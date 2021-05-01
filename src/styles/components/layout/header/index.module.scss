@@ -1,0 +1,51 @@
+.header {
+  @apply transition-all border-b border-gray-500 border-solid bg-white;
+
+  & .search {
+    @apply mb-8;
+
+    @screen lg {
+      @apply mb-4;
+    }
+
+    & .input {
+      @apply mx-auto;
+
+      @screen lg {
+        @apply mx-0 ml-auto;
+      }
+    }
+  }
+
+  & .navigation {
+    @apply flex flex-col items-center;
+
+    @screen lg {
+      @apply flex-row items-end justify-between;
+    }
+
+    & .logo {
+      @apply mb-8 w-32 h-auto;
+
+      @screen lg {
+        @apply mb-0;
+      }
+    }
+  }
+}
+
+.skip {
+  @apply absolute text-sm p-2;
+
+  top: -200px;
+  left: -200px;
+  z-index: 9999;
+  background: #fff;
+
+  &:focus {
+    @apply visible opacity-100;
+
+    top: 10px;
+    left: 10px;
+  }
+}

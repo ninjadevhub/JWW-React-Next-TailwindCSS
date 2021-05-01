@@ -1,0 +1,154 @@
+.w-84 {
+  width: 21rem;
+}
+
+.h-full {
+  height: 100%;
+}
+
+.right-0 {
+  right: 0;
+}
+
+.top-0 {
+  top: 0;
+}
+
+.py-6 {
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+}
+
+.mb-2 {
+  margin-bottom: 0.5rem;
+}
+
+.mb-5 {
+  margin-bottom: 1.25rem;
+}
+
+.mb-7 {
+  margin-bottom: 1.75rem;
+}
+
+.mb-10 {
+  margin-bottom: 2.5rem;
+}
+
+.mb-12 {
+  margin-bottom: 3rem;
+}
+
+.bg-gray-500 {
+  --tw-bg-opacity: 1;
+  background-color: rgba(107, 114, 128, var(--tw-bg-opacity))
+}
+
+.text-4xl {
+  font-size: 2.25rem;
+  line-height: 2.5rem;
+}
+
+@media (min-width: 768px) {
+  .md-w-4-5 {
+    width: 80%;
+  }
+}
+
+.ais-SearchBox-form {
+  display: flex;
+  position: relative;
+  background-color: #fff;
+}
+
+.ais-SearchBox-input {
+  width: calc(100% - 10px);
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 1.5rem 0.5rem 1rem;
+}
+
+.ais-SearchBox-submit {
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.ais-SearchBox-submitIcon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.ais-MenuSelect-select {
+  // A reset of styles, including removing the default dropdown arrow
+  appearance: none;
+  // Additional resets for further consistency
+  background-color: transparent;
+  border: none;
+  padding: 0 1em 0 0;
+  margin: 0;
+  width: 100%;
+  font-family: inherit;
+  font-size: inherit;
+  cursor: inherit;
+  line-height: inherit;
+  outline: none;
+  grid-area: select;
+
+  &::-ms-expand {
+    display: none;
+  }
+}
+
+.ais-MenuSelect {
+  display: grid;
+  grid-template-areas: 'select';
+  align-items: center;
+  width: 100%;
+  min-height: 2.5rem;
+  border: 1px solid transparent;
+  border-radius: 0;
+  padding: 0.25em 0.5em;
+  font-size: 1rem;
+  cursor: pointer;
+  line-height: 1.1;
+  background-color: #fff;
+
+  &::after {
+    content: '';
+    width: 0.8em;
+    height: 0.5em;
+    grid-area: select;
+    justify-self: end;
+    background-color: #777;
+    clip-path: polygon(100% 0%, 0 0%, 50% 100%);
+  }
+}
+
+.ais-InfiniteHits {
+  text-align: center;
+}
+
+.ais-InfiniteHits-list {
+  display: flex;
+  flex-wrap: wrap;
+  text-align: left;
+}
+
+.ais-InfiniteHits-item {
+  flex: 0 0 33.33%;
+  padding: 0 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.ais-infiniteHits-loadMore {
+  margin: auto;
+  padding: 0.5rem 1rem;
+  border: 1px solid #777;
+}

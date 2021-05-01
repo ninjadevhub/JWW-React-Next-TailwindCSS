@@ -1,0 +1,71 @@
+{
+  "name": "jerseywaterworks-frontend",
+  "version": "1.0.0",
+  "description": "Next.js frontend for jerseywaterworks WordPress backend, based on Imran Sayed's repo and WebDevStudios's starter repo",
+  "private": true,
+  "author": "3Lane Marketing",
+  "keywords": [
+    "nextjs",
+    "decoupled",
+    "headless-wordpress"
+  ],
+  "licence": "MIT",
+  "homepage": "https://github.com/3lanemarketing/jerseywaterworks-frontend",
+  "scripts": {
+    "dev": "NODE_OPTIONS='--inspect' next dev",
+    "build": "next build",
+    "start": "next start",
+    "svg": "svgr -d src/components/icons src/components/icons/svgs",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run",
+    "lint": "eslint src/components/* src/utils/* pages/*",
+    "lint:fix": "eslint --fix src/components/* src/utils/* pages/*",
+    "precommit": "npm run lint:fix && npm run build "
+  },
+  "dependencies": {
+    "@apollo/client": "^3.1.4",
+    "@wordpress/base-styles": "^3.3.3",
+    "@wordpress/block-library": "^2.28.5",
+    "algoliasearch": "^4.9.0",
+    "axios": "^0.21.1",
+    "babel-plugin-transform-define": "^2.0.0",
+    "classnames": "^2.3.1",
+    "cookie": "^0.4.1",
+    "cors": "^2.8.5",
+    "dayjs": "^1.10.4",
+    "dompurify": "^2.2.2",
+    "graphql": "^15.3.0",
+    "lodash": "^4.17.21",
+    "next": "^10.2.0",
+    "next-seo": "^4.17.0",
+    "nprogress": "^0.2.0",
+    "react": "^17.0.1",
+    "react-cookie": "^4.0.3",
+    "react-dom": "^17.0.1",
+    "react-instantsearch-dom": "^6.10.3",
+    "sass": "^1.32.10",
+    "uuid": "^8.3.2",
+    "validator": "^13.5.2"
+  },
+  "devDependencies": {
+    "@svgr/cli": "^5.5.0",
+    "autoprefixer": "^10.2.5",
+    "babel-eslint": "^10.1.0",
+    "cypress": "^6.1.0",
+    "eslint": "^7.20.0",
+    "eslint-config-wordpress": "^2.0.0",
+    "eslint-loader": "^4.0.2",
+    "eslint-plugin-jsdoc": "^32.2.0",
+    "eslint-plugin-react": "^7.22.0",
+    "postcss": "^8.2.10",
+    "postcss-flexbugs-fixes": "^4.2.1",
+    "postcss-import": "^12.0.1",
+    "postcss-preset-env": "^6.7.0",
+    "precss": "^4.0.0",
+    "prop-types": "^15.7.2",
+    "tailwindcss": "^2.1.2"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  }
+}
