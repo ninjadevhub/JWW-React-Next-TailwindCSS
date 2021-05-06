@@ -13,7 +13,7 @@ export default function Navigation({menu, className}) {
           <ul>
             {menu.map((item, index) => {
               const children =
-                item.children && item.children.length > 0 ? item.children : ''
+                item.children && item.children.length > 0 ? item.children : '';
 
               return (
                 <li key={index}>

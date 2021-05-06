@@ -4,7 +4,6 @@ import { getIconComponentByName } from '../../../utils/icons-map';
 import { isEmpty, isArray } from 'lodash';
 
 const Footer = ({ siteLogoUrl, footer }) => {
-  console.log(JSON.stringify({ siteLogoUrl, footer }));
   return (
     <footer className="relative">
 			<div className="absolute w-1/2 h-full right-0 top-0 bg-gray-100"></div>

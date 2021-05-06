@@ -14,7 +14,6 @@ export const sanitize = ( content ) => {
 export const stripTrailingSlash = path => path.replace(/\/$/, "");
 
 export const isLinkActive = (asPath, path) => {
-  console.log({asPath, path})
   if (!asPath || !path) {
     return false
   }

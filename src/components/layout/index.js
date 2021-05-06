@@ -8,7 +8,6 @@ import PropTypes from 'prop-types';
 
 const Layout = ( {data, isPost, children} ) => {
 	const {page, post, posts, header, footer } = data || {};
-	console.log(JSON.stringify({header, footer}))
 
 	// If it does not have either post or page.
 	if ( isEmpty( page ) && isEmpty( post ) && isEmpty( posts ) ) {

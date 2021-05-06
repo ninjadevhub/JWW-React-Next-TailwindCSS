@@ -59,6 +59,18 @@
   }
 }
 
+.ais-SearchBox {
+  & > .search-suggestions {
+    display: none;
+  }
+  
+  &:hover {
+    & > .search-suggestions {
+      display: block;
+    }
+  }
+}
+
 .ais-SearchBox-form {
   display: flex;
   position: relative;
