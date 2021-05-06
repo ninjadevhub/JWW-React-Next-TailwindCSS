@@ -19,6 +19,10 @@
   padding-bottom: 1.5rem;
 }
 
+.mt-4 {
+  margin-top: 1rem;
+}
+
 .mb-2 {
   margin-bottom: 0.5rem;
 }
@@ -147,8 +151,12 @@
   margin-bottom: 3rem;
 }
 
-.ais-infiniteHits-loadMore {
+.ais-InfiniteHits-loadMore {
   margin: auto;
   padding: 0.5rem 1rem;
   border: 1px solid #777;
+
+  &--disabled {
+    display: none;
+  }
 }

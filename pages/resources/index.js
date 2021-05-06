@@ -1,22 +1,27 @@
 import client from '../../src/apollo/client';
 import Layout from '../../src/components/layout';
+//import Autocomplete from '../../src/components/autocomplete';
 import Resource from '../../src/components/resources/resource';
 import Link from 'next/link';
+//import Select from 'react-select'
+import MultiSelect from 'react-multi-select-component';
 //import { sanitize } from '../src/utils/miscellaneous';
 import { GET_PAGE } from '../../src/queries/pages/get-page';
 //import { handleRedirectsAndReturnData } from '../src/utils/slug';
 import algoliasearch from 'algoliasearch/lite';
+//import { getAlgoliaResults } from '@algolia/autocomplete-js';
 import { useEffect, useRef, useState } from 'react';
 import {
   Configure,
   connectCurrentRefinements,
   connectMenu,
   connectSearchBox,
+  //connectAutoComplete,
   InfiniteHits,
   InstantSearch,
   Stats,
 } from 'react-instantsearch-dom';
-import {sanitize} from '../../src/utils/miscellaneous';
+import { sanitize } from '../../src/utils/miscellaneous';
 
 const searchClient = algoliasearch(
   'UITI8CODED',
@@ -32,17 +37,89 @@ for (let year = thisYear; year >= 2015; year--) {
 }
 
 const years = Object.keys(yearsMap).sort((a, b) => b - a);
-const yearTimestampRanges = years.map((year) => yearsMap[year]);
+const yearOptions = [
+  { value: '', label: 'See All Years' },
+  ...years.map((year) => ({
+    value: yearsMap[year],
+    label: year,
+  })),
+];
 
 export default function Resources({ data }) {
-  console.log(JSON.stringify({data}));
+  //console.log(JSON.stringify({ data }));
+  data.topics = {
+    nodes: [
+      {
+        name: 'Smart CSO Control Plans',
+        slug: 'smart-cso-control-plans',
+      },
+      {
+        name: 'Paying for Water Infrastructure',
+        slug: 'paying-for-water-infrastructure',
+      },
+      {
+        name: 'Green Infrastructure / Stormwater Management',
+        slug: 'green-infrastructure-stormwater-management',
+      },
+      {
+        name: 'Community Engagement and Partnerships',
+        slug: 'community-engagement-and-partnerships',
+      },
+      {
+        name: 'Drinking Water',
+        slug: 'drinking-water',
+      },
+      {
+        name: 'Lead',
+        slug: 'lead',
+      },
+      {
+        name: 'For Utilities',
+        slug: 'for-utilities',
+      },
+      {
+        name: 'For Municipalities',
+        slug: 'for-municipalities',
+      },
+      {
+        name: 'For Residents',
+        slug: 'for-residents',
+      },
+    ],
+  };
+
+  data.jww_types = {
+    nodes: [
+      {
+        name: 'Guides & Toolkits',
+        slug: 'guides-and-toolkits',
+      },
+      {
+        name: 'Fact Sheets',
+        slug: 'fact-sheets',
+      },
+      {
+        name: 'Case Study',
+        slug: 'case-study',
+      },
+      {
+        name: 'Work Plans',
+        slug: 'work-plans',
+      },
+      {
+        name: 'Policies & Ordinances',
+        slug: 'policies-and-ordinances',
+      },
+    ],
+  };
+
   const [searchMode, setSearchMode] = useState('All');
   const [optionalWords, setOptionalWords] = useState('');
   const [filters, setFilters] = useState('');
-  const [committee, setCommittee] = useState('');
-  const [topic, setTopic] = useState('');
-  const [type, setType] = useState('');
-  const [yearTimestampRange, setYearTimestampRange] = useState('');
+  const [committees, setCommittees] = useState([]);
+  const [topics, setTopics] = useState([]);
+  const [types, setTypes] = useState([]);
+  const [selectedYears, setSelectedYears] = useState([]);
   const searchInputRef = useRef(null);
   const allRadioRef = useRef(null);
   const anyRadioRef = useRef(null);
@@ -53,517 +130,617 @@ export default function Resources({ data }) {
     }
   }, []);
 
-  function setTaxonomyFilters(taxonomy, taxonomyTerm) {
+  const setMultiTaxonomyFilters = (taxonomy, taxonomyTerms) => {
+    const hasTerm =
+      taxonomyTerms.length > 0 &&
+      taxonomyTerms.findIndex((term) => term.value === '') === -1;
+    let newFilters = '';
+    if (hasTerm) {
+      newFilters = taxonomyTerms.reduce((str, term, i) => {
+        if (str !== '(') {
+          str += ' OR ';
+        }
+
+        str += `taxonomies.${taxonomy}:"${term.label}"`;
+        if (i === taxonomyTerms.length - 1) {
+          str += ')';
+        }
+
+        return str;
+      }, '(');
+    }
+
+    const re = new RegExp(
+      `( AND )?\\(taxonomies\\.${taxonomy}:"[^"]+"( OR taxonomies\\.${taxonomy}:"[^"]+")*\\)`
+    );
     if (!filters) {
-      if (taxonomyTerm && taxonomyTerm !== 'ais__see__all__option') {
-        setFilters(`taxonomies.${taxonomy}:"${taxonomyTerm}"`);
+      if (hasTerm) {
+        setFilters(newFilters);
       }
-    } else if (
-      new RegExp(`( AND )?taxonomies\\.${taxonomy}:"[-\\w ]+"`).test(filters)
-    ) {
-      if (taxonomyTerm && taxonomyTerm !== 'ais__see__all__option') {
-        setFilters(
-          filters.replace(
-            new RegExp(`( AND )?taxonomies\\.${taxonomy}:"[-\\w ]+"`),
-            `$1taxonomies.${taxonomy}:"${taxonomyTerm}"`
-          )
-        );
+    } else if (re.test(filters)) {
+      if (hasTerm) {
+        setFilters(filters.replace(re, `$1${newFilters}`));
       } else {
         setFilters(
           filters.replace(
             new RegExp(
-              `^taxonomies\\.${taxonomy}:"[-\\w ]+"( AND )?| AND taxonomies\\.${taxonomy}:"[-\\w ]+"`
+              `^\\(taxonomies\\.${taxonomy}:"[^"]+"( OR taxonomies\\.${taxonomy}:"[^"]+")*\\)( AND )?|( AND )\\(taxonomies\\.${taxonomy}:"[^"]+"( OR taxonomies\\.${taxonomy}:"[^"]+")*\\)`
             ),
             ''
           )
         );
       }
-    } else if (taxonomyTerm && taxonomyTerm !== 'ais__see__all__option') {
-      setFilters(`${filters} AND taxonomies.${taxonomy}:"${taxonomyTerm}"`);
+    } else if (hasTerm) {
+      setFilters(`${filters} AND ${newFilters}`);
     }
-  }
+  };
 
-  function setYearFilters(yearTimestampRange) {
+  const setMultiYearFilters = (selectedYearTimestampRange) => {
+    const hasYear =
+      selectedYearTimestampRange.length > 0 &&
+      selectedYearTimestampRange.findIndex((range) => range.value === '') ===
+        -1;
+    let newFilters = '';
+    if (hasYear) {
+      newFilters = selectedYearTimestampRange.reduce((str, range, i) => {
+        if (str !== '(') {
+          str += ' OR ';
+        }
+
+        str += `post_date:${range.value}`;
+        if (i === selectedYearTimestampRange.length - 1) {
+          str += ')';
+        }
+
+        return str;
+      }, '(');
+    }
+
+    const re = /( AND )?\(post_date:\d+ TO \d+( OR post_date:\d+ TO \d+)*\)/;
     if (!filters) {
-      if (
-        yearTimestampRange &&
-        yearTimestampRange !== 'ais__see__all__option'
-      ) {
-        setFilters(`post_date:${yearTimestampRange}`);
+      if (hasYear) {
+        setFilters(newFilters);
       }
-    } else if (/( AND )?post_date:\d+ TO \d+/.test(filters)) {
-      if (
-        yearTimestampRange &&
-        yearTimestampRange !== 'ais__see__all__option'
-      ) {
-        setFilters(
-          filters.replace(
-            /( AND )?post_date:\d+ TO \d+/,
-            `$1post_date:${yearTimestampRange}`
-          )
-        );
+    } else if (re.test(filters)) {
+      if (hasYear) {
+        setFilters(filters.replace(re, `$1${newFilters}`));
       } else {
         setFilters(
           filters.replace(
-            /(^post_date:\d+ TO \d+( AND )?| AND post_date:\d+ TO \d+)/,
+            /^\(post_date:\d+ TO \d+( OR post_date:\d+ TO \d+)*\)( AND )?|( AND )?\(post_date:\d+ TO \d+( OR post_date:\d+ TO \d+)*\)/,
             ''
           )
         );
       }
-    } else if (
-      yearTimestampRange &&
-      yearTimestampRange !== 'ais__see__all__option'
-    ) {
-      setFilters(`${filters} AND post_date:${yearTimestampRange}`);
+    } else if (hasYear) {
+      setFilters(`${filters} AND ${newFilters}`);
     }
-  }
+  };
 
-  const CustomWidgets = connectSearchBox(({ currentRefinement, _, refine }) => {
-    function handleSearchModeChange(event) {
-      const newSearchMode = event.currentTarget.value;
-      let newQuery;
-      let optionalWords;
-      if (newSearchMode === 'Exact') {
-        newQuery = `"${currentRefinement?.replace(/"+/g, '') || ''}"`;
-      } else {
-        newQuery = currentRefinement?.replace(/"+/g, '') || '';
-      }
+  const CustomWidgets = connectSearchBox(
+    ({ currentRefinement, isSearchStalled, refine }) => {
+      const handleSearchModeChange = (event) => {
+        const newSearchMode = event.currentTarget.value;
+        let newQuery;
+        let optionalWords;
+        if (newSearchMode === 'Exact') {
+          newQuery = `"${currentRefinement?.replace(/"+/g, '') || ''}"`;
+        } else {
+          newQuery = currentRefinement?.replace(/"+/g, '') || '';
+        }
 
-      if (newSearchMode === 'Any') {
-        optionalWords = newQuery;
-      } else {
-        optionalWords = '';
-      }
+        if (newSearchMode === 'Any') {
+          optionalWords = newQuery;
+        } else {
+          optionalWords = '';
+        }
 
-      setSearchMode(newSearchMode);
-      setOptionalWords(optionalWords);
-      setTimeout(() => refine(newQuery));
-    }
+        setSearchMode(newSearchMode);
+        setOptionalWords(optionalWords);
+        setTimeout(() => refine(newQuery));
+      };
 
-    function CommitteeMenuSelect({ items }) {
-      return (
-        <div className="ais-MenuSelect">
-          <select
-            className="ais-MenuSelect-select"
-            value={committee}
-            onChange={(event) => {
-              const newCommittee = event.currentTarget.value;
-              setTaxonomyFilters('committee', newCommittee);
-              setCommittee(newCommittee);
+      const CommitteeMenuSelect = () => (
+        <div className="">
+          <MultiSelect
+            className=""
+            hasSelectAll={false}
+            labelledBy="By Committee"
+            overrideStrings={{ selectSomeItems: 'By Committee' }}
+            options={[
+              { value: '', label: 'See All Committees' },
+              ...(data?.committees?.nodes?.map((obj) => ({
+                value: obj.slug,
+                label: obj.name,
+              })) || []),
+            ]}
+            value={committees}
+            onChange={(selected) => {
+              setMultiTaxonomyFilters('committee', selected);
+              setCommittees((prevCommittees) => {
+                if (
+                  prevCommittees.findIndex(
+                    (committee) => committee.value === ''
+                  ) === -1 &&
+                  selected.findIndex((option) => option.value === '') > -1
+                ) {
+                  return [{ value: '', label: 'See All Committees' }];
+                }
+
+                return selected.filter((committee) => committee.value !== '');
+              });
+
               setTimeout(() => refine(currentRefinement));
             }}
-          >
-            <option value="">By Committee</option>
-            <option
-              value="ais__see__all__option"
-              selected={committee === 'ais__see__all__option'}
-            >
-              See All Committees
-            </option>
-            {items.map((item) => (
-              <option
-                key={item.label}
-                value={item.value}
-                selected={committee === item.value}
-              >
-                {`${item.label} (${item.count})`}
-              </option>
-            ))}
-          </select>
+          />
         </div>
       );
-    }
 
-    const CustomCommitteeMenuSelect = connectMenu(CommitteeMenuSelect);
-    //const MemoizedCommitteeMenuSelect = memo(CustomCommitteeMenuSelect)
+      const CustomCommitteeMenuSelect = connectMenu(CommitteeMenuSelect);
 
-    function TopicMenuSelect({ items }) {
-      return (
-        <div className="ais-MenuSelect">
-          <select
-            className="ais-MenuSelect-select"
-            value={topic}
-            onChange={(event) => {
-              const newTopic = event.currentTarget.value;
-              setTaxonomyFilters('topic', newTopic);
-              setTopic(newTopic);
+      const TopicMenuSelect = () => (
+        <div className="">
+          <MultiSelect
+            className=""
+            hasSelectAll={false}
+            labelledBy="By Topic"
+            overrideStrings={{ selectSomeItems: 'By Topic' }}
+            options={[
+              { value: '', label: 'See All Topics' },
+              ...(data?.topics?.nodes?.map((obj) => ({
+                value: obj.slug,
+                label: obj.name,
+              })) || []),
+            ]}
+            value={topics}
+            onChange={(selected) => {
+              setMultiTaxonomyFilters('topic', selected);
+              setTopics((prevTopics) => {
+                if (
+                  prevTopics.findIndex((topic) => topic.value === '') === -1 &&
+                  selected.findIndex((option) => option.value === '') > -1
+                ) {
+                  return [{ value: '', label: 'See All topics' }];
+                }
+
+                return selected.filter((topic) => topic.value !== '');
+              });
+
               setTimeout(() => refine(currentRefinement));
             }}
-          >
-            <option value="">By Topic</option>
-            <option
-              value="ais__see__all__option"
-              selected={topic === 'ais__see__all__option'}
-            >
-              See All Topics
-            </option>
-            {items.map((item) => (
-              <option
-                key={item.label}
-                value={item.value}
-                selected={topic === item.value}
-              >
-                {`${item.label} (${item.count})`}
-              </option>
-            ))}
-          </select>
+          />
         </div>
       );
-    }
 
-    const CustomTopicMenuSelect = connectMenu(TopicMenuSelect);
-    //const MemoizedTopicMenuSelect = memo(CustomTopicMenuSelect)
+      const CustomTopicMenuSelect = connectMenu(TopicMenuSelect);
 
-    function TypeMenuSelect({ items }) {
-      return (
-        <div className="ais-MenuSelect">
-          <select
-            className="ais-MenuSelect-select"
-            value={type}
-            onChange={(event) => {
-              const newType = event.currentTarget.value;
-              setTaxonomyFilters('type', newType);
-              setType(newType);
+      const TypeMenuSelect = () => (
+        <div className="">
+          <MultiSelect
+            className=""
+            hasSelectAll={false}
+            labelledBy="By Type"
+            overrideStrings={{ selectSomeItems: 'By Type' }}
+            options={[
+              { value: '', label: 'See All Types' },
+              ...(data?.jww_types?.nodes?.map((obj) => ({
+                value: obj.slug,
+                label: obj.name,
+              })) || []),
+            ]}
+            value={types}
+            onChange={(selected) => {
+              setMultiTaxonomyFilters('jww_type', selected);
+              setTypes((prevTypes) => {
+                if (
+                  prevTypes.findIndex((type) => type.value === '') === -1 &&
+                  selected.findIndex((option) => option.value === '') > -1
+                ) {
+                  return [{ value: '', label: 'See All Types' }];
+                }
+
+                return selected.filter((type) => type.value !== '');
+              });
+
               setTimeout(() => refine(currentRefinement));
             }}
-          >
-            <option value="">By Type</option>
-            <option
-              value="ais__see__all__option"
-              selected={type === 'ais__see__all__option'}
-            >
-              See All Types
-            </option>
-            {items.map((item) => (
-              <option
-                key={item.label}
-                value={item.value}
-                selected={type === item.value}
-              >
-                {`${item.label} (${item.count})`}
-              </option>
-            ))}
-          </select>
+          />
         </div>
       );
-    }
 
-    const CustomTypeMenuSelect = connectMenu(TypeMenuSelect);
-    //const MemoizedTypeMenuSelect = memo(CustomTypeMenuSelect)
+      const CustomTypeMenuSelect = connectMenu(TypeMenuSelect);
 
-    function YearMenuSelect() {
-      return (
-        <div className="ais-MenuSelect">
-          <select
-            className="ais-MenuSelect-select"
-            value={yearTimestampRange}
-            onChange={(event) => {
-              const newYearTimestampRange = event.currentTarget.value;
-              setYearFilters(newYearTimestampRange);
-              setYearTimestampRange(newYearTimestampRange);
+      const YearMenuSelect = () => (
+        <div className="">
+          <MultiSelect
+            className=""
+            hasSelectAll={false}
+            labelledBy="By Year"
+            overrideStrings={{ selectSomeItems: 'By Year' }}
+            options={yearOptions}
+            value={selectedYears}
+            onChange={(selected) => {
+              setMultiYearFilters(selected);
+              setSelectedYears((prevYears) => {
+                if (
+                  prevYears.findIndex((year) => year.value === '') === -1 &&
+                  selected.findIndex((option) => option.value === '') > -1
+                ) {
+                  return [{ value: '', label: 'See All Years' }];
+                }
+
+                return selected.filter((year) => year.value !== '');
+              });
+
               setTimeout(() => refine(currentRefinement));
             }}
-          >
-            <option value="">By Year</option>
-            <option
-              value="ais__see__all__option"
-              selected={type === 'ais__see__all__option'}
-            >
-              See All Years
-            </option>
-            {years.map((year) => (
-              <option
-                key={year}
-                value={yearsMap[year]}
-                selected={yearTimestampRange === yearsMap[year]}
-              >
-                {year}
-              </option>
-            ))}
-          </select>
+          />
         </div>
       );
-    }
 
-    function ClearRefinements({ items, refine }) {
-      return (
-        <div className="ais-ClearRefinements">
+      const hasNoFilter =
+        !currentRefinement &&
+        (committees.length === 0 || committees[0].value === '') &&
+        (topics.length === 0 || topics[0].value === '') &&
+        (types.length === 0 || types[0].value === '') &&
+        (selectedYears.length === 0 || selectedYears[0].value === '');
+
+      const ClearRefinements = ({ items, refine }) => (
+        <div className={`ais-ClearRefinements${hasNoFilter ? ' hidden' : ''}`}>
           <button
             className="ais-ClearRefinements-button"
             onClick={() => {
               setFilters('');
               setOptionalWords('');
               setSearchMode('All');
-              setCommittee('');
-              setTopic('');
-              setType('');
-              setYearTimestampRange('');
+              setCommittees([]);
+              setTopics([]);
+              setTypes([]);
+              setSelectedYears([]);
               setTimeout(() => refine(items));
             }}
-            //disabled={!items.length}
           >
             CLEAR SEARCH
           </button>
         </div>
       );
-    }
 
-    const CustomClearRefinements = connectCurrentRefinements(ClearRefinements);
+      const CustomClearRefinements = connectCurrentRefinements(
+        ClearRefinements
+      );
 
-    return (
-      <div className="p-4 mx-6 bg-gray-500">
-        <div className="flex border-solid border-b border-white">
-          <div className="w-2/5 pr-4">
-            <div className="pb-4">
-              <div className="ais-SearchBox">
-                <form
-                  noValidate=""
-                  className="ais-SearchBox-form"
-                  action=""
-                  role="search"
-                >
+      return (
+        <div className="p-4 mx-6 bg-gray-500">
+          <div className="flex border-solid border-b border-white">
+            <div className="w-2/5 pr-4">
+              <div className="pb-4">
+                <div className="ais-SearchBox">
+                  <form
+                    noValidate=""
+                    className="ais-SearchBox-form"
+                    action=""
+                    role="search"
+                  >
+                    <input
+                      type="search"
+                      placeholder="Search here…"
+                      autoComplete="off"
+                      autoCorrect="off"
+                      autoCapitalize="off"
+                      spellCheck="false"
+                      required=""
+                      maxLength="512"
+                      ref={searchInputRef}
+                      value={currentRefinement}
+                      onChange={(event) => {
+                        const { value } = event.currentTarget;
+                        let newQuery;
+                        if (searchMode === 'Exact') {
+                          newQuery = `"${value?.replace(/"+/g, '') || ''}"`;
+                        } else {
+                          newQuery = value?.replace(/"+/g, '') || '';
+                        }
+
+                        refine(newQuery);
+                      }}
+                      className="ais-SearchBox-input"
+                    />
+                    <button
+                      type="button"
+                      title="Submit your search query."
+                      className="ais-SearchBox-submit"
+                    >
+                      <svg
+                        className="ais-SearchBox-submitIcon"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="10"
+                        height="10"
+                        viewBox="0 0 40 40"
+                      >
+                        <path d="M26.804 29.01c-2.832 2.34-6.465 3.746-10.426 3.746C7.333 32.756 0 25.424 0 16.378 0 7.333 7.333 0 16.378 0c9.046 0 16.378 7.333 16.378 16.378 0 3.96-1.406 7.594-3.746 10.426l10.534 10.534c.607.607.61 1.59-.004 2.202-.61.61-1.597.61-2.202.004L26.804 29.01zm-10.426.627c7.323 0 13.26-5.936 13.26-13.26 0-7.32-5.937-13.257-13.26-13.257C9.056 3.12 3.12 9.056 3.12 16.378c0 7.323 5.936 13.26 13.258 13.26z"></path>
+                      </svg>
+                    </button>
+                    <button
+                      type="reset"
+                      title="Clear the search query."
+                      className="ais-SearchBox-reset"
+                      hidden
+                    >
+                      <svg
+                        className="ais-SearchBox-resetIcon"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20"
+                        width="10"
+                        height="10"
+                      >
+                        <path d="M8.114 10L.944 2.83 0 1.885 1.886 0l.943.943L10 8.113l7.17-7.17.944-.943L20 1.886l-.943.943-7.17 7.17 7.17 7.17.943.944L18.114 20l-.943-.943-7.17-7.17-7.17 7.17-.944.943L0 18.114l.943-.943L8.113 10z"></path>
+                      </svg>
+                    </button>
+                  </form>
+                  {/*<Autocomplete
+                    openOnFocus={true}
+                    getSources={() => [
+                      {
+                        sourceId: 'resources',
+                        getItems({ query }) {
+                          return getAlgoliaResults({
+                            searchClient,
+                            queries: [
+                              {
+                                indexName: 'wp_posts_resource',
+                                query,
+                              },
+                            ],
+                          });
+                        },
+                        templates: {
+                          item({ item, components }) {
+                            return (
+                              <components.Highlight
+                                hit={item}
+                                attribute="name"
+                              />
+                            );
+                          },
+                        },
+                      },
+                    ]}
+                  />*/}
+                </div>
+              </div>
+              <div className="flex flex-wrap pb-3 text-white">
+                <div className="w-full py-1">Search for:</div>
+                <label className="flex mr-3 items-center">
                   <input
-                    type="search"
-                    placeholder="Search here…"
-                    autoComplete="off"
-                    autoCorrect="off"
-                    autoCapitalize="off"
-                    spellCheck="false"
-                    required=""
-                    maxLength="512"
-                    ref={searchInputRef}
-                    value={currentRefinement}
-                    onChange={(event) => {
-                      const { value } = event.currentTarget;
-                      let newQuery;
-                      if (searchMode === 'Exact') {
-                        newQuery = `"${value?.replace(/"+/g, '') || ''}"`;
-                      } else {
-                        newQuery = value?.replace(/"+/g, '') || '';
-                      }
-
-                      refine(newQuery);
-                    }}
-                    className="ais-SearchBox-input"
+                    type="radio"
+                    className=""
+                    ref={allRadioRef}
+                    name="searchMode"
+                    value="All"
+                    checked={!searchMode || searchMode === 'All'}
+                    onChange={handleSearchModeChange}
                   />
-                  <button
-                    type="button"
-                    title="Submit your search query."
-                    className="ais-SearchBox-submit"
-                  >
-                    <svg
-                      className="ais-SearchBox-submitIcon"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="10"
-                      height="10"
-                      viewBox="0 0 40 40"
-                    >
-                      <path d="M26.804 29.01c-2.832 2.34-6.465 3.746-10.426 3.746C7.333 32.756 0 25.424 0 16.378 0 7.333 7.333 0 16.378 0c9.046 0 16.378 7.333 16.378 16.378 0 3.96-1.406 7.594-3.746 10.426l10.534 10.534c.607.607.61 1.59-.004 2.202-.61.61-1.597.61-2.202.004L26.804 29.01zm-10.426.627c7.323 0 13.26-5.936 13.26-13.26 0-7.32-5.937-13.257-13.26-13.257C9.056 3.12 3.12 9.056 3.12 16.378c0 7.323 5.936 13.26 13.258 13.26z"></path>
-                    </svg>
-                  </button>
-                  <button
-                    type="reset"
-                    title="Clear the search query."
-                    className="ais-SearchBox-reset"
-                    hidden
-                  >
-                    <svg
-                      className="ais-SearchBox-resetIcon"
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 20 20"
-                      width="10"
-                      height="10"
-                    >
-                      <path d="M8.114 10L.944 2.83 0 1.885 1.886 0l.943.943L10 8.113l7.17-7.17.944-.943L20 1.886l-.943.943-7.17 7.17 7.17 7.17.943.944L18.114 20l-.943-.943-7.17-7.17-7.17 7.17-.944.943L0 18.114l.943-.943L8.113 10z"></path>
-                    </svg>
-                  </button>
-                </form>
+                  <span className="pl-1">All words</span>
+                </label>
+                <label className="flex mr-3 items-center">
+                  <input
+                    type="radio"
+                    className=""
+                    ref={anyRadioRef}
+                    name="searchMode"
+                    value="Any"
+                    checked={searchMode === 'Any'}
+                    onChange={handleSearchModeChange}
+                  />
+                  <span className="pl-1">Any words</span>
+                </label>
+                <label className="flex items-center">
+                  <input
+                    type="radio"
+                    className=""
+                    ref={exactRadioRef}
+                    name="searchMode"
+                    value="Exact"
+                    checked={searchMode === 'Exact'}
+                    onChange={handleSearchModeChange}
+                  />
+                  <span className="pl-1">Exact words</span>
+                </label>
               </div>
             </div>
-            <div className="flex flex-wrap pb-3 text-white">
-              <div className="w-full py-1">Search for:</div>
-              <label className="flex mr-3 items-center">
-                <input
-                  type="radio"
-                  className=""
-                  ref={allRadioRef}
-                  name="searchMode"
-                  value="All"
-                  checked={!searchMode || searchMode === 'All'}
-                  onChange={handleSearchModeChange}
-                />
-                <span className="pl-1">All words</span>
-              </label>
-              <label className="flex mr-3 items-center">
-                <input
-                  type="radio"
-                  className=""
-                  ref={anyRadioRef}
-                  name="searchMode"
-                  value="Any"
-                  checked={searchMode === 'Any'}
-                  onChange={handleSearchModeChange}
-                />
-                <span className="pl-1">Any words</span>
-              </label>
-              <label className="flex items-center">
-                <input
-                  type="radio"
-                  className=""
-                  ref={exactRadioRef}
-                  name="searchMode"
-                  value="Exact"
-                  checked={searchMode === 'Exact'}
-                  onChange={handleSearchModeChange}
-                />
-                <span className="pl-1">Exact words</span>
-              </label>
-            </div>
-          </div>
-          <div className="w-3/5 border-solid border-l border-white">
-            <div className="flex flex-wrap pb-4 px-3 border-solid border-b border-white">
-              <div className="w-1/4 px-3">
-                <CustomCommitteeMenuSelect attribute="taxonomies.committee" />
+            <div className="w-3/5 border-solid border-l border-white">
+              <div className="flex flex-wrap pb-4 px-3 border-solid border-b border-white">
+                <div className="w-1/4 px-3">
+                  <CustomCommitteeMenuSelect attribute="taxonomies.committee" />
+                </div>
+                <div className="w-1/4 px-3">
+                  <CustomTopicMenuSelect attribute="taxonomies.topic" />
+                </div>
+                <div className="w-1/4 px-3">
+                  <CustomTypeMenuSelect attribute="taxonomies.jww_type" />
+                </div>
+                <div className="w-1/4 px-3">
+                  <YearMenuSelect />
+                </div>
               </div>
-              <div className="w-1/4 px-3">
-                <CustomTopicMenuSelect attribute="taxonomies.topic" />
-              </div>
-              <div className="w-1/4 px-3">
-                <CustomTypeMenuSelect attribute="taxonomies.type" />
-              </div>
-              <div className="w-1/4 px-3">
-                <YearMenuSelect />
-              </div>
-            </div>
-            <div className="flex py-4 px-3 text-white">
-              <div className="flex-grow px-3">
-                <Link href="#">
-                  <a className="block py-2 px-3 border-solid border-2 border-white bg-transparent text-center">
-                    FOR MEMBERS
-                  </a>
-                </Link>
-              </div>
-              <div className="flex-grow px-3">
-                <Link href="#">
-                  <a className="block py-2 px-3 border-solid border-2 border-white bg-transparent text-center">
-                    JERSEY WATERCHECK
-                  </a>
-                </Link>
-              </div>
-              <div className="flex-grow px-3">
-                <Link href="#">
-                  <a className="block py-2 px-3 border-solid border-2 border-white bg-transparent text-center">
-                    EQUITY MAP
-                  </a>
-                </Link>
-              </div>
-              <div className="flex-grow px-3">
-                <Link href="#">
-                  <a className="block py-2 px-3 border-solid border-2 border-white bg-transparent text-center">
-                    VIDEOS
-                  </a>
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="">
-          <div className="flex justify-end pt-4 pr-6 text-white">
-            <CustomClearRefinements
-              clearsQuery
-              translations={{
-                reset: 'CLEAR SEARCH',
-              }}
-            />
-          </div>
-          <div className="flex items-center">
-            {committee && committee !== 'ais__see__all__option' && (
-              <div className="relative pl-4 pr-8 mr-6 rounded-full bg-gray-100">
-                <Link href="#">
-                  <a className="block p-2">{committee}</a>
-                </Link>
-                <button
-                  className="w-8 h-8 rounded-full text-2xl absolute right-1 top-1/2 -mt-4 pb-1 flex justify-center items-center bg-white"
-                  type="button"
-                  onClick={() => {
-                    setTaxonomyFilters('committee', '');
-                    setCommittee('');
-                    setTimeout(() => refine(currentRefinement));
-                  }}
-                >
-                  &times;
-                </button>
-              </div>
-            )}
-            {topic && topic !== 'ais__see__all__option' && (
-              <div className="relative pl-4 pr-8 mr-6 rounded-full bg-gray-100">
-                <Link href="#">
-                  <a className="block p-2">{topic}</a>
-                </Link>
-                <button
-                  className="w-8 h-8 rounded-full text-2xl absolute right-1 top-1/2 -mt-4 pb-1 flex justify-center items-center bg-white"
-                  type="button"
-                  onClick={() => {
-                    setTaxonomyFilters('topic', '');
-                    setTopic('');
-                    setTimeout(() => refine(currentRefinement));
-                  }}
-                >
-                  &times;
-                </button>
-              </div>
-            )}
-            {type && type !== 'ais__see__all__option' && (
-              <div className="relative pl-4 pr-8 mr-6 rounded-full bg-gray-100">
-                <Link href="#">
-                  <a className="block p-2">{type}</a>
-                </Link>
-                <button
-                  className="w-8 h-8 rounded-full text-2xl absolute right-1 top-1/2 -mt-4 pb-1 flex justify-center items-center bg-white"
-                  type="button"
-                  onClick={() => {
-                    setTaxonomyFilters('type', '');
-                    setType('');
-                    setTimeout(() => refine(currentRefinement));
-                  }}
-                >
-                  &times;
-                </button>
-              </div>
-            )}
-            {yearTimestampRange &&
-              yearTimestampRange !== 'ais__see__all__option' && (
-                <div className="relative pl-4 pr-8 rounded-full bg-gray-100">
+              <div className="flex py-4 px-3 text-white">
+                <div className="flex-grow px-3">
                   <Link href="#">
-                    <a className="block p-2">
-                      {years[yearTimestampRanges.indexOf(yearTimestampRange)]}
+                    <a className="block py-2 px-3 border-solid border-2 border-white bg-transparent text-center">
+                      FOR MEMBERS
                     </a>
+                  </Link>
+                </div>
+                <div className="flex-grow px-3">
+                  <Link href="#">
+                    <a className="block py-2 px-3 border-solid border-2 border-white bg-transparent text-center">
+                      JERSEY WATERCHECK
+                    </a>
+                  </Link>
+                </div>
+                <div className="flex-grow px-3">
+                  <Link href="#">
+                    <a className="block py-2 px-3 border-solid border-2 border-white bg-transparent text-center">
+                      EQUITY MAP
+                    </a>
+                  </Link>
+                </div>
+                <div className="flex-grow px-3">
+                  <Link href="#">
+                    <a className="block py-2 px-3 border-solid border-2 border-white bg-transparent text-center">
+                      VIDEOS
+                    </a>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="">
+            <div className="flex justify-end pt-4 pr-6 text-white">
+              <CustomClearRefinements
+                clearsQuery
+                translations={{
+                  reset: 'CLEAR SEARCH',
+                }}
+              />
+            </div>
+            <div className="flex flex-wrap items-center">
+              {currentRefinement && (
+                <div className="relative pl-4 pr-8 mr-6 mt-4 rounded-full bg-gray-100">
+                  <Link href="#">
+                    <a className="block p-2">{currentRefinement}</a>
                   </Link>
                   <button
                     className="w-8 h-8 rounded-full text-2xl absolute right-1 top-1/2 -mt-4 pb-1 flex justify-center items-center bg-white"
                     type="button"
-                    onClick={() => {
-                      setYearFilters('');
-                      setYearTimestampRange('');
-                      setTimeout(() => refine(currentRefinement));
-                    }}
+                    onClick={() => refine('')}
                   >
                     &times;
                   </button>
                 </div>
               )}
+              {committees.length > 0 &&
+                committees[0]?.value &&
+                committees.map((committee) => (
+                  <div
+                    className="relative pl-4 pr-8 mr-6 mt-4 rounded-full bg-gray-100"
+                    key={committee.value}
+                  >
+                    <Link href="#">
+                      <a className="block p-2">{committee.label}</a>
+                    </Link>
+                    <button
+                      className="w-8 h-8 rounded-full text-2xl absolute right-1 top-1/2 -mt-4 pb-1 flex justify-center items-center bg-white"
+                      type="button"
+                      onClick={() => {
+                        const newCommittees = committees.filter(
+                          (item) => item.value !== committee.value
+                        );
+                        setMultiTaxonomyFilters('committee', newCommittees);
+                        setCommittees(newCommittees);
+                        setTimeout(() => refine(currentRefinement));
+                      }}
+                    >
+                      &times;
+                    </button>
+                  </div>
+                ))}
+              {topics.length > 0 &&
+                topics[0].value !== '' &&
+                topics.map((topic) => (
+                  <div
+                    className="relative pl-4 pr-8 mr-6 mt-4 rounded-full bg-gray-100"
+                    key={topic.value}
+                  >
+                    <Link href="#">
+                      <a className="block p-2">{topic.label}</a>
+                    </Link>
+                    <button
+                      className="w-8 h-8 rounded-full text-2xl absolute right-1 top-1/2 -mt-4 pb-1 flex justify-center items-center bg-white"
+                      type="button"
+                      onClick={() => {
+                        const newTopics = topics.filter(
+                          (item) => item.value !== topic.value
+                        );
+                        setMultiTaxonomyFilters('topic', newTopics);
+                        setTopics(newTopics);
+                        setTimeout(() => refine(currentRefinement));
+                      }}
+                    >
+                      &times;
+                    </button>
+                  </div>
+                ))}
+              {types.length > 0 &&
+                types[0].value !== '' &&
+                types.map((type) => (
+                  <div
+                    className="relative pl-4 pr-8 mr-6 mt-4 rounded-full bg-gray-100"
+                    key={type.value}
+                  >
+                    <Link href="#">
+                      <a className="block p-2">{type.label}</a>
+                    </Link>
+                    <button
+                      className="w-8 h-8 rounded-full text-2xl absolute right-1 top-1/2 -mt-4 pb-1 flex justify-center items-center bg-white"
+                      type="button"
+                      onClick={() => {
+                        const newTypes = types.filter(
+                          (item) => item.value !== type.value
+                        );
+                        setMultiTaxonomyFilters('jww_type', newTypes);
+                        setTypes(newTypes);
+                        setTimeout(() => refine(currentRefinement));
+                      }}
+                    >
+                      &times;
+                    </button>
+                  </div>
+                ))}
+              {selectedYears.length > 0 &&
+                selectedYears[0].value !== '' &&
+                selectedYears.map((selectedYear) => (
+                  <div
+                    className="relative pl-4 pr-8 mr-6 mt-4 rounded-full bg-gray-100"
+                    key={selectedYear.label}
+                  >
+                    <Link href="#">
+                      <a className="block p-2">{selectedYear.label}</a>
+                    </Link>
+                    <button
+                      className="w-8 h-8 rounded-full text-2xl absolute right-1 top-1/2 -mt-4 pb-1 flex justify-center items-center bg-white"
+                      type="button"
+                      onClick={() => {
+                        const newSelectedYears = selectedYears.filter(
+                          (item) => item.label !== selectedYear.label
+                        );
+                        setMultiYearFilters(newSelectedYears);
+                        setSelectedYears(newSelectedYears);
+                        setTimeout(() => refine(currentRefinement));
+                      }}
+                    >
+                      &times;
+                    </button>
+                  </div>
+                ))}
+            </div>
           </div>
         </div>
-      </div>
-    );
-  });
+      );
+    }
+  );
 
   //const MemoizedWidgets = memo(CustomWidgets)
 
   return (
     <Layout data={data}>
       <h1 className="mb-5 text-center text-4xl">{data?.page?.title}</h1>
-			<div className="md-w-4-5 mx-auto mb-7 text-center" dangerouslySetInnerHTML={{__html: sanitize( data?.page?.content ?? '' )}}/>
+      <div
+        className="md-w-4-5 mx-auto mb-7 text-center"
+        dangerouslySetInnerHTML={{
+          __html: sanitize(data?.page?.content ?? ''),
+        }}
+      />
       <div className="-mx-5">
         <InstantSearch
           indexName="wp_posts_resource"
