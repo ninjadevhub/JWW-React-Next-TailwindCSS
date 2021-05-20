@@ -1,0 +1,86 @@
+{
+  "facet_counts": [
+    {
+      "counts": [
+        {
+          "count": 1,
+          "highlighted": "Legrand/Pass & Seymour",
+          "value": "Legrand/Pass & Seymour"
+        }
+      ],
+      "field_name": "brand",
+      "stats": {}
+    },
+    {
+      "counts": [{ "count": 1, "highlighted": "true", "value": "true" }],
+      "field_name": "free_shipping",
+      "stats": {}
+    },
+    {
+      "counts": [{ "count": 1, "highlighted": "27.99", "value": "27.99" }],
+      "field_name": "price",
+      "stats": {
+        "avg": 27.989999771118164,
+        "max": 27.989999771118164,
+        "min": 27.989999771118164,
+        "sum": 27.989999771118164
+      }
+    },
+    {
+      "counts": [{ "count": 1, "highlighted": "5", "value": "5" }],
+      "field_name": "rating",
+      "stats": { "avg": 5.0, "max": 5.0, "min": 5.0, "sum": 5.0 }
+    },
+    {
+      "counts": [
+        { "count": 1, "highlighted": "Cell Phones", "value": "Cell Phones" },
+        { "count": 1, "highlighted": "Adapters", "value": "Adapters" },
+        {
+          "count": 1,
+          "highlighted": "Cell Phone Accessories",
+          "value": "Cell Phone Accessories"
+        }
+      ],
+      "field_name": "categories",
+      "stats": {}
+    },
+    {
+      "counts": [
+        { "count": 1, "highlighted": "Cell Phones", "value": "Cell Phones" }
+      ],
+      "field_name": "categories.lvl0",
+      "stats": {}
+    }
+  ],
+  "found": 1,
+  "hits": [
+    {
+      "document": {
+        "brand": "Legrand/Pass & Seymour",
+        "categories": ["Cell Phones", "Cell Phone Accessories", "Adapters"],
+        "categories.lvl0": "Cell Phones",
+        "categories.lvl1": "Cell Phones > Cell Phone Accessories",
+        "categories.lvl2": "Cell Phones > Cell Phone Accessories > Adapters",
+        "categories.lvl3": "",
+        "description": "Refuel your device directly from an outlet while powering additional items with this Legrand/Pass & Seymour TM826USBWCCV6 wall outlet that offers 2 standard outlets and 2 USB ports in a single unit. A 3.1 amp draw delivers plenty of power.",
+        "free_shipping": true,
+        "id": "1210",
+        "image": "https://cdn-demo.algolia.com/bestbuy-0118/4397300_sb.jpg",
+        "name": "Legrand/Pass & Seymour - Standard/USB Combo Wall Outlet - White",
+        "popularity": 6828,
+        "price": 27.99,
+        "rating": 5
+      },
+      "highlights": [
+        {
+          "field": "categories",
+          "indices": [2],
+          "snippets": ["<mark>Adapters</mark>"]
+        }
+      ],
+      "match_score": 33488994
+    }
+  ],
+  "page": 1,
+  "search_time_ms": 1
+}

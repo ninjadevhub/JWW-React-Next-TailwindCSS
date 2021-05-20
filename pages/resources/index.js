@@ -23,7 +23,7 @@ import {
   Stats,
 } from 'react-instantsearch-dom';
 import { sanitize } from '../../src/utils/miscellaneous';
-import TypesenseInstantSearchAdapter from '../../lib/typesense-instantsearch-adapter';
+import TypesenseInstantSearchAdapter from '../../src/typesense-instantsearch-adapter';
 
 const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter({
   server: {
