@@ -8,40 +8,60 @@ import MultiSelect from 'react-multi-select-component';
 //import { sanitize } from '../src/utils/miscellaneous';
 import { GET_PAGE } from '../../src/queries/pages/get-page';
 //import { handleRedirectsAndReturnData } from '../src/utils/slug';
-import algoliasearch from 'algoliasearch/lite';
-import { getAlgoliaResults } from '@algolia/autocomplete-js';
+//import algoliasearch from 'algoliasearch/lite';
+//import { getAlgoliaResults } from '@algolia/autocomplete-js';
 import { useEffect, useRef, useState } from 'react';
 import {
   Configure,
   connectCurrentRefinements,
-  connectMenu,
+  //connectMenu,
   connectSearchBox,
   //connectAutoComplete,
   //Hits,
-  InfiniteHits,
+  connectInfiniteHits,
   InstantSearch,
   Stats,
 } from 'react-instantsearch-dom';
 import { sanitize } from '../../src/utils/miscellaneous';
+import TypesenseInstantSearchAdapter from '../../lib/typesense-instantsearch-adapter';
 
-const searchClient = algoliasearch(
+const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter({
+  server: {
+    apiKey: '3IN0Gss3gm2IowqB7yHU40rUhwHTtY48', // Be sure to use the search-only-api-key
+    nodes: [
+      {
+        host: 'jwwsearch.3lanemarketing.com',
+        port: '8108',
+        protocol: 'https',
+      },
+    ],
+  },
+  // The following parameters are directly passed to Typesense's search API endpoint.
+  //  So you can pass any parameters supported by the search endpoint below.
+  //  queryBy is required.
+  additionalSearchParameters: {
+    queryBy:
+      'post_title,content,taxonomies_committee,taxonomies_topic,taxonomies_jww_type,post_year',
+    sortBy: '_text_match:desc, post_date:desc',
+  },
+});
+
+const searchClient = typesenseInstantsearchAdapter.searchClient;
+/*const searchClient = algoliasearch(
   'UITI8CODED',
   '10a6a05f20a0f9794aa2fee36be2739a'
-);
+);*/
 
-const yearsMap = {};
+const years = [];
 const thisYear = new Date().getFullYear();
 for (let year = thisYear; year >= 2015; year--) {
-  yearsMap[year] = `${Math.round(
-    new Date(`${year}-01-01T00:00:00`).getTime() / 1000
-  )} TO ${Math.round(new Date(`${year}-12-31T23:59:59`).getTime() / 1000)}`;
+  years.push(year);
 }
 
-const years = Object.keys(yearsMap).sort((a, b) => b - a);
 const yearOptions = [
   { value: '', label: 'See All Years' },
   ...years.map((year) => ({
-    value: yearsMap[year],
+    value: year,
     label: year,
   })),
 ];
@@ -114,107 +134,70 @@ export default function Resources({ data }) {
     ],
   };
 
-  const [searchMode, setSearchMode] = useState('All');
-  const [optionalWords, setOptionalWords] = useState('');
-  const [filters, setFilters] = useState('');
+  //const [query, setQuery] = useState('');
+  const [searchMode, setSearchMode] = useState('');
+  //const [optionalWords, setOptionalWords] = useState('');
+  const [facetFilters, setFacetFilters] = useState([]);
+  //const [numericFilters, setNumericFilters] = useState([]);
   const [committees, setCommittees] = useState([]);
   const [topics, setTopics] = useState([]);
   const [types, setTypes] = useState([]);
   const [selectedYears, setSelectedYears] = useState([]);
-  const searchInputRef = useRef(null);
+  const [dropTokensThreshold, setDropTokensThreshold] = useState(0);
+  const [numTypos, setNumTypos] = useState(2);
+  //const [hitsCount, setHitsCount] = useState(null);
+  //const searchInputRef = useRef(null);
+  const textInputRef = useRef(null);
   const allRadioRef = useRef(null);
   const anyRadioRef = useRef(null);
   const exactRadioRef = useRef(null);
   useEffect(() => {
-    if (allRadioRef.current) {
+    /*if (allRadioRef.current) {
       allRadioRef.current.checked = true;
-    }
+    }*/
+    setTimeout(() => setSearchMode('All'));
   }, []);
 
-  const setMultiTaxonomyFilters = (taxonomy, taxonomyTerms) => {
-    const hasTerm =
-      taxonomyTerms.length > 0 &&
-      taxonomyTerms.findIndex((term) => term.value === '') === -1;
-    let newFilters = '';
+  const setMultiFacetFilters = (taxonomy, taxonomyTerms) => {
+    const hasTerm = taxonomyTerms.length === 1 && taxonomyTerms[0].value !== '';
+    const hasTerms = taxonomyTerms.length > 1;
+    let hasNoTerm = false;
+    let newFacetFilters;
     if (hasTerm) {
-      newFilters = taxonomyTerms.reduce((str, term, i) => {
-        if (str !== '(') {
-          str += ' OR ';
-        }
-
-        str += `taxonomies.${taxonomy}:"${term.label}"`;
-        if (i === taxonomyTerms.length - 1) {
-          str += ')';
-        }
-
-        return str;
-      }, '(');
+      newFacetFilters = `${taxonomy}:${taxonomyTerms[0].label}`;
+    } else if (hasTerms) {
+      newFacetFilters = taxonomyTerms.map(
+        (term, i) => `${taxonomy}:${term.label}`
+      );
+    } else {
+      hasNoTerm = true;
     }
 
-    const re = new RegExp(
-      `( AND )?\\(taxonomies\\.${taxonomy}:"[^"]+"( OR taxonomies\\.${taxonomy}:"[^"]+")*\\)`
-    );
-    if (!filters) {
-      if (hasTerm) {
-        setFilters(newFilters);
+    const foundIndex = facetFilters.findIndex((filter) => {
+      const filterStr = Array.isArray(filter) ? filter[0] ?? '' : filter ?? '';
+      return filterStr.indexOf(taxonomy) === 0;
+    });
+
+    if (facetFilters.length === 0) {
+      if (hasTerm || hasTerms) {
+        setFacetFilters([newFacetFilters]);
       }
-    } else if (re.test(filters)) {
-      if (hasTerm) {
-        setFilters(filters.replace(re, `$1${newFilters}`));
+    } else if (foundIndex > -1) {
+      if (hasTerm || hasTerms) {
+        setFacetFilters((prevFacetFilters) => {
+          prevFacetFilters[foundIndex] = newFacetFilters;
+          return prevFacetFilters;
+        });
       } else {
-        setFilters(
-          filters.replace(
-            new RegExp(
-              `^\\(taxonomies\\.${taxonomy}:"[^"]+"( OR taxonomies\\.${taxonomy}:"[^"]+")*\\)( AND )?|( AND )\\(taxonomies\\.${taxonomy}:"[^"]+"( OR taxonomies\\.${taxonomy}:"[^"]+")*\\)`
-            ),
-            ''
-          )
+        setFacetFilters((prevFacetFilters) =>
+          prevFacetFilters.filter((_, i) => i !== foundIndex)
         );
       }
     } else if (hasTerm) {
-      setFilters(`${filters} AND ${newFilters}`);
-    }
-  };
-
-  const setMultiYearFilters = (selectedYearTimestampRange) => {
-    const hasYear =
-      selectedYearTimestampRange.length > 0 &&
-      selectedYearTimestampRange.findIndex((range) => range.value === '') ===
-        -1;
-    let newFilters = '';
-    if (hasYear) {
-      newFilters = selectedYearTimestampRange.reduce((str, range, i) => {
-        if (str !== '(') {
-          str += ' OR ';
-        }
-
-        str += `post_date:${range.value}`;
-        if (i === selectedYearTimestampRange.length - 1) {
-          str += ')';
-        }
-
-        return str;
-      }, '(');
-    }
-
-    const re = /( AND )?\(post_date:\d+ TO \d+( OR post_date:\d+ TO \d+)*\)/;
-    if (!filters) {
-      if (hasYear) {
-        setFilters(newFilters);
-      }
-    } else if (re.test(filters)) {
-      if (hasYear) {
-        setFilters(filters.replace(re, `$1${newFilters}`));
-      } else {
-        setFilters(
-          filters.replace(
-            /^\(post_date:\d+ TO \d+( OR post_date:\d+ TO \d+)*\)( AND )?|( AND )?\(post_date:\d+ TO \d+( OR post_date:\d+ TO \d+)*\)/,
-            ''
-          )
-        );
-      }
-    } else if (hasYear) {
-      setFilters(`${filters} AND ${newFilters}`);
+      setFacetFilters((prevFacetFilters) => [
+        ...prevFacetFilters,
+        newFacetFilters,
+      ]);
     }
   };
 
@@ -222,23 +205,25 @@ export default function Resources({ data }) {
     ({ currentRefinement, isSearchStalled, refine }) => {
       const handleSearchModeChange = (event) => {
         const newSearchMode = event.currentTarget.value;
-        let newQuery;
-        let optionalWords;
-        if (newSearchMode === 'Exact') {
-          newQuery = `"${currentRefinement?.replace(/"+/g, '') || ''}"`;
-        } else {
-          newQuery = currentRefinement?.replace(/"+/g, '') || '';
-        }
-
-        if (newSearchMode === 'Any') {
-          optionalWords = newQuery;
-        } else {
-          optionalWords = '';
+        switch (newSearchMode) {
+          case 'All':
+            setDropTokensThreshold(0);
+            setNumTypos(2);
+            break;
+          case 'Any':
+            setDropTokensThreshold(100);
+            setNumTypos(2);
+            break;
+          case 'Exact':
+            setDropTokensThreshold(0);
+            setNumTypos(1);
+            break;
+          default:
+            break;
         }
 
         setSearchMode(newSearchMode);
-        setOptionalWords(optionalWords);
-        setTimeout(() => refine(newQuery));
+        setTimeout(() => refine(currentRefinement));
       };
 
       const CommitteeMenuSelect = () => (
@@ -257,7 +242,7 @@ export default function Resources({ data }) {
             ]}
             value={committees}
             onChange={(selected) => {
-              setMultiTaxonomyFilters('committee', selected);
+              setMultiFacetFilters('taxonomies_committee', selected);
               setCommittees((prevCommittees) => {
                 if (
                   prevCommittees.findIndex(
@@ -277,7 +262,7 @@ export default function Resources({ data }) {
         </div>
       );
 
-      const CustomCommitteeMenuSelect = connectMenu(CommitteeMenuSelect);
+      //const CustomCommitteeMenuSelect = connectMenu(CommitteeMenuSelect);
 
       const TopicMenuSelect = () => (
         <div className="">
@@ -295,7 +280,7 @@ export default function Resources({ data }) {
             ]}
             value={topics}
             onChange={(selected) => {
-              setMultiTaxonomyFilters('topic', selected);
+              setMultiFacetFilters('taxonomies_topic', selected);
               setTopics((prevTopics) => {
                 if (
                   prevTopics.findIndex((topic) => topic.value === '') === -1 &&
@@ -313,7 +298,7 @@ export default function Resources({ data }) {
         </div>
       );
 
-      const CustomTopicMenuSelect = connectMenu(TopicMenuSelect);
+      //const CustomTopicMenuSelect = connectMenu(TopicMenuSelect);
 
       const TypeMenuSelect = () => (
         <div className="">
@@ -331,7 +316,7 @@ export default function Resources({ data }) {
             ]}
             value={types}
             onChange={(selected) => {
-              setMultiTaxonomyFilters('jww_type', selected);
+              setMultiFacetFilters('taxonomies_jww_type', selected);
               setTypes((prevTypes) => {
                 if (
                   prevTypes.findIndex((type) => type.value === '') === -1 &&
@@ -349,7 +334,7 @@ export default function Resources({ data }) {
         </div>
       );
 
-      const CustomTypeMenuSelect = connectMenu(TypeMenuSelect);
+      //const CustomTypeMenuSelect = connectMenu(TypeMenuSelect);
 
       const YearMenuSelect = () => (
         <div className="">
@@ -361,7 +346,7 @@ export default function Resources({ data }) {
             options={yearOptions}
             value={selectedYears}
             onChange={(selected) => {
-              setMultiYearFilters(selected);
+              setMultiFacetFilters('post_year', selected);
               setSelectedYears((prevYears) => {
                 if (
                   prevYears.findIndex((year) => year.value === '') === -1 &&
@@ -379,6 +364,8 @@ export default function Resources({ data }) {
         </div>
       );
 
+      //const CustomYearMenuSelect = connectMenu(YearMenuSelect);
+
       const hasNoFilter =
         !currentRefinement &&
         (committees.length === 0 || committees[0].value === '') &&
@@ -391,8 +378,7 @@ export default function Resources({ data }) {
           <button
             className="ais-ClearRefinements-button"
             onClick={() => {
-              setFilters('');
-              setOptionalWords('');
+              setFacetFilters([]);
               setSearchMode('All');
               setCommittees([]);
               setTopics([]);
@@ -411,239 +397,344 @@ export default function Resources({ data }) {
       );
 
       return (
-        <div className="p-4 mx-6 bg-gray-500">
-          <div className="flex border-solid border-b border-white">
-            <div className="w-2/5 pr-4">
-              <div className="pb-4">
-                <Autocomplete
-                  searchCurrentRefinement={currentRefinement}
-                  searchRefine={refine}
-                  searchMode={searchMode}
+        <>
+          <div className="p-4 mx-6 bg-gray-500">
+            <div className="flex border-solid border-b border-white">
+              <div className="w-2/5 pr-4">
+                <div className="pb-4">
+                  <Autocomplete
+                    searchCurrentRefinement={currentRefinement}
+                    searchRefine={refine}
+                    textInputRef={textInputRef}
+                    //searchMode={searchMode}
+                    //setQuery={setQuery}
+                  />
+                </div>
+                <div className="flex flex-wrap pb-3 text-white">
+                  <div className="w-full py-1">Search for:</div>
+                  <label className="flex mr-3 items-center">
+                    <input
+                      type="radio"
+                      className=""
+                      ref={allRadioRef}
+                      name="searchMode"
+                      value="All"
+                      checked={!searchMode || searchMode === 'All'}
+                      onChange={handleSearchModeChange}
+                    />
+                    <span className="pl-1">All words</span>
+                  </label>
+                  <label className="flex mr-3 items-center">
+                    <input
+                      type="radio"
+                      className=""
+                      ref={anyRadioRef}
+                      name="searchMode"
+                      value="Any"
+                      checked={searchMode === 'Any'}
+                      onChange={handleSearchModeChange}
+                    />
+                    <span className="pl-1">Any words</span>
+                  </label>
+                  <label className="flex items-center">
+                    <input
+                      type="radio"
+                      className=""
+                      ref={exactRadioRef}
+                      name="searchMode"
+                      value="Exact"
+                      checked={searchMode === 'Exact'}
+                      onChange={handleSearchModeChange}
+                    />
+                    <span className="pl-1">Exact words</span>
+                  </label>
+                </div>
+              </div>
+              <div className="w-3/5 border-solid border-l border-white">
+                <div className="flex flex-wrap pb-4 px-3 border-solid border-b border-white">
+                  <div className="w-1/4 px-3">
+                    <CommitteeMenuSelect />
+                  </div>
+                  <div className="w-1/4 px-3">
+                    <TopicMenuSelect />
+                  </div>
+                  <div className="w-1/4 px-3">
+                    <TypeMenuSelect />
+                  </div>
+                  <div className="w-1/4 px-3">
+                    <YearMenuSelect />
+                  </div>
+                </div>
+                <div className="flex py-4 px-3 text-white">
+                  <div className="flex-grow px-3">
+                    <Link href="#">
+                      <a className="block py-2 px-3 border-solid border-2 border-white bg-transparent text-center">
+                        FOR MEMBERS
+                      </a>
+                    </Link>
+                  </div>
+                  <div className="flex-grow px-3">
+                    <Link href="#">
+                      <a className="block py-2 px-3 border-solid border-2 border-white bg-transparent text-center">
+                        JERSEY WATERCHECK
+                      </a>
+                    </Link>
+                  </div>
+                  <div className="flex-grow px-3">
+                    <Link href="#">
+                      <a className="block py-2 px-3 border-solid border-2 border-white bg-transparent text-center">
+                        EQUITY MAP
+                      </a>
+                    </Link>
+                  </div>
+                  <div className="flex-grow px-3">
+                    <Link href="#">
+                      <a className="block py-2 px-3 border-solid border-2 border-white bg-transparent text-center">
+                        VIDEOS
+                      </a>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="">
+              <div className="flex justify-end pt-4 pr-6 text-white">
+                <CustomClearRefinements
+                  clearsQuery
+                  translations={{
+                    reset: 'CLEAR SEARCH',
+                  }}
                 />
               </div>
-              <div className="flex flex-wrap pb-3 text-white">
-                <div className="w-full py-1">Search for:</div>
-                <label className="flex mr-3 items-center">
-                  <input
-                    type="radio"
-                    className=""
-                    ref={allRadioRef}
-                    name="searchMode"
-                    value="All"
-                    checked={!searchMode || searchMode === 'All'}
-                    onChange={handleSearchModeChange}
-                  />
-                  <span className="pl-1">All words</span>
-                </label>
-                <label className="flex mr-3 items-center">
-                  <input
-                    type="radio"
-                    className=""
-                    ref={anyRadioRef}
-                    name="searchMode"
-                    value="Any"
-                    checked={searchMode === 'Any'}
-                    onChange={handleSearchModeChange}
-                  />
-                  <span className="pl-1">Any words</span>
-                </label>
-                <label className="flex items-center">
-                  <input
-                    type="radio"
-                    className=""
-                    ref={exactRadioRef}
-                    name="searchMode"
-                    value="Exact"
-                    checked={searchMode === 'Exact'}
-                    onChange={handleSearchModeChange}
-                  />
-                  <span className="pl-1">Exact words</span>
-                </label>
-              </div>
-            </div>
-            <div className="w-3/5 border-solid border-l border-white">
-              <div className="flex flex-wrap pb-4 px-3 border-solid border-b border-white">
-                <div className="w-1/4 px-3">
-                  <CustomCommitteeMenuSelect attribute="taxonomies.committee" />
-                </div>
-                <div className="w-1/4 px-3">
-                  <CustomTopicMenuSelect attribute="taxonomies.topic" />
-                </div>
-                <div className="w-1/4 px-3">
-                  <CustomTypeMenuSelect attribute="taxonomies.jww_type" />
-                </div>
-                <div className="w-1/4 px-3">
-                  <YearMenuSelect />
-                </div>
-              </div>
-              <div className="flex py-4 px-3 text-white">
-                <div className="flex-grow px-3">
-                  <Link href="#">
-                    <a className="block py-2 px-3 border-solid border-2 border-white bg-transparent text-center">
-                      FOR MEMBERS
-                    </a>
-                  </Link>
-                </div>
-                <div className="flex-grow px-3">
-                  <Link href="#">
-                    <a className="block py-2 px-3 border-solid border-2 border-white bg-transparent text-center">
-                      JERSEY WATERCHECK
-                    </a>
-                  </Link>
-                </div>
-                <div className="flex-grow px-3">
-                  <Link href="#">
-                    <a className="block py-2 px-3 border-solid border-2 border-white bg-transparent text-center">
-                      EQUITY MAP
-                    </a>
-                  </Link>
-                </div>
-                <div className="flex-grow px-3">
-                  <Link href="#">
-                    <a className="block py-2 px-3 border-solid border-2 border-white bg-transparent text-center">
-                      VIDEOS
-                    </a>
-                  </Link>
-                </div>
+              <div className="flex flex-wrap items-center">
+                {currentRefinement && (
+                  <div className="relative pl-4 pr-8 mr-6 mt-4 rounded-full bg-gray-100">
+                    <Link href="#">
+                      <a className="block p-2">{currentRefinement}</a>
+                    </Link>
+                    <button
+                      className="w-8 h-8 rounded-full text-2xl absolute right-1 top-1/2 -mt-4 pb-1 flex justify-center items-center bg-white"
+                      type="button"
+                      onClick={() => refine('')}
+                    >
+                      &times;
+                    </button>
+                  </div>
+                )}
+                {committees.length > 0 &&
+                  committees[0]?.value &&
+                  committees.map((committee) => (
+                    <div
+                      className="relative pl-4 pr-8 mr-6 mt-4 rounded-full bg-gray-100"
+                      key={committee.value}
+                    >
+                      <Link href="#">
+                        <a className="block p-2">{committee.label}</a>
+                      </Link>
+                      <button
+                        className="w-8 h-8 rounded-full text-2xl absolute right-1 top-1/2 -mt-4 pb-1 flex justify-center items-center bg-white"
+                        type="button"
+                        onClick={() => {
+                          const newCommittees = committees.filter(
+                            (item) => item.value !== committee.value
+                          );
+                          setMultiFacetFilters(
+                            'taxonomies_committee',
+                            newCommittees
+                          );
+                          setCommittees(newCommittees);
+                          setTimeout(() => refine(currentRefinement));
+                        }}
+                      >
+                        &times;
+                      </button>
+                    </div>
+                  ))}
+                {topics.length > 0 &&
+                  topics[0].value !== '' &&
+                  topics.map((topic) => (
+                    <div
+                      className="relative pl-4 pr-8 mr-6 mt-4 rounded-full bg-gray-100"
+                      key={topic.value}
+                    >
+                      <Link href="#">
+                        <a className="block p-2">{topic.label}</a>
+                      </Link>
+                      <button
+                        className="w-8 h-8 rounded-full text-2xl absolute right-1 top-1/2 -mt-4 pb-1 flex justify-center items-center bg-white"
+                        type="button"
+                        onClick={() => {
+                          const newTopics = topics.filter(
+                            (item) => item.value !== topic.value
+                          );
+                          setMultiFacetFilters('taxonomies_topic', newTopics);
+                          setTopics(newTopics);
+                          setTimeout(() => refine(currentRefinement));
+                        }}
+                      >
+                        &times;
+                      </button>
+                    </div>
+                  ))}
+                {types.length > 0 &&
+                  types[0].value !== '' &&
+                  types.map((type) => (
+                    <div
+                      className="relative pl-4 pr-8 mr-6 mt-4 rounded-full bg-gray-100"
+                      key={type.value}
+                    >
+                      <Link href="#">
+                        <a className="block p-2">{type.label}</a>
+                      </Link>
+                      <button
+                        className="w-8 h-8 rounded-full text-2xl absolute right-1 top-1/2 -mt-4 pb-1 flex justify-center items-center bg-white"
+                        type="button"
+                        onClick={() => {
+                          const newTypes = types.filter(
+                            (item) => item.value !== type.value
+                          );
+                          setMultiFacetFilters('taxonomies_jww_type', newTypes);
+                          setTypes(newTypes);
+                          setTimeout(() => refine(currentRefinement));
+                        }}
+                      >
+                        &times;
+                      </button>
+                    </div>
+                  ))}
+                {selectedYears.length > 0 &&
+                  selectedYears[0].value !== '' &&
+                  selectedYears.map((selectedYear) => (
+                    <div
+                      className="relative pl-4 pr-8 mr-6 mt-4 rounded-full bg-gray-100"
+                      key={selectedYear.label}
+                    >
+                      <Link href="#">
+                        <a className="block p-2">{selectedYear.label}</a>
+                      </Link>
+                      <button
+                        className="w-8 h-8 rounded-full text-2xl absolute right-1 top-1/2 -mt-4 pb-1 flex justify-center items-center bg-white"
+                        type="button"
+                        onClick={() => {
+                          const newSelectedYears = selectedYears.filter(
+                            (item) => item.label !== selectedYear.label
+                          );
+                          setMultiFacetFilters('post_year', newSelectedYears);
+                          setSelectedYears(newSelectedYears);
+                          setTimeout(() => refine(currentRefinement));
+                        }}
+                      >
+                        &times;
+                      </button>
+                    </div>
+                  ))}
               </div>
             </div>
           </div>
-          <div className="">
-            <div className="flex justify-end pt-4 pr-6 text-white">
-              <CustomClearRefinements
-                clearsQuery
-                translations={{
-                  reset: 'CLEAR SEARCH',
-                }}
-              />
-            </div>
-            <div className="flex flex-wrap items-center">
-              {currentRefinement && (
-                <div className="relative pl-4 pr-8 mr-6 mt-4 rounded-full bg-gray-100">
-                  <Link href="#">
-                    <a className="block p-2">{currentRefinement}</a>
-                  </Link>
-                  <button
-                    className="w-8 h-8 rounded-full text-2xl absolute right-1 top-1/2 -mt-4 pb-1 flex justify-center items-center bg-white"
-                    type="button"
-                    onClick={() => refine('')}
-                  >
-                    &times;
-                  </button>
-                </div>
-              )}
-              {committees.length > 0 &&
-                committees[0]?.value &&
-                committees.map((committee) => (
-                  <div
-                    className="relative pl-4 pr-8 mr-6 mt-4 rounded-full bg-gray-100"
-                    key={committee.value}
-                  >
-                    <Link href="#">
-                      <a className="block p-2">{committee.label}</a>
-                    </Link>
-                    <button
-                      className="w-8 h-8 rounded-full text-2xl absolute right-1 top-1/2 -mt-4 pb-1 flex justify-center items-center bg-white"
-                      type="button"
-                      onClick={() => {
-                        const newCommittees = committees.filter(
-                          (item) => item.value !== committee.value
-                        );
-                        setMultiTaxonomyFilters('committee', newCommittees);
-                        setCommittees(newCommittees);
-                        setTimeout(() => refine(currentRefinement));
-                      }}
-                    >
-                      &times;
-                    </button>
-                  </div>
-                ))}
-              {topics.length > 0 &&
-                topics[0].value !== '' &&
-                topics.map((topic) => (
-                  <div
-                    className="relative pl-4 pr-8 mr-6 mt-4 rounded-full bg-gray-100"
-                    key={topic.value}
-                  >
-                    <Link href="#">
-                      <a className="block p-2">{topic.label}</a>
-                    </Link>
-                    <button
-                      className="w-8 h-8 rounded-full text-2xl absolute right-1 top-1/2 -mt-4 pb-1 flex justify-center items-center bg-white"
-                      type="button"
-                      onClick={() => {
-                        const newTopics = topics.filter(
-                          (item) => item.value !== topic.value
-                        );
-                        setMultiTaxonomyFilters('topic', newTopics);
-                        setTopics(newTopics);
-                        setTimeout(() => refine(currentRefinement));
-                      }}
-                    >
-                      &times;
-                    </button>
-                  </div>
-                ))}
-              {types.length > 0 &&
-                types[0].value !== '' &&
-                types.map((type) => (
-                  <div
-                    className="relative pl-4 pr-8 mr-6 mt-4 rounded-full bg-gray-100"
-                    key={type.value}
-                  >
-                    <Link href="#">
-                      <a className="block p-2">{type.label}</a>
-                    </Link>
-                    <button
-                      className="w-8 h-8 rounded-full text-2xl absolute right-1 top-1/2 -mt-4 pb-1 flex justify-center items-center bg-white"
-                      type="button"
-                      onClick={() => {
-                        const newTypes = types.filter(
-                          (item) => item.value !== type.value
-                        );
-                        setMultiTaxonomyFilters('jww_type', newTypes);
-                        setTypes(newTypes);
-                        setTimeout(() => refine(currentRefinement));
-                      }}
-                    >
-                      &times;
-                    </button>
-                  </div>
-                ))}
-              {selectedYears.length > 0 &&
-                selectedYears[0].value !== '' &&
-                selectedYears.map((selectedYear) => (
-                  <div
-                    className="relative pl-4 pr-8 mr-6 mt-4 rounded-full bg-gray-100"
-                    key={selectedYear.label}
-                  >
-                    <Link href="#">
-                      <a className="block p-2">{selectedYear.label}</a>
-                    </Link>
-                    <button
-                      className="w-8 h-8 rounded-full text-2xl absolute right-1 top-1/2 -mt-4 pb-1 flex justify-center items-center bg-white"
-                      type="button"
-                      onClick={() => {
-                        const newSelectedYears = selectedYears.filter(
-                          (item) => item.label !== selectedYear.label
-                        );
-                        setMultiYearFilters(newSelectedYears);
-                        setSelectedYears(newSelectedYears);
-                        setTimeout(() => refine(currentRefinement));
-                      }}
-                    >
-                      &times;
-                    </button>
-                  </div>
-                ))}
-            </div>
+          <div className="px-5 py-8">
+            <Stats
+              translations={{
+                stats(nbHits) {
+                  return (currentRefinement?.split(/\s+/).length === 1 || searchMode !== 'Exact') && `${nbHits.toLocaleString()} Results Found`;
+                },
+              }}
+            />
           </div>
-        </div>
+        </>
       );
     }
   );
 
-  //const MemoizedWidgets = memo(CustomWidgets)
+  const InfiniteHits = ({
+    hits,
+    //hasPrevious,
+    hasMore,
+    //refinePrevious,
+    refineNext,
+    //setHitsCount,
+  }) => {
+    const query = textInputRef.current?.value?.toLowerCase() ?? '';
+    const queryTokens = query.toLowerCase().split(/\s+/) ?? [];
+    let filteredHits;
+    if (queryTokens.length > 1 && searchMode === 'Exact') {
+      /*filteredHits = hits.filter(
+        ({ _highlightResult }) => {
+          const re = new RegExp(
+            queryTokens
+              .map((token) => `<[^>]+>${token}<\\/[^>]+>`)
+              .join(' ')
+          );
+
+          return (
+            re.test(_highlightResult?.post_title?.value?.toLowerCase() ?? '') ||
+            re.test(_highlightResult?.content?.value?.toLowerCase() ?? '')
+          );
+        });*/
+      filteredHits = hits.filter(({ post_title, content }) => post_title?.toLowerCase()?.includes(query) || content?.toLowerCase()?.includes(query));
+      //setHitsCount(filteredHits.length);
+    } else {
+      filteredHits = hits;
+    }
+
+    /*if (currentRefinement?.trim() !== '') {
+          switch (searchMode) {
+            case 'All':
+              filteredHits = hits.filter(
+                ({ highlights }) =>
+                  highlights?.findIndex((highlight) =>
+                    queryTokens.every((token) =>
+                      highlight.matched_tokens
+                        ?.map((matchedToken) => matchedToken.toLowerCase())
+                        ?.includes(token)
+                    )
+                  ) > -1
+              );
+              break;
+            case 'Exact':
+              filteredHits = hits.filter(
+                ({ highlights }) =>
+                  highlights?.findIndex((highlight) =>
+                    new RegExp(
+                      queryTokens
+                        .map((token) => `<mark>${token}<\\/mark>`)
+                        .join(' ')
+                    ).test(highlight.snippet?.toLowerCase())
+                  ) > -1
+              );
+              break;
+            default:
+              break;
+          }
+        }
+
+    setHitsCount(filteredHits.length);*/
+    return (
+      <div class="ais-InfiniteHits">
+        {filteredHits.length > 0 && (
+          <ul class="ais-InfiniteHits-list">
+            {filteredHits.map((hit) => (
+              <li
+                class="ais-InfiniteHits-item"
+                key={hit.id}
+              >
+                <Resource hit={hit} />
+              </li>
+            ))}
+          </ul>
+        )}
+        {hasMore && (
+          <button
+            class="ais-InfiniteHits-loadMore"
+            onClick={refineNext}
+          >
+            LOAD MORE RESOURCES
+          </button>
+        )}
+      </div>
+    );
+  };
+
+  const CustomInfiniteHits = connectInfiniteHits(InfiniteHits);
 
   return (
     <Layout data={data}>
@@ -656,37 +747,28 @@ export default function Resources({ data }) {
       />
       <div className="-mx-5">
         <InstantSearch
+          //indexName="wp_posts_resource"
           indexName="wp_posts_resource"
           searchClient={searchClient}
           //searchState={searchState
-          onSearchStateChange={(searchState) => {}
-            //console.log(JSON.stringify({ searchState }))
-          }
+          onSearchStateChange={(searchState) => {
+            console.log(JSON.stringify({ searchState }));
+          }}
         >
           <Configure
             //query={query}
-            filters={filters}
-            optionalWords={optionalWords}
-            advancedSyntax={true}
+            queryByWeights="3,1,1,1,1,1"
+            //filters={filters}
+            facetFilters={facetFilters}
+            //numericFilters={numericFilters}
+            //optionalWords={optionalWords}
+            //advancedSyntax={true}
+            dropTokensThreshold={dropTokensThreshold}
+            numTypos={numTypos}
             hitsPerPage={9}
           />
           <CustomWidgets />
-          <div className="px-5 py-8">
-            <Stats
-              translations={{
-                stats(nbHits) {
-                  return `${nbHits.toLocaleString()} Results Found`;
-                },
-              }}
-            />
-          </div>
-          <InfiniteHits
-            hitComponent={Resource}
-            translations={{
-              loadPrevious: 'LOAD PREVIOUS RESOURCES',
-              loadMore: 'LOAD MORE RESOURCES',
-            }}
-          />
+          <CustomInfiniteHits />
         </InstantSearch>
       </div>
     </Layout>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 //import PropTypes from 'prop-types';
 import { connectAutoComplete } from 'react-instantsearch-dom';
 //import AutoSuggest from 'react-autosuggest';
@@ -7,9 +7,12 @@ function AutoComplete({
   hits,
   searchCurrentRefinement,
   searchRefine,
-  searchMode,
+  textInputRef,
+  //searchMode,
+  //setQuery,
 }) {
   const [suggestionsAreVisible, setSuggestionsVisibility] = useState(false);
+  //const inputRef = useRef(null);
 
   return (
     <div
@@ -22,6 +25,8 @@ function AutoComplete({
         role="search"
       >
         <input
+          className="ais-SearchBox-input"
+          ref={textInputRef}
           type="search"
           placeholder="Search here…"
           autoComplete="off"
@@ -34,22 +39,29 @@ function AutoComplete({
           onFocus={() => setSuggestionsVisibility(!!searchCurrentRefinement)}
           onChange={(event) => {
             const { value } = event.currentTarget;
-            let newQuery;
-            if (searchMode === 'Exact') {
+            //let newQuery;
+            /*if (searchMode === 'Exact') {
               newQuery = `"${value?.replace(/"+/g, '') || ''}"`;
             } else {
               newQuery = value?.replace(/"+/g, '') || '';
-            }
+            }*/
 
-            searchRefine(newQuery);
-            setSuggestionsVisibility(!['', '""'].includes(newQuery));
+            searchRefine(value);
+            setSuggestionsVisibility(value !== '');
+            //setQuery(value);
           }}
           onBlur={(event) => {
             if (!(event.relatedTarget?.classList?.contains('suggestion'))) {
               setSuggestionsVisibility(false);
             }
           }}
-          className="ais-SearchBox-input"
+          onKeyPress={(event) => {
+            if (event.key === 'Enter') {
+              event.preventDefault();
+              setSuggestionsVisibility(false);
+              //searchRefine(value);
+            }
+          }}
         />
         <button
           type="button"

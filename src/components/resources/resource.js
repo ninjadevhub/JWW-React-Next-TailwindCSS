@@ -4,7 +4,9 @@ const Resource = ({ hit }) => {
   const {
     post_date,
     images,
-    taxonomies,
+    taxonomies_committee,
+    taxonomies_topic,
+    taxonomies_jww_type,
     post_title,
     content,
   } = hit;
@@ -22,22 +24,22 @@ const Resource = ({ hit }) => {
         images.map((image) => JSON.stringify(image)) :
         <div className="ml-8 bg-gray-200" style={{ width: 'calc(100% - 5rem)', height: 300 }}></div>}
         <div className="pt-3 text-center text-xs">
-          {taxonomies?.committee?.map(committee => (
+          {taxonomies_committee?.map(committee => (
             <div>{committee}</div>
           ))}
         </div>
       </div>
       <div className="pt-6 pb-4 px-8 bg-white">
         <div className="flex text-center text-xs">
-          {taxonomies?.topic &&
+          {taxonomies_topic?.length > 0 &&
           <div className="flex flex-col justify-center items-center py-2 px-3 mr-3 bg-gray-100">
-            {taxonomies?.topic?.map(t => (
+            {taxonomies_topic?.map(t => (
               <div>{t}</div>
             ))}
           </div>}
-          {taxonomies?.jww_type &&
+          {taxonomies_jww_type.length > 0 &&
           <div className="flex flex-col justify-center items-center py-2 px-3 bg-gray-500 text-white">
-            {taxonomies?.jww_type?.map(type => (
+            {taxonomies_jww_type?.map(type => (
               <div>{type}</div>
             ))}
           </div>}
