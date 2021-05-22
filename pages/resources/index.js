@@ -677,7 +677,7 @@ export default function Resources({ data }) {
   return (
     <Layout data={data}>
       <div className="relative">
-        <Swiper effect="fade" loop={true} pagination={{ clickable: true }}>
+        <Swiper autoplay={{ delay: 5000 }} effect="fade" loop={true} pagination={{ clickable: true }}>
           <SwiperSlide>
             <div className="relative w-full" style={{ height: 430 }}>
               <Image
