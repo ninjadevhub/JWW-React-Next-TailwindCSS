@@ -11,17 +11,18 @@ const Header = ({ header }) => {
   )?.[0]?.menuItems?.nodes;
   return (
     <header className={styles.header}>
-      <div className="md:container px-5 py-2 mx-auto flex justify-center items-center">
-        <span className="mr-8">
-          April 26: Water Exchange Speaker Series: Preparing for Climate Change
-          in the Wake of Houston&rsquo;s Water Crisis
-        </span>
-        <Link href="">
-          <a className="text-blue-500">Join Us</a>
-        </Link>
+      <div className=" bg-brand-blue text-white">
+        <div className="md:container mx-auto py-2 flex justify-center items-center">
+          <span className="mr-8">
+            April 26: Water Exchange Speaker Series: Preparing for Climate Change
+            in the Wake of Houston&rsquo;s Water Crisis
+          </span>
+          <Link href="">
+            <a className="text-white text-semibold">Join Us</a>
+          </Link>
+        </div>
       </div>
-      <hr className="h-0 border-solid border-t-0 border-b border-gray-500" />
-      <div className="md:container px-5 mx-auto flex">
+      <div className="md:container mx-auto flex">
         <div className="py-4 mr-16">
           <Link href="/">
             <a>
@@ -37,13 +38,12 @@ const Header = ({ header }) => {
         </div>
         <div className="flex flex-col justify-between flex-1 pb-3">
           <div className="flex justify-end">
-            <div className="flex px-6 py-1 bg-gray-100 text-sm">
+            <div className="flex px-6 py-1 text-sm">
               <Link href="#">
-                <a className="mr-3">About Jersey Water Works</a>
+                <a className="mr-3 text-brand-blue">About Jersey Water Works</a>
               </Link>
-              |
               <Link href="#">
-                <a className="ml-3">About Jersey Water Works</a>
+                <a className="ml-3 text-brand-green">Get Involved</a>
               </Link>
             </div>
           </div>
@@ -54,7 +54,10 @@ const Header = ({ header }) => {
               className={styles.primaryMenu}
             />
             <div className="flex border-solid border-gray-500 border-b-2">
-              <input className="border-none bg-transparent w-32" />
+              <input
+                className="border-none bg-transparent w-32"
+                placeholder="Search"
+              />
               <button
                 type="button"
                 title="Submit your search query."

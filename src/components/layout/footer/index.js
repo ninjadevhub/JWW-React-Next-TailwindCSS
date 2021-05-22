@@ -6,8 +6,7 @@ import { isEmpty, isArray } from 'lodash';
 const Footer = ({ siteLogoUrl, footer }) => {
   return (
     <footer className="relative">
-			<div className="absolute w-1/2 h-full right-0 top-0 bg-gray-100"></div>
-      <div className="relative bg-gray-500">
+      <div className="relative bg-brand-navy">
         <div className="md:container px-5 mx-auto">
           <div className="flex -mx-5 text-white">
             <div className="w-1/4 px-5 py-2 text-center">
@@ -17,19 +16,19 @@ const Footer = ({ siteLogoUrl, footer }) => {
               </div>
             </div>
             <div className="w-1/4 px-5 py-2 text-center">
-              <div className="my-3 border-solid border-white border-l">
+              <div className="my-3 border-solid border-brand-green border-l">
                 Supporting Members
                 <div className="text-xl">611</div>
               </div>
             </div>
             <div className="w-1/4 px-5 py-2 text-center">
-              <div className="my-3 border-solid border-white border-l">
+              <div className="my-3 border-solid border-brand-green border-l">
                 People We Reach
                 <div className="text-xl">3,513</div>
               </div>
             </div>
             <div className="w-1/4 px-5 py-2 text-center">
-              <div className="my-3 border-solid border-white border-l">
+              <div className="my-3 border-solid border-brand-green border-l">
                 Join the Movement
                 <div>
                   <Link href="#">
@@ -101,8 +100,8 @@ const Footer = ({ siteLogoUrl, footer }) => {
                 : `©${new Date().getFullYear()} Jersey Water Works. All Rights Reserved.`}
             </div>
           </div>
-          <div className="w-1/2 bg-gray-100">
-            <div className="px-5 border-solid border-gray-500 border-b">
+          <div className="w-1/2 bg-brand-green box-shadow-r-long-brand-green text-white">
+            <div className="px-5 border-solid border-gray-500 border-b bg-brand-blue box-shadow-r-long-brand-blue">
               <div className="w-84 max-w-full py-8 mx-auto">
                 <div className="mb-5 text-xl">
                   New Jersey&rsquo;s water infrastructure needs an estimated $25
@@ -116,7 +115,7 @@ const Footer = ({ siteLogoUrl, footer }) => {
                 </Link>
               </div>
             </div>
-            <div className="px-5 border-solid border-gray-500 border-b">
+            <div className="px-5 bg-brand-orange box-shadow-r-long-brand-orange">
               <div className="w-84 max-w-full py-6 mx-auto">
                 <div className="flex">
                   <Link href="#">
@@ -131,7 +130,7 @@ const Footer = ({ siteLogoUrl, footer }) => {
                 </div>
               </div>
             </div>
-            <div className="px-5">
+            <div className="px-5 bg-brand-green box-shadow-r-long-brand-green">
               <div className="w-84 max-w-full py-8 mx-auto">
                 <div className="mb-5 text-xl">
                   Stay Informed

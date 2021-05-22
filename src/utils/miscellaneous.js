@@ -24,3 +24,4 @@ export const isLinkActive = (asPath, path) => {
   return asPath === stripTrailingSlash(path)
 };
 
+export const convertAmpersands = html => html?.replace(/&amp;/g, '&');

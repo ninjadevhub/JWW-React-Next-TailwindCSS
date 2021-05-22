@@ -32,7 +32,7 @@ const Layout = ( {data, isPost, children} ) => {
 				) : null}
 			</Head>
 			<Header header={header}/>
-			<div className="md:container px-5 py-24 mx-auto min-h-almost-screen">
+			<div className="md:container pb-24 mx-auto min-h-almost-screen">
 				{children}
 			</div>
 			<Footer siteLogoUrl={header?.siteLogoUrl} footer={footer}/>

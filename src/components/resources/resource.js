@@ -1,4 +1,8 @@
+import Image from 'next/image';
+import Link from 'next/link';
 import dayjs from 'dayjs';
+import { getTopicIconByName, getTypeIconByName, getCommitteeIconsByName } from '../../utils/icons-map';
+import { convertAmpersands } from '../../utils/miscellaneous';
 
 const Resource = ({ hit }) => {
   const {
@@ -8,44 +12,84 @@ const Resource = ({ hit }) => {
     taxonomies_topic,
     taxonomies_jww_type,
     post_title,
+    post_excerpt,
     content,
   } = hit;
 
   return (
-    <div className="rounded text-gray-700">
-      <div className="py-4 pl-4 bg-gray-100">
-        <div className="pb-4 flex justify-between items-center">
-          <div className="ml-8 text-xs">{dayjs(post_date * 1000).format('MM/DD/YY')}</div>
-          {Date.now() - post_date * 1000 < 61 * 24 * 60 * 60 * 1000 && (
-            <div className="py-2 px-3 bg-blue-500 text-xs text-white">New</div>
-          )}
-        </div>
-        {images.length > 0 ?
-        images.map((image) => JSON.stringify(image)) :
-        <div className="ml-8 bg-gray-200" style={{ width: 'calc(100% - 5rem)', height: 300 }}></div>}
-        <div className="pt-3 text-center text-xs">
-          {taxonomies_committee?.map(committee => (
-            <div>{committee}</div>
-          ))}
-        </div>
+    <div className="w-full flex border-solid border-b border-color-brand-gray text-gray-700">
+      <div
+        className="relative flex-grow-0 flex-shrink-0 mb-10"
+        style={{ flexBasis: '292px', maxWidth: 292, height: 362 }}
+      >
+        {images?.full ? (
+          <Image
+            src={images.full.url}
+            alt={(images.full.alt || images.full.title) ?? ''}
+            layout="fill"
+            objectFit="cover"
+          />
+        ) : (
+          <div className="w-full h-full bg-brand-gray"></div>
+        )}
+        {Date.now() - post_date * 1000 < 61 * 24 * 60 * 60 * 1000 && (
+          <div className="absolute left-4 top-4">
+            <Image src="/images/new.png" width={49} height={49} />
+          </div>
+        )}
       </div>
-      <div className="pt-6 pb-4 px-8 bg-white">
-        <div className="flex text-center text-xs">
-          {taxonomies_topic?.length > 0 &&
-          <div className="flex flex-col justify-center items-center py-2 px-3 mr-3 bg-gray-100">
-            {taxonomies_topic?.map(t => (
-              <div>{t}</div>
-            ))}
-          </div>}
-          {taxonomies_jww_type.length > 0 &&
-          <div className="flex flex-col justify-center items-center py-2 px-3 bg-gray-500 text-white">
-            {taxonomies_jww_type?.map(type => (
-              <div>{type}</div>
-            ))}
-          </div>}
+      <div className="flex-1 pt-3 px-6">
+        <div className="flex justify-between text-xs">
+          <div className="flex">
+            {taxonomies_topic?.length > 0 && (
+              <div className="mr-6">
+                {taxonomies_topic?.map((t) => (
+                  <div className="flex items-center pb-2">
+                    <div className="mr-3">{getTopicIconByName(t)}</div>
+                    {t}
+                  </div>
+                ))}
+              </div>
+            )}
+            {taxonomies_jww_type.length > 0 && (
+              <div className="mr-6">
+                {taxonomies_jww_type?.map((type) => (
+                  <div className="flex items-center pb-2">
+                    <div className="mr-3">{getTypeIconByName(type)}</div>
+                    {convertAmpersands(type)}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+          <div className="">{dayjs(post_date * 1000).format('MM/DD/YY')}</div>
         </div>
-        <h3 className="my-4 text-2xl">{post_title}</h3>
-        <div>{content?.slice(0, 100)}...</div>
+        <h2 className="my-4 text-2xl">{post_title}</h2>
+        <div className="mb-6">{post_excerpt} ...</div>
+        <button className="inline-block py-2 px-8 bg-brand-orange text-center text-white" type="button">
+          VIEW RESOURCE
+        </button>
+      </div>
+      <div
+        className="flex-grow-0 flex-shrink-0 flex flex-column justify-center items-center p-3 bg-brand-gray text-center"
+        style={{ flexBasis: '190px', maxWidth: 190, minHeight: 362 }}
+      >
+        {taxonomies_committee?.map((committee) => (
+          <div className="flex flex-col items-center pb-2">
+            <div className="mb-4">{getCommitteeIconsByName(committee)}</div>
+            <div className="mb-4">{committee}</div>
+            <Link href="#">
+              <a className="inline-block">
+                <Image
+                  src="/images/right-arrow.png"
+                  width={51}
+                  height={26}
+                  alt="Right Arrow"
+                />
+              </a>
+            </Link>
+          </div>
+        ))}
       </div>
     </div>
   );

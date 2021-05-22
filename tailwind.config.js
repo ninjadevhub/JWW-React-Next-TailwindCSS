@@ -1,3 +1,5 @@
+const colors = require('tailwindcss/colors');
+
 module.exports = {
   future: {
     //removeDeprecatedGapUtilities: true,
@@ -8,6 +10,21 @@ module.exports = {
 	  './pages/**/*.js',
   ],
   theme: {
+    colors: {
+      transparent: 'transparent',
+      current: 'currentColor',
+      black: colors.black,
+      white: colors.white,
+      gray: colors.trueGray,
+      blue: colors.blue,
+      red: colors.red,
+      'brand-blue': '#4579a1',
+      'brand-navy': '#1b3c53',
+      'brand-orange': '#ee8f25',
+      'brand-green': '#03a399',
+      'brand-gray': '#e5e5e5',
+      'brand-gray-pale': '#f3f3f3',
+    },
     extend: {
         screens: {
           xm: '320px'

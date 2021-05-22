@@ -48,6 +48,7 @@
     "react-multi-select-component": "^4.0.1",
     "react-select": "^4.3.0",
     "sass": "^1.32.10",
+    "swiper": "^6.6.2",
     "typesense-instantsearch-adapter": "^1.1.1",
     "uuid": "^8.3.2",
     "validator": "^13.5.2"

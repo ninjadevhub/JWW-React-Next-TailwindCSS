@@ -3,27 +3,24 @@ import Layout from '../../src/components/layout';
 import Autocomplete from '../../src/components/autocomplete';
 import Resource from '../../src/components/resources/resource';
 import Link from 'next/link';
-//import Select from 'react-select'
+import Image from 'next/image';
 import MultiSelect from 'react-multi-select-component';
-//import { sanitize } from '../src/utils/miscellaneous';
 import { GET_PAGE } from '../../src/queries/pages/get-page';
-//import { handleRedirectsAndReturnData } from '../src/utils/slug';
-//import algoliasearch from 'algoliasearch/lite';
-//import { getAlgoliaResults } from '@algolia/autocomplete-js';
 import { useEffect, useRef, useState } from 'react';
 import {
   Configure,
   connectCurrentRefinements,
-  //connectMenu,
   connectSearchBox,
-  //connectAutoComplete,
-  //Hits,
   connectInfiniteHits,
   InstantSearch,
   Stats,
 } from 'react-instantsearch-dom';
 import { sanitize } from '../../src/utils/miscellaneous';
 import TypesenseInstantSearchAdapter from '../../src/typesense-instantsearch-adapter';
+import SwiperCore, { Pagination, EffectFade, A11y } from 'swiper';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import styles from '../../src/styles/pages/resources/index.module.scss';
+SwiperCore.use([Pagination, EffectFade, A11y]);
 
 const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter({
   server: {
@@ -36,9 +33,6 @@ const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter({
       },
     ],
   },
-  // The following parameters are directly passed to Typesense's search API endpoint.
-  //  So you can pass any parameters supported by the search endpoint below.
-  //  queryBy is required.
   additionalSearchParameters: {
     queryBy:
       'post_title,content,taxonomies_committee,taxonomies_topic,taxonomies_jww_type,post_year',
@@ -47,10 +41,6 @@ const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter({
 });
 
 const searchClient = typesenseInstantsearchAdapter.searchClient;
-/*const searchClient = algoliasearch(
-  'UITI8CODED',
-  '10a6a05f20a0f9794aa2fee36be2739a'
-);*/
 
 const years = [];
 const thisYear = new Date().getFullYear();
@@ -67,7 +57,6 @@ const yearOptions = [
 ];
 
 export default function Resources({ data }) {
-  //console.log(JSON.stringify({ data }));
   data.topics = {
     nodes: [
       {
@@ -134,27 +123,19 @@ export default function Resources({ data }) {
     ],
   };
 
-  //const [query, setQuery] = useState('');
   const [searchMode, setSearchMode] = useState('');
-  //const [optionalWords, setOptionalWords] = useState('');
   const [facetFilters, setFacetFilters] = useState([]);
-  //const [numericFilters, setNumericFilters] = useState([]);
   const [committees, setCommittees] = useState([]);
   const [topics, setTopics] = useState([]);
   const [types, setTypes] = useState([]);
   const [selectedYears, setSelectedYears] = useState([]);
   const [dropTokensThreshold, setDropTokensThreshold] = useState(0);
   const [numTypos, setNumTypos] = useState(2);
-  //const [hitsCount, setHitsCount] = useState(null);
-  //const searchInputRef = useRef(null);
   const textInputRef = useRef(null);
   const allRadioRef = useRef(null);
   const anyRadioRef = useRef(null);
   const exactRadioRef = useRef(null);
   useEffect(() => {
-    /*if (allRadioRef.current) {
-      allRadioRef.current.checked = true;
-    }*/
     setTimeout(() => setSearchMode('All'));
   }, []);
 
@@ -262,8 +243,6 @@ export default function Resources({ data }) {
         </div>
       );
 
-      //const CustomCommitteeMenuSelect = connectMenu(CommitteeMenuSelect);
-
       const TopicMenuSelect = () => (
         <div className="">
           <MultiSelect
@@ -297,8 +276,6 @@ export default function Resources({ data }) {
           />
         </div>
       );
-
-      //const CustomTopicMenuSelect = connectMenu(TopicMenuSelect);
 
       const TypeMenuSelect = () => (
         <div className="">
@@ -334,8 +311,6 @@ export default function Resources({ data }) {
         </div>
       );
 
-      //const CustomTypeMenuSelect = connectMenu(TypeMenuSelect);
-
       const YearMenuSelect = () => (
         <div className="">
           <MultiSelect
@@ -363,8 +338,6 @@ export default function Resources({ data }) {
           />
         </div>
       );
-
-      //const CustomYearMenuSelect = connectMenu(YearMenuSelect);
 
       const hasNoFilter =
         !currentRefinement &&
@@ -398,244 +371,264 @@ export default function Resources({ data }) {
 
       return (
         <>
-          <div className="p-4 mx-6 bg-gray-500">
-            <div className="flex border-solid border-b border-white">
-              <div className="w-2/5 pr-4">
-                <div className="pb-4">
-                  <Autocomplete
-                    searchCurrentRefinement={currentRefinement}
-                    searchRefine={refine}
-                    textInputRef={textInputRef}
-                    //searchMode={searchMode}
-                    //setQuery={setQuery}
-                  />
-                </div>
-                <div className="flex flex-wrap pb-3 text-white">
-                  <div className="w-full py-1">Search for:</div>
-                  <label className="flex mr-3 items-center">
-                    <input
-                      type="radio"
-                      className=""
-                      ref={allRadioRef}
-                      name="searchMode"
-                      value="All"
-                      checked={!searchMode || searchMode === 'All'}
-                      onChange={handleSearchModeChange}
+          <div className="py-14 px-24 border-b-thick-brand-green bg-brand-gray">
+            <div className="bg-brand-gray-pale">
+              <div className="flex border-solid border-b border-brand-gray">
+                <div className="w-2/5 pt-6 pr-6 pl-6">
+                  <div className="pb-4">
+                    <Autocomplete
+                      searchCurrentRefinement={currentRefinement}
+                      searchRefine={refine}
+                      textInputRef={textInputRef}
                     />
-                    <span className="pl-1">All words</span>
-                  </label>
-                  <label className="flex mr-3 items-center">
-                    <input
-                      type="radio"
-                      className=""
-                      ref={anyRadioRef}
-                      name="searchMode"
-                      value="Any"
-                      checked={searchMode === 'Any'}
-                      onChange={handleSearchModeChange}
+                  </div>
+                  <div className="flex flex-wrap pb-3">
+                    <label className="flex mr-3 items-center">
+                      <input
+                        type="radio"
+                        className=""
+                        ref={allRadioRef}
+                        name="searchMode"
+                        value="All"
+                        checked={!searchMode || searchMode === 'All'}
+                        onChange={handleSearchModeChange}
+                      />
+                      <span className="pl-1">All words</span>
+                    </label>
+                    <label className="flex mr-3 items-center">
+                      <input
+                        type="radio"
+                        className=""
+                        ref={anyRadioRef}
+                        name="searchMode"
+                        value="Any"
+                        checked={searchMode === 'Any'}
+                        onChange={handleSearchModeChange}
+                      />
+                      <span className="pl-1">Any words</span>
+                    </label>
+                    <label className="flex items-center">
+                      <input
+                        type="radio"
+                        className=""
+                        ref={exactRadioRef}
+                        name="searchMode"
+                        value="Exact"
+                        checked={searchMode === 'Exact'}
+                        onChange={handleSearchModeChange}
+                      />
+                      <span className="pl-1">Exact words</span>
+                    </label>
+                  </div>
+                </div>
+                <div className="w-3/5 pt-6 border-solid border-l border-brand-gray">
+                  <div className="flex flex-wrap pb-6 px-4 border-solid border-b border-brand-gray">
+                    <div className="w-1/4 px-2">
+                      <CommitteeMenuSelect />
+                    </div>
+                    <div className="w-1/4 px-2">
+                      <TopicMenuSelect />
+                    </div>
+                    <div className="w-1/4 px-2">
+                      <TypeMenuSelect />
+                    </div>
+                    <div className="w-1/4 px-2">
+                      <YearMenuSelect />
+                    </div>
+                  </div>
+                  <div className="flex py-6 px-4 text-white">
+                    <div className="flex-grow px-2">
+                      <Link href="#">
+                        <a className="block py-2 px-3 bg-brand-blue text-center">
+                          FOR MEMBERS
+                        </a>
+                      </Link>
+                    </div>
+                    <div className="flex-grow px-2">
+                      <Link href="#">
+                        <a className="block py-2 px-3 bg-brand-blue text-center">
+                          JERSEY WATERCHECK
+                        </a>
+                      </Link>
+                    </div>
+                    <div className="flex-grow px-2">
+                      <Link href="#">
+                        <a className="block py-2 px-3 bg-brand-blue text-center">
+                          EQUITY MAP
+                        </a>
+                      </Link>
+                    </div>
+                    <div className="flex-grow px-2">
+                      <Link href="#">
+                        <a className="block py-2 px-3 bg-brand-blue text-center">
+                          VIDEOS
+                        </a>
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {(currentRefinement ||
+                (committees.length > 0 && committees[0]?.value) ||
+                (topics.length > 0 && topics[0]?.value) ||
+                (types.length > 0 && types[0]?.value) ||
+                (selectedYears.length > 0 && selectedYears[0]?.value)) && (
+                <div className="pb-6 pl-6 pr-6">
+                  <div className="flex justify-end pt-2 text-brand-green">
+                    <CustomClearRefinements
+                      clearsQuery
+                      translations={{
+                        reset: 'CLEAR SEARCH',
+                      }}
                     />
-                    <span className="pl-1">Any words</span>
-                  </label>
-                  <label className="flex items-center">
-                    <input
-                      type="radio"
-                      className=""
-                      ref={exactRadioRef}
-                      name="searchMode"
-                      value="Exact"
-                      checked={searchMode === 'Exact'}
-                      onChange={handleSearchModeChange}
-                    />
-                    <span className="pl-1">Exact words</span>
-                  </label>
+                  </div>
+                  <div className="flex flex-wrap items-center">
+                    {currentRefinement && (
+                      <div className="relative pl-4 pr-8 mr-4 mt-2 rounded-full bg-brand-gray">
+                        <Link href="#">
+                          <a className="block p-2 mr-3">{currentRefinement}</a>
+                        </Link>
+                        <button
+                          className="w-8 h-8 rounded-full text-2xl absolute right-1 top-1/2 -mt-4 pb-1 flex justify-center items-center bg-white text-brand-green"
+                          type="button"
+                          onClick={() => refine('')}
+                        >
+                          &times;
+                        </button>
+                      </div>
+                    )}
+                    {committees.length > 0 &&
+                      committees[0]?.value &&
+                      committees.map((committee) => (
+                        <div
+                          className="relative pl-4 pr-8 mr-4 mt-2 rounded-full bg-brand-gray"
+                          key={committee.value}
+                        >
+                          <Link href="#">
+                            <a className="block p-2 mr-3">{committee.label}</a>
+                          </Link>
+                          <button
+                            className="w-8 h-8 rounded-full text-2xl absolute right-1 top-1/2 -mt-4 pb-1 flex justify-center items-center bg-white text-brand-green"
+                            type="button"
+                            onClick={() => {
+                              const newCommittees = committees.filter(
+                                (item) => item.value !== committee.value
+                              );
+                              setMultiFacetFilters(
+                                'taxonomies_committee',
+                                newCommittees
+                              );
+                              setCommittees(newCommittees);
+                              setTimeout(() => refine(currentRefinement));
+                            }}
+                          >
+                            &times;
+                          </button>
+                        </div>
+                      ))}
+                    {topics.length > 0 &&
+                      topics[0].value !== '' &&
+                      topics.map((topic) => (
+                        <div
+                          className="relative pl-4 pr-8 mr-4 mt-2 rounded-full bg-brand-gray"
+                          key={topic.value}
+                        >
+                          <Link href="#">
+                            <a className="block p-2 mr-3">{topic.label}</a>
+                          </Link>
+                          <button
+                            className="w-8 h-8 rounded-full text-2xl absolute right-1 top-1/2 -mt-4 pb-1 flex justify-center items-center bg-white"
+                            type="button"
+                            onClick={() => {
+                              const newTopics = topics.filter(
+                                (item) => item.value !== topic.value
+                              );
+                              setMultiFacetFilters(
+                                'taxonomies_topic',
+                                newTopics
+                              );
+                              setTopics(newTopics);
+                              setTimeout(() => refine(currentRefinement));
+                            }}
+                          >
+                            &times;
+                          </button>
+                        </div>
+                      ))}
+                    {types.length > 0 &&
+                      types[0].value !== '' &&
+                      types.map((type) => (
+                        <div
+                          className="relative pl-4 pr-8 mr-4 mt-2 rounded-full bg-brand-gray"
+                          key={type.value}
+                        >
+                          <Link href="#">
+                            <a className="block p-2 mr-3">{type.label}</a>
+                          </Link>
+                          <button
+                            className="w-8 h-8 rounded-full text-2xl absolute right-1 top-1/2 -mt-4 pb-1 flex justify-center items-center bg-white text-brand-green"
+                            type="button"
+                            onClick={() => {
+                              const newTypes = types.filter(
+                                (item) => item.value !== type.value
+                              );
+                              setMultiFacetFilters(
+                                'taxonomies_jww_type',
+                                newTypes
+                              );
+                              setTypes(newTypes);
+                              setTimeout(() => refine(currentRefinement));
+                            }}
+                          >
+                            &times;
+                          </button>
+                        </div>
+                      ))}
+                    {selectedYears.length > 0 &&
+                      selectedYears[0].value !== '' &&
+                      selectedYears.map((selectedYear) => (
+                        <div
+                          className="relative pl-4 pr-8 mr-4 mt-2 rounded-full bg-gray-100"
+                          key={selectedYear.label}
+                        >
+                          <Link href="#">
+                            <a className="block p-2 mr-3">
+                              {selectedYear.label}
+                            </a>
+                          </Link>
+                          <button
+                            className="w-8 h-8 rounded-full text-2xl absolute right-1 top-1/2 -mt-4 pb-1 flex justify-center items-center bg-white text-brand-green"
+                            type="button"
+                            onClick={() => {
+                              const newSelectedYears = selectedYears.filter(
+                                (item) => item.label !== selectedYear.label
+                              );
+                              setMultiFacetFilters(
+                                'post_year',
+                                newSelectedYears
+                              );
+                              setSelectedYears(newSelectedYears);
+                              setTimeout(() => refine(currentRefinement));
+                            }}
+                          >
+                            &times;
+                          </button>
+                        </div>
+                      ))}
+                  </div>
                 </div>
-              </div>
-              <div className="w-3/5 border-solid border-l border-white">
-                <div className="flex flex-wrap pb-4 px-3 border-solid border-b border-white">
-                  <div className="w-1/4 px-3">
-                    <CommitteeMenuSelect />
-                  </div>
-                  <div className="w-1/4 px-3">
-                    <TopicMenuSelect />
-                  </div>
-                  <div className="w-1/4 px-3">
-                    <TypeMenuSelect />
-                  </div>
-                  <div className="w-1/4 px-3">
-                    <YearMenuSelect />
-                  </div>
-                </div>
-                <div className="flex py-4 px-3 text-white">
-                  <div className="flex-grow px-3">
-                    <Link href="#">
-                      <a className="block py-2 px-3 border-solid border-2 border-white bg-transparent text-center">
-                        FOR MEMBERS
-                      </a>
-                    </Link>
-                  </div>
-                  <div className="flex-grow px-3">
-                    <Link href="#">
-                      <a className="block py-2 px-3 border-solid border-2 border-white bg-transparent text-center">
-                        JERSEY WATERCHECK
-                      </a>
-                    </Link>
-                  </div>
-                  <div className="flex-grow px-3">
-                    <Link href="#">
-                      <a className="block py-2 px-3 border-solid border-2 border-white bg-transparent text-center">
-                        EQUITY MAP
-                      </a>
-                    </Link>
-                  </div>
-                  <div className="flex-grow px-3">
-                    <Link href="#">
-                      <a className="block py-2 px-3 border-solid border-2 border-white bg-transparent text-center">
-                        VIDEOS
-                      </a>
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="">
-              <div className="flex justify-end pt-4 pr-6 text-white">
-                <CustomClearRefinements
-                  clearsQuery
-                  translations={{
-                    reset: 'CLEAR SEARCH',
-                  }}
-                />
-              </div>
-              <div className="flex flex-wrap items-center">
-                {currentRefinement && (
-                  <div className="relative pl-4 pr-8 mr-6 mt-4 rounded-full bg-gray-100">
-                    <Link href="#">
-                      <a className="block p-2">{currentRefinement}</a>
-                    </Link>
-                    <button
-                      className="w-8 h-8 rounded-full text-2xl absolute right-1 top-1/2 -mt-4 pb-1 flex justify-center items-center bg-white"
-                      type="button"
-                      onClick={() => refine('')}
-                    >
-                      &times;
-                    </button>
-                  </div>
-                )}
-                {committees.length > 0 &&
-                  committees[0]?.value &&
-                  committees.map((committee) => (
-                    <div
-                      className="relative pl-4 pr-8 mr-6 mt-4 rounded-full bg-gray-100"
-                      key={committee.value}
-                    >
-                      <Link href="#">
-                        <a className="block p-2">{committee.label}</a>
-                      </Link>
-                      <button
-                        className="w-8 h-8 rounded-full text-2xl absolute right-1 top-1/2 -mt-4 pb-1 flex justify-center items-center bg-white"
-                        type="button"
-                        onClick={() => {
-                          const newCommittees = committees.filter(
-                            (item) => item.value !== committee.value
-                          );
-                          setMultiFacetFilters(
-                            'taxonomies_committee',
-                            newCommittees
-                          );
-                          setCommittees(newCommittees);
-                          setTimeout(() => refine(currentRefinement));
-                        }}
-                      >
-                        &times;
-                      </button>
-                    </div>
-                  ))}
-                {topics.length > 0 &&
-                  topics[0].value !== '' &&
-                  topics.map((topic) => (
-                    <div
-                      className="relative pl-4 pr-8 mr-6 mt-4 rounded-full bg-gray-100"
-                      key={topic.value}
-                    >
-                      <Link href="#">
-                        <a className="block p-2">{topic.label}</a>
-                      </Link>
-                      <button
-                        className="w-8 h-8 rounded-full text-2xl absolute right-1 top-1/2 -mt-4 pb-1 flex justify-center items-center bg-white"
-                        type="button"
-                        onClick={() => {
-                          const newTopics = topics.filter(
-                            (item) => item.value !== topic.value
-                          );
-                          setMultiFacetFilters('taxonomies_topic', newTopics);
-                          setTopics(newTopics);
-                          setTimeout(() => refine(currentRefinement));
-                        }}
-                      >
-                        &times;
-                      </button>
-                    </div>
-                  ))}
-                {types.length > 0 &&
-                  types[0].value !== '' &&
-                  types.map((type) => (
-                    <div
-                      className="relative pl-4 pr-8 mr-6 mt-4 rounded-full bg-gray-100"
-                      key={type.value}
-                    >
-                      <Link href="#">
-                        <a className="block p-2">{type.label}</a>
-                      </Link>
-                      <button
-                        className="w-8 h-8 rounded-full text-2xl absolute right-1 top-1/2 -mt-4 pb-1 flex justify-center items-center bg-white"
-                        type="button"
-                        onClick={() => {
-                          const newTypes = types.filter(
-                            (item) => item.value !== type.value
-                          );
-                          setMultiFacetFilters('taxonomies_jww_type', newTypes);
-                          setTypes(newTypes);
-                          setTimeout(() => refine(currentRefinement));
-                        }}
-                      >
-                        &times;
-                      </button>
-                    </div>
-                  ))}
-                {selectedYears.length > 0 &&
-                  selectedYears[0].value !== '' &&
-                  selectedYears.map((selectedYear) => (
-                    <div
-                      className="relative pl-4 pr-8 mr-6 mt-4 rounded-full bg-gray-100"
-                      key={selectedYear.label}
-                    >
-                      <Link href="#">
-                        <a className="block p-2">{selectedYear.label}</a>
-                      </Link>
-                      <button
-                        className="w-8 h-8 rounded-full text-2xl absolute right-1 top-1/2 -mt-4 pb-1 flex justify-center items-center bg-white"
-                        type="button"
-                        onClick={() => {
-                          const newSelectedYears = selectedYears.filter(
-                            (item) => item.label !== selectedYear.label
-                          );
-                          setMultiFacetFilters('post_year', newSelectedYears);
-                          setSelectedYears(newSelectedYears);
-                          setTimeout(() => refine(currentRefinement));
-                        }}
-                      >
-                        &times;
-                      </button>
-                    </div>
-                  ))}
-              </div>
+              )}
             </div>
           </div>
-          <div className="px-5 py-8">
+          <div className="py-8">
             <Stats
               translations={{
                 stats(nbHits) {
-                  return (currentRefinement?.split(/\s+/).length === 1 || searchMode !== 'Exact') && `${nbHits.toLocaleString()} Results Found`;
+                  return (
+                    (currentRefinement?.split(/\s+/).length === 1 ||
+                      searchMode !== 'Exact') &&
+                    `${nbHits.toLocaleString()} Results Found`
+                  );
                 },
               }}
             />
@@ -645,88 +638,33 @@ export default function Resources({ data }) {
     }
   );
 
-  const InfiniteHits = ({
-    hits,
-    //hasPrevious,
-    hasMore,
-    //refinePrevious,
-    refineNext,
-    //setHitsCount,
-  }) => {
+  const InfiniteHits = ({ hits, hasMore, refineNext }) => {
     const query = textInputRef.current?.value?.toLowerCase() ?? '';
     const queryTokens = query.toLowerCase().split(/\s+/) ?? [];
     let filteredHits;
     if (queryTokens.length > 1 && searchMode === 'Exact') {
-      /*filteredHits = hits.filter(
-        ({ _highlightResult }) => {
-          const re = new RegExp(
-            queryTokens
-              .map((token) => `<[^>]+>${token}<\\/[^>]+>`)
-              .join(' ')
-          );
-
-          return (
-            re.test(_highlightResult?.post_title?.value?.toLowerCase() ?? '') ||
-            re.test(_highlightResult?.content?.value?.toLowerCase() ?? '')
-          );
-        });*/
-      filteredHits = hits.filter(({ post_title, content }) => post_title?.toLowerCase()?.includes(query) || content?.toLowerCase()?.includes(query));
-      //setHitsCount(filteredHits.length);
+      filteredHits = hits.filter(
+        ({ post_title, content }) =>
+          post_title?.toLowerCase()?.includes(query) ||
+          content?.toLowerCase()?.includes(query)
+      );
     } else {
       filteredHits = hits;
     }
 
-    /*if (currentRefinement?.trim() !== '') {
-          switch (searchMode) {
-            case 'All':
-              filteredHits = hits.filter(
-                ({ highlights }) =>
-                  highlights?.findIndex((highlight) =>
-                    queryTokens.every((token) =>
-                      highlight.matched_tokens
-                        ?.map((matchedToken) => matchedToken.toLowerCase())
-                        ?.includes(token)
-                    )
-                  ) > -1
-              );
-              break;
-            case 'Exact':
-              filteredHits = hits.filter(
-                ({ highlights }) =>
-                  highlights?.findIndex((highlight) =>
-                    new RegExp(
-                      queryTokens
-                        .map((token) => `<mark>${token}<\\/mark>`)
-                        .join(' ')
-                    ).test(highlight.snippet?.toLowerCase())
-                  ) > -1
-              );
-              break;
-            default:
-              break;
-          }
-        }
-
-    setHitsCount(filteredHits.length);*/
     return (
       <div class="ais-InfiniteHits">
         {filteredHits.length > 0 && (
           <ul class="ais-InfiniteHits-list">
             {filteredHits.map((hit) => (
-              <li
-                class="ais-InfiniteHits-item"
-                key={hit.id}
-              >
+              <li class="ais-InfiniteHits-item" key={hit.id}>
                 <Resource hit={hit} />
               </li>
             ))}
           </ul>
         )}
         {hasMore && (
-          <button
-            class="ais-InfiniteHits-loadMore"
-            onClick={refineNext}
-          >
+          <button class="ais-InfiniteHits-loadMore" onClick={refineNext}>
             LOAD MORE RESOURCES
           </button>
         )}
@@ -738,34 +676,83 @@ export default function Resources({ data }) {
 
   return (
     <Layout data={data}>
-      <h1 className="mb-5 text-center text-4xl">{data?.page?.title}</h1>
-      <div
-        className="md-w-4-5 mx-auto mb-7 text-center"
-        dangerouslySetInnerHTML={{
-          __html: sanitize(data?.page?.content ?? ''),
-        }}
-      />
-      <div className="-mx-5">
+      <div className="relative">
+        <Swiper effect="fade" loop={true} pagination={{ clickable: true }}>
+          <SwiperSlide>
+            <div className="relative w-full" style={{ height: 430 }}>
+              <Image
+                src="/images/child-holding-glass-of-water.jpg"
+                alt=""
+                layout="fill"
+                objectFit="cover"
+              />
+            </div>
+          </SwiperSlide>
+          <SwiperSlide>
+            <div className="relative w-full" style={{ height: 430 }}>
+              <Image
+                src="/images/boots-on-wet-street.jpg"
+                alt=""
+                layout="fill"
+                objectFit="cover"
+              />
+            </div>
+          </SwiperSlide>
+          <SwiperSlide>
+            <div className="relative w-full" style={{ height: 430 }}>
+              <Image
+                src="/images/mallard-duck-swimming-pond-park.jpg"
+                alt=""
+                layout="fill"
+                objectFit="cover"
+              />
+            </div>
+          </SwiperSlide>
+          <SwiperSlide>
+            <div className="relative w-full" style={{ height: 430 }}>
+              <Image
+                src="/images/girl-playing-dancing-around-wet-street.jpg"
+                alt=""
+                layout="fill"
+                objectFit="cover"
+              />
+            </div>
+          </SwiperSlide>
+          <SwiperSlide>
+            <div className="relative w-full" style={{ height: 430 }}>
+              <Image
+                src="/images/couple-together-kayaking-river.jpg"
+                alt=""
+                layout="fill"
+                objectFit="cover"
+              />
+            </div>
+          </SwiperSlide>
+        </Swiper>
+        <div className="w-150 max-w-full absolute right-24 top-14 z-10 bg-white p-6 pointer-events-none">
+          <h1 className="mb-5 text-center text-3xl">{data?.page?.title}</h1>
+          <div
+            className="md-w-4-5 mx-auto mb-7 text-center"
+            dangerouslySetInnerHTML={{
+              __html: sanitize(data?.page?.content ?? ''),
+            }}
+          />
+        </div>
+      </div>
+      <div>
         <InstantSearch
-          //indexName="wp_posts_resource"
           indexName="wp_posts_resource"
           searchClient={searchClient}
-          //searchState={searchState
           onSearchStateChange={(searchState) => {
             console.log(JSON.stringify({ searchState }));
           }}
         >
           <Configure
-            //query={query}
             queryByWeights="3,1,1,1,1,1"
-            //filters={filters}
             facetFilters={facetFilters}
-            //numericFilters={numericFilters}
-            //optionalWords={optionalWords}
-            //advancedSyntax={true}
             dropTokensThreshold={dropTokensThreshold}
             numTypos={numTypos}
-            hitsPerPage={9}
+            hitsPerPage={5}
           />
           <CustomWidgets />
           <CustomInfiniteHits />
@@ -791,6 +778,4 @@ export async function getStaticProps(context) {
   };
 
   return defaultProps;
-
-  //return handleRedirectsAndReturnData( defaultProps, data, errors, 'page' );
 }
