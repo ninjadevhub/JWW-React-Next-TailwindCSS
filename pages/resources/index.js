@@ -17,10 +17,10 @@ import {
 } from 'react-instantsearch-dom';
 import { sanitize } from '../../src/utils/miscellaneous';
 import TypesenseInstantSearchAdapter from '../../src/typesense-instantsearch-adapter';
-import SwiperCore, { Pagination, EffectFade, A11y } from 'swiper';
+import SwiperCore, { Autoplay, Pagination, EffectFade, A11y } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import styles from '../../src/styles/pages/resources/index.module.scss';
-SwiperCore.use([Pagination, EffectFade, A11y]);
+SwiperCore.use([Autoplay, Pagination, EffectFade, A11y]);
 
 const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter({
   server: {
