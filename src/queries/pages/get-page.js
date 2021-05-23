@@ -2,6 +2,8 @@ import { gql } from "@apollo/client";
 //import MenuFragment from "../fragments/menus";
 import {HeaderFooter} from "../get-menus";
 import CommitteesFragment from "../fragments/committees";
+import TopicsFragment from '../fragments/topics';
+import TypesFragment from '../fragments/types';
 import SeoFragment from "../fragments/seo";
 
 export const GET_PAGE = gql`
@@ -20,9 +22,17 @@ export const GET_PAGE = gql`
 	  committees {
 			...CommitteesFragment
 		}
+		topics {
+			...TopicsFragment
+		}
+		jww_types {
+			...TypesFragment
+		}
 	}
 	${SeoFragment}
 	${CommitteesFragment}
+	${TopicsFragment}
+	${TypesFragment}
 `;
 
 export const GET_PAGE_BY_ID = gql`
