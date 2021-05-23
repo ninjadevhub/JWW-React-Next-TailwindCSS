@@ -220,7 +220,7 @@ export default function Resources({ data }) {
             overrideStrings={{ selectSomeItems: 'By Type' }}
             options={[
               { value: '', label: 'See All Types' },
-              ...(data?.jww_types?.nodes?.map((obj) => ({
+              ...(data?.types?.nodes?.map((obj) => ({
                 value: obj.slug,
                 label: obj.name,
               })) || []),
