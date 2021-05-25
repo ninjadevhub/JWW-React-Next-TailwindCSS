@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import client from '../../../src/apollo/client';
-import { GET_TOPICS_SLUGS } from '../../../src/queries/taxonomies/get-topics-slugs';
-import { GET_TOPIC } from '../../../src/queries/taxonomies/get-topic';
+import { GET_COMMITTEES_SLUGS } from '../../../src/queries/taxonomies/get-committees-slugs';
+import { GET_COMMITTEE } from '../../../src/queries/taxonomies/get-committee';
 import { useRouter } from 'next/router';
 import Layout from '../../../src/components/layout';
 import Image from 'next/image';
@@ -11,7 +11,7 @@ import {
   FALLBACK,
   handleRedirectsAndReturnData,
 } from '../../../src/utils/slug';
-import { getTopicCircleIconBySlug } from '../../../src/utils/icons-map';
+import { getCommitteeIconsByName } from '../../../src/utils/icons-map';
 import Autocomplete from '../../../src/components/autocomplete';
 import Resource from '../../../src/components/resources/resource';
 import MultiSelect from 'react-multi-select-component';
