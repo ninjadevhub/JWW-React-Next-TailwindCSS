@@ -15,7 +15,7 @@ const Resource = ({ hit, committees }) => {
     content,
   } = hit;
 
-  const resourceLink = content.match(/(?!<a href=")<a href="([^"]+)/)?.[1] ?? '';
+  const resourceLink = content.match(/<a href="([^"]+)(?!<a href=")/)?.[1] ?? '';
   return (
     <div className="w-full flex border-solid border-b border-color-brand-gray text-gray-700">
       <div
