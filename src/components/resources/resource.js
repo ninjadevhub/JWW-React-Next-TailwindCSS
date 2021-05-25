@@ -16,6 +16,7 @@ const Resource = ({ hit, committees }) => {
     content,
   } = hit;
 
+  const resourceLink = content.match(/(?<=<li><a href=")[^"]+/)?.[0] ?? '';
   return (
     <div className="w-full flex border-solid border-b border-color-brand-gray text-gray-700">
       <div
@@ -66,9 +67,9 @@ const Resource = ({ hit, committees }) => {
         </div>
         <h2 className="my-4 text-2xl">{post_title}</h2>
         <div className="mb-6">{post_excerpt} ...</div>
-        <button className="inline-block py-2 px-8 bg-brand-orange text-center text-white" type="button">
+        <a href={resourceLink} className="inline-block py-2 px-8 bg-brand-orange text-center text-white" target="_blank">
           VIEW RESOURCE
-        </button>
+        </a>
       </div>
       <div
         className="flex-grow-0 flex-shrink-0 flex flex-column justify-center items-center p-3 bg-brand-gray text-center"
