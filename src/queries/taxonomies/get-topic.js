@@ -12,7 +12,7 @@ export const GET_TOPIC = gql`
 				title
 				backgroundImage {
 					altText
-					uri
+					link
 					title(format: RAW)
 				}
 			}

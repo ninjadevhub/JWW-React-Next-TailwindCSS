@@ -37,7 +37,7 @@ export default function CommitteeOverview({ data }) {
       <div className="w-full relative bg-brand-gray" style={{ height: 340 }}>
         {data?.committee?.Committee?.backgroundImage && (
           <Image
-            src={data?.committee?.Committee?.backgroundImage?.uri}
+            src={data?.committee?.Committee?.backgroundImage?.link}
             alt={
               data?.committee?.Committee?.backgroundImage?.altText ||
               data?.committee?.Committee?.backgroundImage?.title

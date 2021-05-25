@@ -494,7 +494,7 @@ export default function LatestNews({ data }) {
       <div className="w-full relative bg-brand-gray" style={{ height: 340 }}>
         {data?.topic?.Topic?.backgroundImage && (
           <Image
-            src={data?.topic?.Topic?.backgroundImage?.uri}
+            src={data?.topic?.Topic?.backgroundImage?.link}
             alt={
               data?.topic?.Topic?.backgroundImage?.altText ||
               data?.topic?.Topic?.backgroundImage?.title

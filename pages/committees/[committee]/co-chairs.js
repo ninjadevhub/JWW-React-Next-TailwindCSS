@@ -37,7 +37,7 @@ export default function CommitteeOverview({ data }) {
       <div className="w-full relative bg-brand-gray" style={{ height: 340 }}>
         {data?.committee?.Committee?.backgroundImage && (
           <Image
-            src={data?.committee?.Committee?.backgroundImage?.uri}
+            src={data?.committee?.Committee?.backgroundImage?.link}
             alt={
               data?.committee?.Committee?.backgroundImage?.altText ||
               data?.committee?.Committee?.backgroundImage?.title
@@ -66,9 +66,11 @@ export default function CommitteeOverview({ data }) {
         </div>
       </div>
       <div className="flex justify-center bg-brand-gray mb-12">
-          <div className="w-52 h-15 flex justify-center items-center bg-white text-brand-blue">
+        <Link href={`/committees/${slug}`}>
+		  <a className="w-52 h-15 flex justify-center items-center">
             OVERVIEW
-          </div>
+          </a>
+		</Link>
         <Link href={`/committees/${slug}/work-plans`}>
           <a className="w-52 h-15 flex justify-center items-center">
             WORK PLANS
@@ -84,11 +86,9 @@ export default function CommitteeOverview({ data }) {
             RESOURCES
           </a>
         </Link>
-        <Link href={`/committees/${slug}/co-chairs`}>
-          <a className="w-52 h-15 flex justify-center items-center">
+          <div className="w-52 h-15 flex justify-center items-center bg-white text-brand-blue">
             CO-CHAIRS
-          </a>
-        </Link>
+          </div>
         <Link href={`#`}>
           <a className="w-52 h-15 flex justify-center items-center">JOIN</a>
         </Link>
