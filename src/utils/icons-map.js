@@ -31,6 +31,14 @@ export const getTopicIconByName = name => {
 	return Object.keys(TopicIconsMap).includes(name) ? TopicIconsMap[name] : null;
 };
 
+export const getTopicCircleIconBySlug = slug => {
+	const TopicCircleIconsMap = {
+		lead: <Image src="/images/lead-icon-in-green-circle.png" width={80} height={80} alt="Lead Icon in Green Circle" />,
+	};
+	
+	return Object.keys(TopicCircleIconsMap).includes(slug) ? TopicCircleIconsMap[slug] : <div className="rounded-full bg-brand-green" style={{ width: 80, height: 80 }} />;
+};
+
 export const getTypeIconByName = name => {
 	const TypeIconsMap = {
 		'Guides &amp; Toolkits': <Image src="/images/toolkit.png" width={18} height={18} alt="Guides & Toolkits" />,

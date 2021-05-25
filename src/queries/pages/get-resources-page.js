@@ -3,8 +3,8 @@ import { gql } from "@apollo/client";
 import {HeaderFooter} from "../get-menus";
 import SeoFragment from "../fragments/seo";
 
-export const GET_PAGE = gql`
-	query GET_PAGE($uri: String) {
+export const GET_RESOURCES_PAGE = gql`
+	query GET_RESOURCES_PAGE($uri: String) {
 		${HeaderFooter}
 	  page: pageBy(uri: $uri) {
 	    id
@@ -16,24 +16,30 @@ export const GET_PAGE = gql`
         ...SeoFragment
       }
 	  }
-	}
-	${SeoFragment}
-`;
-
-export const GET_PAGE_BY_ID = gql`
-	query GET_PAGE_BY_ID($id: ID!) {
-		${HeaderFooter}
-	  page(idType: DATABASE_ID, id: $id) {
-	    id
-	    title
-	    content
-	    slug
-	    uri
-	    seo {
-          ...SeoFragment
-        }
-		status
-	  }
+	  committees {
+			nodes {
+				name
+				slug
+				Committee {
+					title
+				}
+			}
+		}
+		topics {
+			nodes {
+				name
+				slug
+				Topic {
+					title
+				}
+			}
+		}
+		types {
+			nodes {
+				name
+				slug
+			}
+		}
 	}
 	${SeoFragment}
 `;

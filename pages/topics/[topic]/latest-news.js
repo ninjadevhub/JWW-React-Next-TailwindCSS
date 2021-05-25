@@ -1,13 +1,17 @@
-import client from '../../src/apollo/client';
-import Layout from '../../src/components/layout';
-import Autocomplete from '../../src/components/autocomplete';
-import Resource from '../../src/components/resources/resource';
-import Button from '../../src/components/buttons';
-import Link from 'next/link';
-import Image from 'next/image';
-import MultiSelect from 'react-multi-select-component';
-import { GET_RESOURCES_PAGE } from '../../src/queries/pages/get-resources-page';
 import { useEffect, useRef, useState } from 'react';
+import client from '../../../src/apollo/client';
+import { GET_TOPICS_SLUGS } from '../../../src/queries/taxonomies/get-topics-slugs';
+import { GET_TOPIC } from '../../../src/queries/taxonomies/get-topic';
+import { useRouter } from 'next/router';
+import Layout from '../../../src/components/layout';
+import Image from 'next/image';
+import Select from 'react-select';
+import Link from 'next/link';
+import { FALLBACK, handleRedirectsAndReturnData } from '../../../src/utils/slug';
+import { getTopicCircleIconBySlug } from '../../../src/utils/icons-map';
+import Autocomplete from '../../../src/components/autocomplete';
+import News from '../../../src/components/news/news';
+import MultiSelect from 'react-multi-select-component';
 import {
   Configure,
   connectCurrentRefinements,
@@ -16,12 +20,7 @@ import {
   InstantSearch,
   Stats,
 } from 'react-instantsearch-dom';
-import { sanitize } from '../../src/utils/miscellaneous';
-import TypesenseInstantSearchAdapter from '../../src/typesense-instantsearch-adapter';
-import SwiperCore, { Autoplay, Pagination, EffectFade, A11y } from 'swiper';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import styles from '../../src/styles/pages/resources/index.module.scss';
-SwiperCore.use([Autoplay, Pagination, EffectFade, A11y]);
+import TypesenseInstantSearchAdapter from '../../../src/typesense-instantsearch-adapter';
 
 const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter({
   server: {
@@ -36,7 +35,7 @@ const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter({
   },
   additionalSearchParameters: {
     queryBy:
-      'post_title,content,taxonomies_committee,taxonomies_topic,taxonomies_jww_type,post_year',
+      'post_title,content,taxonomies_topic',
     sortBy: '_text_match:desc, post_date:desc',
   },
 });
@@ -57,12 +56,30 @@ const yearOptions = [
   })),
 ];
 
-export default function Resources({ data }) {
+export default function LatestNews({ data }) {
+  const router = useRouter();
+
+  // If the page is not yet generated, this will be displayed
+  // initially until getStaticProps() finishes running
+  if (router.isFallback) {
+    return <div>Loading...</div>;
+  }
+
+  const slug = data?.topic?.slug ?? '';
+  const defaultTopicOption = { value: '', label: 'Change Topic' };
+  const topicsOptions = [
+    defaultTopicOption,
+    ...(data?.topics?.nodes?.map(({ slug, name }) => ({
+      value: slug,
+      label: name,
+    })) ?? []),
+  ];
+  
+  const [topicOption, setTopicOption] = useState(defaultTopicOption);
   const [searchMode, setSearchMode] = useState('');
-  const [facetFilters, setFacetFilters] = useState([]);
-  const [committees, setCommittees] = useState([]);
-  const [topics, setTopics] = useState([]);
-  const [types, setTypes] = useState([]);
+  const [facetFilters, setFacetFilters] = useState([`taxonomies_topic:${data?.topic?.name ?? ''}`]);
+  //const [topics, setTopics] = useState([]);
+  const [newsSources, setNewsSources] = useState([]);
   const [selectedYears, setSelectedYears] = useState([]);
   const [dropTokensThreshold, setDropTokensThreshold] = useState(0);
   const [numTypos, setNumTypos] = useState(2);
@@ -70,18 +87,13 @@ export default function Resources({ data }) {
   const allRadioRef = useRef(null);
   const anyRadioRef = useRef(null);
   const exactRadioRef = useRef(null);
-  const committeesMap = {};
-  data?.committees?.nodes?.forEach(node => {
-    committeesMap[node.name] = node.slug;
-  });
-  
   useEffect(() => {
     setTimeout(() => setSearchMode('All'));
   }, []);
 
   const setMultiFacetFilters = (taxonomy, taxonomyTerms) => {
-    const hasTerm = taxonomyTerms.length === 1 && taxonomyTerms[0].value !== '';
-    const hasTerms = taxonomyTerms.length > 1;
+    const hasTerm = taxonomyTerms?.length === 1 && taxonomyTerms[0].value !== '';
+    const hasTerms = taxonomyTerms?.length > 1;
     let hasNoTerm = false;
     let newFacetFilters;
     if (hasTerm) {
@@ -99,7 +111,7 @@ export default function Resources({ data }) {
       return filterStr.indexOf(taxonomy) === 0;
     });
 
-    if (facetFilters.length === 0) {
+    if (facetFilters?.length === 0) {
       if (hasTerm || hasTerms) {
         setFacetFilters([newFacetFilters]);
       }
@@ -147,102 +159,32 @@ export default function Resources({ data }) {
         setTimeout(() => refine(currentRefinement));
       };
 
-      const CommitteeMenuSelect = () => (
+      const NewsSourceMenuSelect = () => (
         <div className="">
           <MultiSelect
             className=""
             hasSelectAll={false}
-            labelledBy="By Committee"
-            overrideStrings={{ selectSomeItems: 'By Committee' }}
+            labelledBy="By News Source"
+            overrideStrings={{ selectSomeItems: 'By News Source' }}
             options={[
-              { value: '', label: 'See All Committees' },
-              ...(data?.committees?.nodes?.map((obj) => ({
+              { value: '', label: 'See All News Sources' },
+              ...(data?.newsSources?.nodes?.map((obj) => ({
                 value: obj.slug,
                 label: obj.name,
               })) || []),
             ]}
-            value={committees}
+            value={newsSources}
             onChange={(selected) => {
-              setMultiFacetFilters('taxonomies_committee', selected);
-              setCommittees((prevCommittees) => {
+              setMultiFacetFilters('taxonomies_news_source', selected);
+              setNewsSources((prevNewsSources) => {
                 if (
-                  prevCommittees.findIndex(
-                    (committee) => committee.value === ''
-                  ) === -1 &&
+                  prevNewsSources.findIndex((source) => source.value === '') === -1 &&
                   selected.findIndex((option) => option.value === '') > -1
                 ) {
-                  return [{ value: '', label: 'See All Committees' }];
+                  return [{ value: '', label: 'See All News Sources' }];
                 }
 
-                return selected.filter((committee) => committee.value !== '');
-              });
-
-              setTimeout(() => refine(currentRefinement));
-            }}
-          />
-        </div>
-      );
-
-      const TopicMenuSelect = () => (
-        <div className="">
-          <MultiSelect
-            className=""
-            hasSelectAll={false}
-            labelledBy="By Topic"
-            overrideStrings={{ selectSomeItems: 'By Topic' }}
-            options={[
-              { value: '', label: 'See All Topics' },
-              ...(data?.topics?.nodes?.map((obj) => ({
-                value: obj.slug,
-                label: obj.name,
-              })) || []),
-            ]}
-            value={topics}
-            onChange={(selected) => {
-              setMultiFacetFilters('taxonomies_topic', selected);
-              setTopics((prevTopics) => {
-                if (
-                  prevTopics.findIndex((topic) => topic.value === '') === -1 &&
-                  selected.findIndex((option) => option.value === '') > -1
-                ) {
-                  return [{ value: '', label: 'See All topics' }];
-                }
-
-                return selected.filter((topic) => topic.value !== '');
-              });
-
-              setTimeout(() => refine(currentRefinement));
-            }}
-          />
-        </div>
-      );
-
-      const TypeMenuSelect = () => (
-        <div className="">
-          <MultiSelect
-            className=""
-            hasSelectAll={false}
-            labelledBy="By Type"
-            overrideStrings={{ selectSomeItems: 'By Type' }}
-            options={[
-              { value: '', label: 'See All Types' },
-              ...(data?.types?.nodes?.map((obj) => ({
-                value: obj.slug,
-                label: obj.name,
-              })) || []),
-            ]}
-            value={types}
-            onChange={(selected) => {
-              setMultiFacetFilters('taxonomies_jww_type', selected);
-              setTypes((prevTypes) => {
-                if (
-                  prevTypes.findIndex((type) => type.value === '') === -1 &&
-                  selected.findIndex((option) => option.value === '') > -1
-                ) {
-                  return [{ value: '', label: 'See All Types' }];
-                }
-
-                return selected.filter((type) => type.value !== '');
+                return selected.filter((source) => source.value !== '');
               });
 
               setTimeout(() => refine(currentRefinement));
@@ -281,10 +223,8 @@ export default function Resources({ data }) {
 
       const hasNoFilter =
         !currentRefinement &&
-        (committees.length === 0 || committees[0].value === '') &&
-        (topics.length === 0 || topics[0].value === '') &&
-        (types.length === 0 || types[0].value === '') &&
-        (selectedYears.length === 0 || selectedYears[0].value === '');
+        (newsSources?.length === 0 || newsSources[0].value === '') &&
+        (selectedYears?.length === 0 || selectedYears[0].value === '');
 
       const ClearRefinements = ({ items, refine }) => (
         <div className={`ais-ClearRefinements${hasNoFilter ? ' hidden' : ''}`}>
@@ -293,9 +233,7 @@ export default function Resources({ data }) {
             onClick={() => {
               setFacetFilters([]);
               setSearchMode('All');
-              setCommittees([]);
-              setTopics([]);
-              setTypes([]);
+              setNewsSources([]);
               setSelectedYears([]);
               setTimeout(() => refine(items));
             }}
@@ -366,16 +304,10 @@ export default function Resources({ data }) {
                 </div>
                 <div className="w-3/5 pt-6 border-solid border-l border-brand-gray">
                   <div className="flex flex-wrap pb-6 px-4 border-solid border-b border-brand-gray">
-                    <div className="w-1/4 px-2">
-                      <CommitteeMenuSelect />
+                    <div className="w-1/3 px-2">
+                      <NewsSourceMenuSelect />
                     </div>
-                    <div className="w-1/4 px-2">
-                      <TopicMenuSelect />
-                    </div>
-                    <div className="w-1/4 px-2">
-                      <TypeMenuSelect />
-                    </div>
-                    <div className="w-1/4 px-2">
+                    <div className="w-1/3 px-2">
                       <YearMenuSelect />
                     </div>
                   </div>
@@ -412,10 +344,8 @@ export default function Resources({ data }) {
                 </div>
               </div>
               {(currentRefinement ||
-                (committees.length > 0 && committees[0]?.value) ||
-                (topics.length > 0 && topics[0]?.value) ||
-                (types.length > 0 && types[0]?.value) ||
-                (selectedYears.length > 0 && selectedYears[0]?.value)) && (
+                (newsSources?.length > 0 && newsSources[0]?.value) ||
+                (selectedYears?.length > 0 && selectedYears[0]?.value)) && (
                 <div className="pb-6 pl-6 pr-6">
                   <div className="flex justify-end pt-2 text-brand-green">
                     <CustomClearRefinements
@@ -440,86 +370,28 @@ export default function Resources({ data }) {
                         </button>
                       </div>
                     )}
-                    {committees.length > 0 &&
-                      committees[0]?.value &&
-                      committees.map((committee) => (
+                    {newsSources?.length > 0 &&
+                      newsSources[0].value !== '' &&
+                      newsSources.map((source) => (
                         <div
                           className="relative pl-4 pr-8 mr-4 mt-2 rounded-full bg-brand-gray"
-                          key={committee.value}
+                          key={source.value}
                         >
                           <Link href="#">
-                            <a className="block p-2 mr-3">{committee.label}</a>
+                            <a className="block p-2 mr-3">{source.label}</a>
                           </Link>
                           <button
                             className="w-8 h-8 rounded-full text-2xl absolute right-1 top-1/2 -mt-4 pb-1 flex justify-center items-center bg-white text-brand-green"
                             type="button"
                             onClick={() => {
-                              const newCommittees = committees.filter(
-                                (item) => item.value !== committee.value
+                              const newNewsSources = newsSources.filter(
+                                (item) => item.value !== source.value
                               );
                               setMultiFacetFilters(
-                                'taxonomies_committee',
-                                newCommittees
+                                'taxonomies_news_source',
+                                newNewsSources
                               );
-                              setCommittees(newCommittees);
-                              setTimeout(() => refine(currentRefinement));
-                            }}
-                          >
-                            &times;
-                          </button>
-                        </div>
-                      ))}
-                    {topics.length > 0 &&
-                      topics[0].value !== '' &&
-                      topics.map((topic) => (
-                        <div
-                          className="relative pl-4 pr-8 mr-4 mt-2 rounded-full bg-brand-gray"
-                          key={topic.value}
-                        >
-                          <Link href="#">
-                            <a className="block p-2 mr-3">{topic.label}</a>
-                          </Link>
-                          <button
-                            className="w-8 h-8 rounded-full text-2xl absolute right-1 top-1/2 -mt-4 pb-1 flex justify-center items-center bg-white"
-                            type="button"
-                            onClick={() => {
-                              const newTopics = topics.filter(
-                                (item) => item.value !== topic.value
-                              );
-                              setMultiFacetFilters(
-                                'taxonomies_topic',
-                                newTopics
-                              );
-                              setTopics(newTopics);
-                              setTimeout(() => refine(currentRefinement));
-                            }}
-                          >
-                            &times;
-                          </button>
-                        </div>
-                      ))}
-                    {types.length > 0 &&
-                      types[0].value !== '' &&
-                      types.map((type) => (
-                        <div
-                          className="relative pl-4 pr-8 mr-4 mt-2 rounded-full bg-brand-gray"
-                          key={type.value}
-                        >
-                          <Link href="#">
-                            <a className="block p-2 mr-3">{type.label}</a>
-                          </Link>
-                          <button
-                            className="w-8 h-8 rounded-full text-2xl absolute right-1 top-1/2 -mt-4 pb-1 flex justify-center items-center bg-white text-brand-green"
-                            type="button"
-                            onClick={() => {
-                              const newTypes = types.filter(
-                                (item) => item.value !== type.value
-                              );
-                              setMultiFacetFilters(
-                                'taxonomies_jww_type',
-                                newTypes
-                              );
-                              setTypes(newTypes);
+                              setNewsSources(newNewsSources);
                               setTimeout(() => refine(currentRefinement));
                             }}
                           >
@@ -563,26 +435,12 @@ export default function Resources({ data }) {
               )}
             </div>
           </div>
-          {topics.length > 0 && topics[0].value && 
-          <div className="flex w-full mt-8">
-            <div className="w-52 min-h-33 flex justify-center items-center px-8 py-4 text-center bg-brand-green text-white text-2xl">Topic Overviews</div>
-            <div className="flex items-center flex-grow p-8 bg-brand-gray">
-              {topics.map(topic => <Button key={topic.value} className="mr-4" uri={`/topics/${topic.value}`}>{topic.label}</Button>)}
-            </div>
-          </div>}
-          {committees.length > 0 && committees[0].value && 
-          <div className="flex w-full mt-4">
-            <div className="w-52 min-h-33 flex justify-center items-center px-8 py-4 text-center bg-brand-green text-white text-2xl">Topic Overviews</div>
-            <div className="flex items-center flex-grow p-8 bg-brand-gray">
-              {committees.map(committee => <Button key={committee.value} className="mr-4" uri={`/committee/${committee.value}`}>{committee.label}</Button>)}
-            </div>
-          </div>}
           <div className="py-8">
             <Stats
               translations={{
                 stats(nbHits) {
                   return (
-                    (currentRefinement?.split(/\s+/).length === 1 ||
+                    (currentRefinement?.split(/\s+/)?.length === 1 ||
                       searchMode !== 'Exact') &&
                     `${nbHits.toLocaleString()} Results Found`
                   );
@@ -599,7 +457,7 @@ export default function Resources({ data }) {
     const query = textInputRef.current?.value?.toLowerCase() ?? '';
     const queryTokens = query.toLowerCase().split(/\s+/) ?? [];
     let filteredHits;
-    if (queryTokens.length > 1 && searchMode === 'Exact') {
+    if (queryTokens?.length > 1 && searchMode === 'Exact') {
       filteredHits = hits.filter(
         ({ post_title, content }) =>
           post_title?.toLowerCase()?.includes(query) ||
@@ -611,18 +469,18 @@ export default function Resources({ data }) {
 
     return (
       <div class="ais-InfiniteHits">
-        {filteredHits.length > 0 && (
+        {filteredHits?.length > 0 && (
           <ul class="ais-InfiniteHits-list">
             {filteredHits.map((hit) => (
               <li class="ais-InfiniteHits-item" key={hit.id}>
-                <Resource hit={hit} committees={hit?.taxonomies_committee?.map(committee => [committeesMap[committee] ?? '', committee]) ?? []} />
+                <News hit={hit} />
               </li>
             ))}
           </ul>
         )}
         {hasMore && (
           <button class="ais-InfiniteHits-loadMore" onClick={refineNext}>
-            LOAD MORE RESOURCES
+            LOAD MORE NEWS
           </button>
         )}
       </div>
@@ -633,79 +491,70 @@ export default function Resources({ data }) {
 
   return (
     <Layout data={data}>
-      <div className="relative">
-        <Swiper autoplay={{ delay: 5000 }} effect="fade" loop={true} pagination={{ clickable: true }}>
-          <SwiperSlide>
-            <div className="relative w-full" style={{ height: 430 }}>
-              <Image
-                src="/images/child-holding-glass-of-water.jpg"
-                alt=""
-                layout="fill"
-                objectFit="cover"
-              />
-            </div>
-          </SwiperSlide>
-          <SwiperSlide>
-            <div className="relative w-full" style={{ height: 430 }}>
-              <Image
-                src="/images/boots-on-wet-street.jpg"
-                alt=""
-                layout="fill"
-                objectFit="cover"
-              />
-            </div>
-          </SwiperSlide>
-          <SwiperSlide>
-            <div className="relative w-full" style={{ height: 430 }}>
-              <Image
-                src="/images/mallard-duck-swimming-pond-park.jpg"
-                alt=""
-                layout="fill"
-                objectFit="cover"
-              />
-            </div>
-          </SwiperSlide>
-          <SwiperSlide>
-            <div className="relative w-full" style={{ height: 430 }}>
-              <Image
-                src="/images/girl-playing-dancing-around-wet-street.jpg"
-                alt=""
-                layout="fill"
-                objectFit="cover"
-              />
-            </div>
-          </SwiperSlide>
-          <SwiperSlide>
-            <div className="relative w-full" style={{ height: 430 }}>
-              <Image
-                src="/images/couple-together-kayaking-river.jpg"
-                alt=""
-                layout="fill"
-                objectFit="cover"
-              />
-            </div>
-          </SwiperSlide>
-        </Swiper>
-        <div className="w-150 max-w-full absolute right-24 top-14 z-10 bg-white p-6 pointer-events-none">
-          <h1 className="mb-5 text-center text-3xl">{data?.page?.title}</h1>
-          <div
-            className="md-w-4-5 mx-auto mb-7 text-center"
-            dangerouslySetInnerHTML={{
-              __html: sanitize(data?.page?.content ?? ''),
+      <div className="w-full relative bg-brand-gray" style={{ height: 340 }}>
+        {data?.topic?.Topic?.backgroundImage && (
+          <Image
+            src={data?.topic?.Topic?.backgroundImage?.uri}
+            alt={
+              data?.topic?.Topic?.backgroundImage?.altText ||
+              data?.topic?.Topic?.backgroundImage?.title
+            }
+            layout="fill"
+            objectFit="cover"
+          />
+        )}
+        <div className="w-200 max-w-full absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col justify-center items-center p-8 border-b-thick-brand-green bg-white">
+		      {getTopicCircleIconBySlug(slug)}
+          <h1 className="mb-5 text-center text-3xl">
+            {data?.topic?.Topic?.title || data?.topic?.name}
+          </h1>
+          <Select
+            className="w-84"
+            defaultValue={topicsOptions[0]}
+            onChange={(option) => {
+              setTopicOption(option);
+              if (option?.value) {
+                router.push(`/topics/${option.value}`);
+              }
             }}
+            options={topicsOptions}
+            value={topicOption}
           />
         </div>
       </div>
+      <div className="flex justify-center bg-brand-gray mb-12">
+        <Link href={`/topics/${slug}`}>
+          <a className="w-52 h-15 flex justify-center items-center">
+            OVERVIEW
+          </a>
+        </Link>
+        <Link href={`/topics/${slug}/highlights`}>
+          <a className="w-52 h-15 flex justify-center items-center">
+            HIGHLIGHTS
+          </a>
+        </Link>
+          <div className="w-52 h-15 flex justify-center items-center bg-white text-brand-blue">
+            LATEST NEWS
+          </div>
+        <Link href={`/topics/${slug}/resources`}>
+          <a className="w-52 h-15 flex justify-center items-center">
+            RESOURCES
+          </a>
+        </Link>
+        <Link href={`#`}>
+          <a className="w-52 h-15 flex justify-center items-center">JOIN</a>
+        </Link>
+      </div>
       <div>
         <InstantSearch
-          indexName="wp_posts_resource"
+          indexName="wp_posts_post"
           searchClient={searchClient}
           onSearchStateChange={(searchState) => {
             console.log(JSON.stringify({ searchState }));
           }}
         >
           <Configure
-            queryByWeights="3,1,1,1,1,1"
+            queryByWeights="3,1,1"
             facetFilters={facetFilters}
             dropTokensThreshold={dropTokensThreshold}
             numTypos={numTypos}
@@ -719,20 +568,67 @@ export default function Resources({ data }) {
   );
 }
 
-export async function getStaticProps(context) {
-  const { data, errors } = await client.query({
-    query: GET_RESOURCES_PAGE,
-    variables: {
-      uri: '/resources/',
-    },
-  });
+export async function getStaticProps({ params }) {
+  try {
+    const { data, errors } = await client.query({
+      query: GET_TOPIC,
+      variables: {
+        slug: params?.topic ?? '',
+      },
+    });
 
-  const defaultProps = {
-    props: {
-      data: data || {},
-    },
-    revalidate: 60,
-  };
+    const defaultProps = {
+      props: {
+        data: data || {},
+      },
+      /**
+       * Revalidate means that if a new request comes to server, then every 1 sec it will check
+       * if the data is changed, if it is changed then it will update the
+       * static file inside .next folder with the new data, so that any 'SUBSEQUENT' requests should have updated data.
+       */
+      revalidate: 60,
+    };
 
-  return defaultProps;
+    return handleRedirectsAndReturnData(defaultProps, data, errors, 'topic');
+  } catch (err) {
+    console.log({ error: err });
+    return {
+      props: {
+        data: {},
+      },
+      revalidate: 60,
+    };
+  }
+}
+
+export async function getStaticPaths() {
+  try {
+    const { data } = await client.query({
+      query: GET_TOPICS_SLUGS,
+    });
+
+    //const topicPages = ['', '/highlights', '/latest-news', '/resources'];
+    const pathsData =
+      (data?.topics?.nodes &&
+        data?.topics?.nodes.reduce((arr, topic) => {
+          const slug = topic.slug;
+          if (slug) {
+            arr.push({ params: { topic: slug } });
+          }
+
+          return arr;
+        }, [])) ||
+      [];
+
+    return {
+      paths: pathsData,
+      fallback: FALLBACK,
+    };
+  } catch (err) {
+    console.log({ error: err });
+    return {
+      paths: [],
+      fallback: FALLBACK,
+    };
+  }
 }

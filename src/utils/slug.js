@@ -9,7 +9,12 @@ export const isCustomPageUri = ( uri ) => {
 		'/news/',
 	];
 
-	return pagesToExclude.includes( uri );
+	const pagesToExclude2 = [
+		/^\/topic\//,
+		/^\/committee\//,
+	];
+
+	return pagesToExclude.includes(uri) || pagesToExclude2.some(re => re.test(uri));
 };
 
 export const handleRedirectsAndReturnData = ( defaultProps, data, errors, field, isPreview = false, loginRedirectURL = '' ) => {
@@ -23,7 +28,8 @@ export const handleRedirectsAndReturnData = ( defaultProps, data, errors, field,
 		};
 	}
 
-	if ( isEmpty( data ) ) {
+	const isTaxonomyPage = ['topic', 'committee'].includes(field);
+	if ( isEmpty( data ) && !isTaxonomyPage) {
 		return {
 			/*redirect: {
 				destination: '/503',
@@ -33,7 +39,7 @@ export const handleRedirectsAndReturnData = ( defaultProps, data, errors, field,
 		};
 	}
 
-	if ( field && isEmpty(data?.pages)) { // isEmpty( data?.[field] ) ) {
+	if ( field && isEmpty( data?.[field] ) && !isTaxonomyPage) {
 		return {
 			// returns the default 404 page with a status code of 404
 			notFound: true

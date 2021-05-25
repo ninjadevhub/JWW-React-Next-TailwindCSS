@@ -4,13 +4,12 @@ import dayjs from 'dayjs';
 import { getTopicIconByName, getTypeIconByName, getCommitteeIconsByName } from '../../utils/icons-map';
 import { convertAmpersands } from '../../utils/miscellaneous';
 
-const Resource = ({ hit, committees }) => {
+const News = ({ hit }) => {
   const {
     post_date,
     images,
-    taxonomies_committee,
     taxonomies_topic,
-    taxonomies_jww_type,
+    taxonomies_news_source,
     post_title,
     post_excerpt,
     content,
@@ -41,6 +40,14 @@ const Resource = ({ hit, committees }) => {
       <div className="flex-1 pt-3 px-6">
         <div className="flex justify-between text-xs">
           <div className="flex">
+            {taxonomies_news_source?.length > 0 && (
+              <div className="mr-6">
+                {taxonomies_news_source?.map((source) => (
+                  <div className="flex items-center pb-2">
+                    <div className="mr-3">{source}</div>
+                    {source}
+                  </div>
+                ))}
             {taxonomies_topic?.length > 0 && (
               <div className="mr-6">
                 {taxonomies_topic?.map((t) => (
@@ -51,14 +58,6 @@ const Resource = ({ hit, committees }) => {
                 ))}
               </div>
             )}
-            {taxonomies_jww_type.length > 0 && (
-              <div className="mr-6">
-                {taxonomies_jww_type?.map((type) => (
-                  <div className="flex items-center pb-2">
-                    <div className="mr-3">{getTypeIconByName(type)}</div>
-                    {convertAmpersands(type)}
-                  </div>
-                ))}
               </div>
             )}
           </div>
@@ -67,18 +66,18 @@ const Resource = ({ hit, committees }) => {
         <h2 className="my-4 text-2xl">{post_title}</h2>
         <div className="mb-6">{post_excerpt} ...</div>
         <button className="inline-block py-2 px-8 bg-brand-orange text-center text-white" type="button">
-          VIEW RESOURCE
+          READ ARTICLE
         </button>
       </div>
       <div
         className="flex-grow-0 flex-shrink-0 flex flex-column justify-center items-center p-3 bg-brand-gray text-center"
         style={{ flexBasis: '190px', maxWidth: 190, minHeight: 362 }}
       >
-        {committees?.map((committee) => (
+        {/*taxonomies_committee?.map((committee) => (
           <div className="flex flex-col items-center pb-2">
-            <div className="mb-4">{getCommitteeIconsByName(committee[1])}</div>
-            <div className="mb-4">{committee[1]}</div>
-            <Link href={`/committees/${committee[0]}`}>
+            <div className="mb-4">{getCommitteeIconsByName(committee)}</div>
+            <div className="mb-4">{committee}</div>
+            <Link href="#">
               <a className="inline-block">
                 <Image
                   src="/images/right-arrow.png"
@@ -89,10 +88,10 @@ const Resource = ({ hit, committees }) => {
               </a>
             </Link>
           </div>
-        ))}
+        ))*/}
       </div>
     </div>
   );
 };
 
-export default Resource;
+export default News;
