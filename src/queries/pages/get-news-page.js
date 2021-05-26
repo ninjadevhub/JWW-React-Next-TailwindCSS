@@ -1,10 +1,10 @@
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
 //import MenuFragment from "../fragments/menus";
-import { HeaderFooter } from '../get-menus';
-import SeoFragment from '../fragments/seo';
+import {HeaderFooter} from "../get-menus";
+import SeoFragment from "../fragments/seo";
 
-export const GET_RESOURCES_PAGE = gql`
-	query GET_RESOURCES_PAGE($uri: String) {
+export const GET_NEWS_PAGE = gql`
+	query GET_NEWS_PAGE($uri: String) {
 		${HeaderFooter}
 	  page: pageBy(uri: $uri) {
 	    id
@@ -12,7 +12,7 @@ export const GET_RESOURCES_PAGE = gql`
 	    content
 	    slug
 	    uri
-			resources {
+			news {
 				sliderImages {
 					image {
 						altText
@@ -25,15 +25,6 @@ export const GET_RESOURCES_PAGE = gql`
         ...SeoFragment
       }
 	  }
-	  committees {
-			nodes {
-				name
-				slug
-				Committee {
-					title
-				}
-			}
-		}
 		topics {
 			nodes {
 				name
@@ -43,7 +34,7 @@ export const GET_RESOURCES_PAGE = gql`
 				}
 			}
 		}
-		types {
+		news_sources {
 			nodes {
 				name
 				slug

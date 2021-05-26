@@ -35,7 +35,7 @@ const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter({
   },
   additionalSearchParameters: {
     queryBy:
-      'post_title,content,taxonomies_topic',
+      'post_title,content,taxonomies_topic,post_year',
     sortBy: '_text_match:desc, post_date:desc',
   },
 });
@@ -554,7 +554,7 @@ export default function LatestNews({ data }) {
           }}
         >
           <Configure
-            queryByWeights="3,1,1"
+            queryByWeights="3,1,1,1"
             facetFilters={facetFilters}
             dropTokensThreshold={dropTokensThreshold}
             numTypos={numTypos}

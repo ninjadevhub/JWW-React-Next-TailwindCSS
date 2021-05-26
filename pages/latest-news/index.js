@@ -1,12 +1,12 @@
 import client from '../../src/apollo/client';
 import Layout from '../../src/components/layout';
 import Autocomplete from '../../src/components/autocomplete';
-import Resource from '../../src/components/resources/resource';
+import News from '../../src/components/news/news';
 import Button from '../../src/components/buttons';
 import Link from 'next/link';
 import Image from 'next/image';
 import MultiSelect from 'react-multi-select-component';
-import { GET_RESOURCES_PAGE } from '../../src/queries/pages/get-resources-page';
+import { GET_NEWS_PAGE } from '../../src/queries/pages/get-news-page';
 import { useEffect, useRef, useState } from 'react';
 import {
   Configure,
@@ -20,7 +20,7 @@ import { sanitize } from '../../src/utils/miscellaneous';
 import TypesenseInstantSearchAdapter from '../../src/typesense-instantsearch-adapter';
 import SwiperCore, { Autoplay, Pagination, EffectFade, A11y } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import styles from '../../src/styles/pages/resources/index.module.scss';
+//import styles from '../../src/styles/pages/resources/index.module.scss';
 SwiperCore.use([Autoplay, Pagination, EffectFade, A11y]);
 
 const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter({
@@ -35,8 +35,7 @@ const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter({
     ],
   },
   additionalSearchParameters: {
-    queryBy:
-      'post_title,content,taxonomies_committee,taxonomies_topic,taxonomies_jww_type,post_year',
+    queryBy: 'post_title,content,taxonomies_topic,post_year',
     sortBy: '_text_match:desc, post_date:desc',
   },
 });
@@ -60,9 +59,10 @@ const yearOptions = [
 export default function Resources({ data }) {
   const [searchMode, setSearchMode] = useState('');
   const [facetFilters, setFacetFilters] = useState([]);
-  const [committees, setCommittees] = useState([]);
+  //const [committees, setCommittees] = useState([]);
   const [topics, setTopics] = useState([]);
-  const [types, setTypes] = useState([]);
+  //const [types, setTypes] = useState([]);
+  const [newsSources, setNewsSources] = useState([]);
   const [selectedYears, setSelectedYears] = useState([]);
   const [dropTokensThreshold, setDropTokensThreshold] = useState(0);
   const [numTypos, setNumTypos] = useState(2);
@@ -147,42 +147,6 @@ export default function Resources({ data }) {
         setTimeout(() => refine(currentRefinement));
       };
 
-      const CommitteeMenuSelect = () => (
-        <div className="">
-          <MultiSelect
-            className=""
-            hasSelectAll={false}
-            labelledBy="By Committee"
-            overrideStrings={{ selectSomeItems: 'By Committee' }}
-            options={[
-              { value: '', label: 'See All Committees' },
-              ...(data?.committees?.nodes?.map((obj) => ({
-                value: obj.slug,
-                label: obj.name,
-              })) || []),
-            ]}
-            value={committees}
-            onChange={(selected) => {
-              setMultiFacetFilters('taxonomies_committee', selected);
-              setCommittees((prevCommittees) => {
-                if (
-                  prevCommittees.findIndex(
-                    (committee) => committee.value === ''
-                  ) === -1 &&
-                  selected.findIndex((option) => option.value === '') > -1
-                ) {
-                  return [{ value: '', label: 'See All Committees' }];
-                }
-
-                return selected.filter((committee) => committee.value !== '');
-              });
-
-              setTimeout(() => refine(currentRefinement));
-            }}
-          />
-        </div>
-      );
-
       const TopicMenuSelect = () => (
         <div className="">
           <MultiSelect
@@ -217,32 +181,33 @@ export default function Resources({ data }) {
         </div>
       );
 
-      const TypeMenuSelect = () => (
+      const NewsSourceMenuSelect = () => (
         <div className="">
           <MultiSelect
             className=""
             hasSelectAll={false}
-            labelledBy="By Type"
-            overrideStrings={{ selectSomeItems: 'By Type' }}
+            labelledBy="By News Source"
+            overrideStrings={{ selectSomeItems: 'By News Source' }}
             options={[
-              { value: '', label: 'See All Types' },
-              ...(data?.types?.nodes?.map((obj) => ({
+              { value: '', label: 'See All News Sources' },
+              ...(data?.news_sources?.nodes?.map((obj) => ({
                 value: obj.slug,
                 label: obj.name,
               })) || []),
             ]}
-            value={types}
+            value={newsSources}
             onChange={(selected) => {
-              setMultiFacetFilters('taxonomies_jww_type', selected);
-              setTypes((prevTypes) => {
+              setMultiFacetFilters('taxonomies_news_source', selected);
+              setNewsSources((prevNewsSources) => {
                 if (
-                  prevTypes.findIndex((type) => type.value === '') === -1 &&
+                  prevNewsSources.findIndex((source) => source.value === '') ===
+                    -1 &&
                   selected.findIndex((option) => option.value === '') > -1
                 ) {
-                  return [{ value: '', label: 'See All Types' }];
+                  return [{ value: '', label: 'See All News Sources' }];
                 }
 
-                return selected.filter((type) => type.value !== '');
+                return selected.filter((source) => source.value !== '');
               });
 
               setTimeout(() => refine(currentRefinement));
@@ -281,9 +246,8 @@ export default function Resources({ data }) {
 
       const hasNoFilter =
         !currentRefinement &&
-        (committees.length === 0 || committees[0].value === '') &&
         (topics.length === 0 || topics[0].value === '') &&
-        (types.length === 0 || types[0].value === '') &&
+        (newsSources.length === 0 || newsSources[0].value === '') &&
         (selectedYears.length === 0 || selectedYears[0].value === '');
 
       const ClearRefinements = ({ items, refine }) => (
@@ -293,9 +257,8 @@ export default function Resources({ data }) {
             onClick={() => {
               setFacetFilters([]);
               setSearchMode('All');
-              setCommittees([]);
               setTopics([]);
-              setTypes([]);
+              setNewsSources([]);
               setSelectedYears([]);
               setTimeout(() => refine(items));
             }}
@@ -367,13 +330,10 @@ export default function Resources({ data }) {
                 <div className="w-3/5 pt-6 border-solid border-l border-brand-gray">
                   <div className="flex flex-wrap pb-6 px-4 border-solid border-b border-brand-gray">
                     <div className="w-1/4 px-2">
-                      <CommitteeMenuSelect />
-                    </div>
-                    <div className="w-1/4 px-2">
                       <TopicMenuSelect />
                     </div>
                     <div className="w-1/4 px-2">
-                      <TypeMenuSelect />
+                      <NewsSourceMenuSelect />
                     </div>
                     <div className="w-1/4 px-2">
                       <YearMenuSelect />
@@ -412,9 +372,8 @@ export default function Resources({ data }) {
                 </div>
               </div>
               {(currentRefinement ||
-                (committees.length > 0 && committees[0]?.value) ||
                 (topics.length > 0 && topics[0]?.value) ||
-                (types.length > 0 && types[0]?.value) ||
+                (newsSources.length > 0 && newsSources[0]?.value) ||
                 (selectedYears.length > 0 && selectedYears[0]?.value)) && (
                 <div className="pb-6 pl-6 pr-6">
                   <div className="flex justify-end pt-2 text-brand-green">
@@ -440,35 +399,6 @@ export default function Resources({ data }) {
                         </button>
                       </div>
                     )}
-                    {committees.length > 0 &&
-                      committees[0]?.value &&
-                      committees.map((committee) => (
-                        <div
-                          className="relative pl-4 pr-8 mr-4 mt-2 rounded-full bg-brand-gray"
-                          key={committee.value}
-                        >
-                          <Link href="#">
-                            <a className="block p-2 mr-3">{committee.label}</a>
-                          </Link>
-                          <button
-                            className="w-8 h-8 rounded-full text-2xl absolute right-1 top-1/2 -mt-4 pb-1 flex justify-center items-center bg-white text-brand-green"
-                            type="button"
-                            onClick={() => {
-                              const newCommittees = committees.filter(
-                                (item) => item.value !== committee.value
-                              );
-                              setMultiFacetFilters(
-                                'taxonomies_committee',
-                                newCommittees
-                              );
-                              setCommittees(newCommittees);
-                              setTimeout(() => refine(currentRefinement));
-                            }}
-                          >
-                            &times;
-                          </button>
-                        </div>
-                      ))}
                     {topics.length > 0 &&
                       topics[0].value !== '' &&
                       topics.map((topic) => (
@@ -498,28 +428,28 @@ export default function Resources({ data }) {
                           </button>
                         </div>
                       ))}
-                    {types.length > 0 &&
-                      types[0].value !== '' &&
-                      types.map((type) => (
+                    {newsSources.length > 0 &&
+                      newsSources[0].value !== '' &&
+                      newsSources.map((source) => (
                         <div
                           className="relative pl-4 pr-8 mr-4 mt-2 rounded-full bg-brand-gray"
-                          key={type.value}
+                          key={source.value}
                         >
                           <Link href="#">
-                            <a className="block p-2 mr-3">{type.label}</a>
+                            <a className="block p-2 mr-3">{source.label}</a>
                           </Link>
                           <button
                             className="w-8 h-8 rounded-full text-2xl absolute right-1 top-1/2 -mt-4 pb-1 flex justify-center items-center bg-white text-brand-green"
                             type="button"
                             onClick={() => {
-                              const newTypes = types.filter(
-                                (item) => item.value !== type.value
+                              const newNewsSources = newsSources.filter(
+                                (item) => item.value !== source.value
                               );
                               setMultiFacetFilters(
-                                'taxonomies_jww_type',
-                                newTypes
+                                'taxonomies_news_source',
+                                newNewsSources
                               );
-                              setTypes(newTypes);
+                              setNewsSources(newNewsSources);
                               setTimeout(() => refine(currentRefinement));
                             }}
                           >
@@ -563,42 +493,6 @@ export default function Resources({ data }) {
               )}
             </div>
           </div>
-          {topics.length > 0 && topics[0].value && (
-            <div className="flex w-full mt-8">
-              <div className="w-52 min-h-33 flex justify-center items-center px-8 py-4 text-center bg-brand-green text-white text-2xl">
-                Topic Overviews
-              </div>
-              <div className="flex items-center flex-grow p-8 bg-brand-gray">
-                {topics.map((topic) => (
-                  <Button
-                    key={topic.value}
-                    className="mr-4"
-                    uri={`/topics/${topic.value}`}
-                  >
-                    {topic.label}
-                  </Button>
-                ))}
-              </div>
-            </div>
-          )}
-          {committees.length > 0 && committees[0].value && (
-            <div className="flex w-full mt-4">
-              <div className="w-52 min-h-33 flex justify-center items-center px-8 py-4 text-center bg-brand-green text-white text-2xl">
-                Topic Overviews
-              </div>
-              <div className="flex items-center flex-grow p-8 bg-brand-gray">
-                {committees.map((committee) => (
-                  <Button
-                    key={committee.value}
-                    className="mr-4"
-                    uri={`/committees/${committee.value}`}
-                  >
-                    {committee.label}
-                  </Button>
-                ))}
-              </div>
-            </div>
-          )}
           <div className="py-8">
             <Stats
               translations={{
@@ -637,15 +531,7 @@ export default function Resources({ data }) {
           <ul class="ais-InfiniteHits-list">
             {filteredHits.map((hit) => (
               <li class="ais-InfiniteHits-item" key={hit.id}>
-                <Resource
-                  hit={hit}
-                  committees={
-                    hit?.taxonomies_committee?.map((committee) => [
-                      committeesMap[committee] ?? '',
-                      committee,
-                    ]) ?? []
-                  }
-                />
+                <News hit={hit} />
               </li>
             ))}
           </ul>
@@ -664,14 +550,14 @@ export default function Resources({ data }) {
   return (
     <Layout data={data}>
       <div className="relative w-full bg-brand-gray" style={{ height: 430 }}>
-        {data?.page?.resources?.sliderImages?.length > 0 && (
+        {data?.page?.news?.sliderImages?.length > 0 && (
           <Swiper
             autoplay={{ delay: 5000 }}
             effect="fade"
             loop={true}
             pagination={{ clickable: true }}
           >
-            {data?.page?.resources?.sliderImages?.map((image) => (
+            {data?.page?.news?.sliderImages?.map((image) => (
               <SwiperSlide>
                 <div className="relative w-full" style={{ height: 430 }}>
                   <Image
@@ -697,14 +583,14 @@ export default function Resources({ data }) {
       </div>
       <div>
         <InstantSearch
-          indexName="wp_posts_resource"
+          indexName="wp_posts_post"
           searchClient={searchClient}
           onSearchStateChange={(searchState) => {
             console.log(JSON.stringify({ searchState }));
           }}
         >
           <Configure
-            queryByWeights="3,1,1,1,1,1"
+            queryByWeights="3,1,1,1"
             facetFilters={facetFilters}
             dropTokensThreshold={dropTokensThreshold}
             numTypos={numTypos}
@@ -720,9 +606,9 @@ export default function Resources({ data }) {
 
 export async function getStaticProps(context) {
   const { data, errors } = await client.query({
-    query: GET_RESOURCES_PAGE,
+    query: GET_NEWS_PAGE,
     variables: {
-      uri: '/resources/',
+      uri: '/latest-news/',
     },
   });
 

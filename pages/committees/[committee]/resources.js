@@ -190,7 +190,7 @@ export default function Resources({ data }) {
             value={topics}
             onChange={(selected) => {
               setMultiFacetFilters('taxonomies_topic', selected);
-              setTopics((prevCommittees) => {
+              setTopics((prevTopics) => {
                 if (
                   prevTopics.findIndex((topic) => topic.value === '') === -1 &&
                   selected.findIndex((option) => option.value === '') > -1
