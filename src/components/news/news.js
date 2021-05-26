@@ -21,7 +21,7 @@ const News = ({ hit }) => {
         className="relative flex-grow-0 flex-shrink-0 mb-10"
         style={{ flexBasis: '292px', maxWidth: 292, height: 362 }}
       >
-        {images?.full ? (
+        {images?.full?.url ? (
           <Image
             src={images.full.url}
             alt={(images.full.alt || images.full.title) ?? ''}

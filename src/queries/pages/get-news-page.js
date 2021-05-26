@@ -12,7 +12,7 @@ export const GET_NEWS_PAGE = gql`
 	    content
 	    slug
 	    uri
-			news {
+			latestNews {
 				sliderImages {
 					image {
 						altText
@@ -34,7 +34,7 @@ export const GET_NEWS_PAGE = gql`
 				}
 			}
 		}
-		news_sources {
+		newsSources {
 			nodes {
 				name
 				slug

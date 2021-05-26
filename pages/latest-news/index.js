@@ -2,7 +2,7 @@ import client from '../../src/apollo/client';
 import Layout from '../../src/components/layout';
 import Autocomplete from '../../src/components/autocomplete';
 import News from '../../src/components/news/news';
-import Button from '../../src/components/buttons';
+//import Button from '../../src/components/buttons';
 import Link from 'next/link';
 import Image from 'next/image';
 import MultiSelect from 'react-multi-select-component';
@@ -524,6 +524,7 @@ export default function Resources({ data }) {
     } else {
       filteredHits = hits;
     }
+    console.log(filteredHits[0])
 
     return (
       <div class="ais-InfiniteHits">
@@ -550,14 +551,14 @@ export default function Resources({ data }) {
   return (
     <Layout data={data}>
       <div className="relative w-full bg-brand-gray" style={{ height: 430 }}>
-        {data?.page?.news?.sliderImages?.length > 0 && (
+        {data?.page?.latestNews?.sliderImages?.length > 0 && (
           <Swiper
             autoplay={{ delay: 5000 }}
             effect="fade"
             loop={true}
             pagination={{ clickable: true }}
           >
-            {data?.page?.news?.sliderImages?.map((image) => (
+            {data?.page?.latestNews?.sliderImages?.map((image) => (
               <SwiperSlide>
                 <div className="relative w-full" style={{ height: 430 }}>
                   <Image
