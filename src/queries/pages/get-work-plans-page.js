@@ -14,6 +14,7 @@ export const GET_WORK_PLANS_PAGE = gql`
 					sourceUrl(size: LARGE)
 				}
 				description
+				workPlansDescription
 			}
 	    id
 	    title(format: RENDERED)

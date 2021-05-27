@@ -14,6 +14,7 @@ export const GET_COMMITMENTS_PAGE = gql`
 					sourceUrl(size: LARGE)
 				}
 				description
+        commitmentsDecription
 			}
 	    id
 	    title(format: RENDERED)
