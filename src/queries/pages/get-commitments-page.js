@@ -14,7 +14,7 @@ export const GET_COMMITMENTS_PAGE = gql`
 					sourceUrl(size: LARGE)
 				}
 				description
-        commitmentsDecription
+        commitmentsDescription
 			}
 	    id
 	    title(format: RENDERED)
@@ -25,6 +25,8 @@ export const GET_COMMITMENTS_PAGE = gql`
 		}
 		commitments {
 			nodes {
+        title(format: RENDERED)
+        slug
 				commitment {
 					backgroundImage {
 						altText

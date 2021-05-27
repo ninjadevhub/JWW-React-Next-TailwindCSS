@@ -25,10 +25,11 @@ export const GET_WORK_PLANS_PAGE = gql`
 		}
 		workPlans {
 			nodes {
+				title(format: RENDERED)
 				workPlan {
 					backgroundImage {
 						altText
-						title(format: RAW)
+						title(format: RENDERED)
 						sourceUrl(size: LARGE)
 					}
 					year
