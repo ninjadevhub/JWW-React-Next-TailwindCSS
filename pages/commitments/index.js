@@ -54,7 +54,7 @@ export default function WorkPlans({ data }) {
         className="max-w-5xl mx-auto px-4 mb-20"
         dangerouslySetInnerHTML={{
           __html: sanitize(
-            data?.page?.workPlansAndCommitments?.committeesDescription ?? ''
+            data?.page?.workPlansAndCommitments?.commitmentsDescription ?? ''
           ),
         }}
       />
