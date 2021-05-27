@@ -12,7 +12,7 @@ export const GET_COMMITTEE = gql`
 				title
 				backgroundImage {
 					altText
-					link
+					sourceUrl
 					title(format: RAW)
 				}
 			}
