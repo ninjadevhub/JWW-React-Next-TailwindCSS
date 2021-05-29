@@ -26,6 +26,7 @@ export const GET_COMMITMENTS_PAGE = gql`
 		commitments {
 			nodes {
         title(format: RENDERED)
+        content(format: RENDERED)
         slug
 				commitment {
 					backgroundImage {

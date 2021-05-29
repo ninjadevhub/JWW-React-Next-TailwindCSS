@@ -26,6 +26,7 @@ export const GET_WORK_PLANS_PAGE = gql`
 		workPlans {
 			nodes {
 				title(format: RENDERED)
+				content(format: RENDERED)
 				workPlan {
 					backgroundImage {
 						altText

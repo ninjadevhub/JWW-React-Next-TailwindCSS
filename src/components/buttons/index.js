@@ -4,6 +4,7 @@ const defaultClassName = 'inline-block py-2 px-8 text-center text-white';
 
 export default function Button({
   className,
+  style,
   uri,
   onClick,
   color = 'brand-blue',
@@ -16,12 +17,12 @@ export default function Button({
   if (uri) {
     return (
       <Link href={uri}>
-        <a className={finalClassName}>{children}</a>
+        <a className={finalClassName} style={style ? style : {}}>{children}</a>
       </Link>
     );
   } else if (typeof onClick === 'function') {
     return (
-      <button className={finalClassName} type="button" onClick={onClick}>
+      <button className={finalClassName} style={style ? style : {}} type="button" onClick={onClick}>
         {children}
       </button>
     );

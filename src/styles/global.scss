@@ -50,12 +50,32 @@
   top: 1rem;
 }
 
+.top-8 {
+  top: 2rem;
+}
+
+.top-12 {
+  top: 3rem;
+}
+
 .top-14 {
   top: 3.5rem;
 }
 
+.top-20 {
+  top: 5rem;
+}
+
+.bottom-16 {
+  bottom: 4rem;
+}
+
 .left-4 {
   left: 1rem;
+}
+
+.p-3 {
+  padding: 0.75rem;
 }
 
 .py-6 {
@@ -73,6 +93,14 @@
 
 .pl-6 {
   padding-left: 1.5rem;
+}
+
+.pl-28 {
+  padding-left: 7rem;
+}
+
+.border-4 {
+  border-width: 4px !important;
 }
 
 .border-b-thick-brand-green {
@@ -103,9 +131,13 @@
   margin-bottom: 3rem;
 }
 
+.translate-x-16 {
+  transform: translateX(4rem);
+}
+
 .bg-gray-500 {
   --tw-bg-opacity: 1;
-  background-color: rgba(107, 114, 128, var(--tw-bg-opacity))
+  background-color: rgba(107, 114, 128, var(--tw-bg-opacity));
 }
 
 .bg-brand-orange {
@@ -151,6 +183,94 @@
   background: $brand-green;
 }
 
+.swiper-container-vertical {
+  display: flex;
+
+  .swiper-pagination {
+    position: static !important;
+    width: auto !important;
+    max-height: calc(100vh - 6rem);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transform: none !important;
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+    background: $brand-green;
+    color: #fff;
+  }
+
+  .swiper-pagination-bullet {
+    display: flex !important;
+    align-items: center;
+    width: auto !important;
+    height: auto !important;
+    padding: 0.5rem 1rem;
+    margin: 0 !important;
+    border-radius: 0;
+    background: $brand-green;
+    text-align: left;
+
+    & > .fas {
+      margin-left: 0.25rem;
+    }
+  }
+
+  .swiper-pagination-bullet-active {
+    background: $brand-green-light !important;
+    font-weight: 700;
+  }
+
+  .swiper-container-vertical {
+    .swiper-pagination {
+      background: $brand-green-light;
+    }
+
+    .swiper-pagination-bullet {
+      background: transparent;
+    }
+
+    .swiper-pagination-bullet-active {
+      background: rgba(255, 255, 255, 0.2) !important;
+      font-weight: 400;
+    }
+
+    .swiper-slide {
+      min-height: calc(100vh - 6rem);
+    }
+  }
+}
+
+.vertical-slider-nav-button {
+  position: absolute;
+  left: 0.75rem;
+  z-index: 1;
+
+  &--prev {
+    top: 1.25rem;
+  }
+
+  &--next {
+    bottom: 1.25rem;
+  }
+}
+
+.slider-content {
+  p {
+    margin-bottom: 1.25rem;
+  }
+
+  ul {
+    margin-left: 2rem;
+  }
+
+  li {
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid $brand-gray;
+    margin-bottom: 0.5rem;
+  }
+}
+
 @media (min-width: 768px) {
   .md-w-4-5 {
     width: 80%;
@@ -161,7 +281,7 @@
   & > .search-suggestions {
     display: none;
   }
-  
+
   &:hover {
     & > .search-suggestions {
       display: block;

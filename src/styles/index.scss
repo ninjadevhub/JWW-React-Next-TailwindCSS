@@ -14,6 +14,9 @@
 @import '~@wordpress/block-library/src/style.scss';
 @import '~@wordpress/block-library/src/theme.scss';*/
 
+@import "libraries/font-awesome/fontawesome.scss";
+@import "libraries/font-awesome/solid.scss";
+
 @import 'swiper/swiper.scss';
 @import 'swiper/components/pagination/pagination.scss';
 @import 'swiper/components/effect-fade/effect-fade.scss';
