@@ -128,7 +128,7 @@ export default function CommitteeOverview({ data }) {
                 className="text-brand-blue"
                 href={sanitize(coChair?.coChair?.associationUrl ?? '')}
               >
-                {sanitize(coChair?.coChair?.associationText)}
+                {sanitize(coChair?.coChair?.associationName)}
               </a>
             </div>
           ))}
