@@ -15,6 +15,8 @@ export const GET_TOPIC = gql`
 					sourceUrl
 					title(format: RAW)
 				}
+				highlightsButtonText
+				highlightsButtonUrl
 			}
 			slug
 			name

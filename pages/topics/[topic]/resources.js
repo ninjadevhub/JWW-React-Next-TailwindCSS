@@ -604,7 +604,7 @@ export default function Resources({ data }) {
           <div className="w-52 h-15 flex justify-center items-center bg-white text-brand-blue">
             RESOURCES
           </div>
-        <Link href={`#`}>
+        <Link href={``}>
           <a className="w-52 h-15 flex justify-center items-center">JOIN</a>
         </Link>
       </div>

@@ -44,5 +44,50 @@ export const GET_COMMITTEE = gql`
 				slug
 			}
 		}
+		workPlans {
+			nodes {
+				title(format: RENDERED)
+				workPlan {
+					year
+					committee {
+						name
+						slug
+					}
+				}
+				content(format: RENDERED)
+			}
+		}
+		accomplishments {
+			nodes {
+				accomplishments {
+					committee {
+						slug
+					}
+					accomplishments {
+						accomplishment
+					}
+					year
+				}
+			}
+		}
+		coChairs {
+			nodes {
+				coChair {
+					committee {
+						slug
+					}
+					associationName
+					associationUrl
+					firstName
+					lastName
+					image {
+						altText
+						title(format: RENDERED)
+						sourceUrl(size: LARGE)
+					}
+				}
+				coChairId
+			}
+		}
 	}
 `;

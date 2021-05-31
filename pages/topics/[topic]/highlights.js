@@ -7,7 +7,10 @@ import Layout from '../../../src/components/layout';
 import Image from 'next/image';
 import Select from 'react-select';
 import Link from 'next/link';
-import { FALLBACK, handleRedirectsAndReturnData } from '../../../src/utils/slug';
+import {
+  FALLBACK,
+  handleRedirectsAndReturnData,
+} from '../../../src/utils/slug';
 import { getTopicCircleIconBySlug } from '../../../src/utils/icons-map';
 import { sanitize } from '../../../src/utils/miscellaneous';
 
@@ -29,7 +32,10 @@ export default function TopicHighlights({ data }) {
       label: name,
     })) ?? []),
   ];
+
   const [topicOption, setTopicOption] = useState(defaultTopicOption);
+  const { highlightsButtonText, highlightsButtonUrl } =
+    data?.topic?.Topic || {};
 
   return (
     <Layout data={data}>
@@ -66,13 +72,11 @@ export default function TopicHighlights({ data }) {
       </div>
       <div className="flex justify-center bg-brand-gray mb-12">
         <Link href={`/topics/${slug}`}>
-          <a className="w-52 h-15 flex justify-center items-center">
-            OVERVIEW
-          </a>
+          <a className="w-52 h-15 flex justify-center items-center">OVERVIEW</a>
         </Link>
-          <div className="w-52 h-15 flex justify-center items-center bg-white text-brand-blue">
-            HIGHLIGHTS
-          </div>
+        <div className="w-52 h-15 flex justify-center items-center bg-white text-brand-blue">
+          HIGHLIGHTS
+        </div>
         <Link href={`/topics/${slug}/latest-news`}>
           <a className="w-52 h-15 flex justify-center items-center">
             LATEST NEWS
@@ -88,11 +92,13 @@ export default function TopicHighlights({ data }) {
         </Link>
       </div>
       <div className="text-center">
-        <Link href={`#`}>
-          <a className="inline-block px-12 py-4 bg-brand-orange text-sm text-white">
-            LEAD IN DRINKING WATER TASK FORCE
-          </a>
-        </Link>
+        {highlightsButtonText && (
+          <Link href={highlightsButtonUrl}>
+            <a className="inline-block px-12 py-4 bg-brand-orange text-sm text-white">
+              {highlightsButtonText}
+            </a>
+          </Link>
+        )}
       </div>
     </Layout>
   );

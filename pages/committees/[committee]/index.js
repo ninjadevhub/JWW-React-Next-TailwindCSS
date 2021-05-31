@@ -89,7 +89,7 @@ export default function CommitteeOverview({ data }) {
             CO-CHAIRS
           </a>
         </Link>
-        <Link href={`#`}>
+        <Link href={``}>
           <a className="w-52 h-15 flex justify-center items-center">JOIN</a>
         </Link>
       </div>

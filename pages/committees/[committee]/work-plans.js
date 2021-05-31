@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import client from '../../../src/apollo/client';
 import { GET_COMMITTEES_SLUGS } from '../../../src/queries/taxonomies/get-committees-slugs';
 import { GET_COMMITTEE } from '../../../src/queries/taxonomies/get-committee';
@@ -30,7 +30,7 @@ const Accordion = withStyles({
 
 const AccordionSummary = withStyles({
   root: {
-    minHeight: '76px',
+    minHeight: '4rem !important',
     paddingLeft: '2rem',
     paddingRight: '2rem',
     backgroundColor: '#e5e5e5',
@@ -44,7 +44,7 @@ const AccordionDetails = withStyles({
     paddingTop: '1rem',
     paddingRight: '5rem',
     paddingLeft: '5rem',
-  }
+  },
 })(MuiAccordionDetails);
 
 export default function CommitteeOverview({ data }) {
@@ -68,6 +68,16 @@ export default function CommitteeOverview({ data }) {
   ];
   const [committeeOption, setCommitteeOption] = useState(
     defaultCommitteeOption
+  );
+
+  const workPlans = useMemo(
+    () =>
+      data?.workPlans?.nodes
+        ?.filter(
+          (node) => node.workPlan?.committee?.slug === data?.committee?.slug
+        )
+        ?.sort((a, b) => +b.workPlan?.year - +a.workPlan?.year),
+    [data]
   );
 
   return (
@@ -125,80 +135,32 @@ export default function CommitteeOverview({ data }) {
             CO-CHAIRS
           </a>
         </Link>
-        <Link href={`#`}>
+        <Link href={``}>
           <a className="w-52 h-15 flex justify-center items-center">JOIN</a>
         </Link>
       </div>
-      <div className="p-8 border border-solid border-brand-gray mb-20">
-        <div>
-          <Accordion>
-            <AccordionSummary
-              expandIcon={<span className="fas fa-chevron-right" />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-            >
-              <span>2021</span>
-            </AccordionSummary>
-            <AccordionDetails>
-              <div>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Suspendisse malesuada lacus ex, sit amet blandit leo lobortis
-                eget.
-              </div>
-            </AccordionDetails>
-          </Accordion>
-          <Accordion>
-            <AccordionSummary
-              expandIcon={<span className="fas fa-chevron-right" />}
-              aria-controls="panel2a-content"
-              id="panel2a-header"
-            >
-              <span>2020</span>
-            </AccordionSummary>
-            <AccordionDetails>
-              <div className="content">
-                <p>Advance water and sewer affordability for low-income customers
-                by:</p>
-                <ul>
-                  <li>
-                    Producing recommendations to implement the white paper state
-                    policy options report released in 2019
-                  </li>
-                  <li>
-                    Establishing a consensus methodology for measuring
-                    affordability issues, applying it to assess NJ communities,
-                    and publishing the findings
-                  </li>
-                  <li>
-                    Work with the Combined Sewer Overflow committee to identify
-                    ways to address affordability in Long Term Control Plans and
-                    recommend them to the New Jersey Department of Environmental
-                    Protection (DEP).
-                  </li>
-                </ul>
-              </div>
-            </AccordionDetails>
-          </Accordion>
-          <Accordion>
-            <AccordionSummary
-              expandIcon={<span className="fas fa-chevron-right" />}
-              aria-controls="panel3a-content"
-              id="panel3a-header"
-            >
-              <span>
-                2019
-              </span>
-            </AccordionSummary>
-            <AccordionDetails>
-              <div className="content">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Suspendisse malesuada lacus ex, sit amet blandit leo lobortis
-                eget.
-              </div>
-            </AccordionDetails>
-          </Accordion>
+      {workPlans?.length > 0 && (
+        <div className="p-8 border border-solid border-brand-gray mb-20">
+          <div>
+            {workPlans?.map((node) => (
+              <Accordion key={node.workPlan?.year}>
+                <AccordionSummary
+                  expandIcon={<span className="fas fa-chevron-right" />}
+                  aria-controls="panel1a-content"
+                  id="panel1a-header"
+                >
+                  <span>{node.workPlan?.year}</span>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <div className="content" dangerouslySetInnerHTML={{
+                    __html: sanitize(node.content ?? ''),
+                  }} />
+                </AccordionDetails>
+              </Accordion>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
     </Layout>
   );
 }

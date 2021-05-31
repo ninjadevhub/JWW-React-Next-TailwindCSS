@@ -92,46 +92,48 @@ export default function CommitteeOverview({ data }) {
         <div className="w-52 h-15 flex justify-center items-center bg-white text-brand-blue">
           CO-CHAIRS
         </div>
-        <Link href={`#`}>
+        <Link href={``}>
           <a className="w-52 h-15 flex justify-center items-center">JOIN</a>
         </Link>
       </div>
-      <div className="p-8 border border-solid border-brand-gray mb-20">
-        <div
-          className="flex items-center px-4 py-6 mb-2 bg-brand-gray-pale"
-          style={{ minHeight: 130 }}
-        >
-          <div className="rounded-full">
-            <Image
-              src="/images/dan-kennedy.png"
-              width={75}
-              height={75}
-              alt="Dan Kennedy"
-            />
-          </div>
-          <span className="ml-5 mr-2">Dan Kennedy</span>
-          <a className="text-brand-blue" href="#">
-            Utility and Transportation Contractors Association
-          </a>
+      {data?.coChairs?.nodes?.length > 0 && (
+        <div className="p-8 border border-solid border-brand-gray mb-20">
+          {data?.coChairs?.nodes?.map((coChair) => (
+            <div
+              key={coChair.coChairId}
+              className="flex items-center px-4 py-6 mb-2 bg-brand-gray-pale"
+              style={{ minHeight: 130 }}
+            >
+              <div
+                className="rounded-full bg-brand-gray"
+                style={{ width: 75, height: 75 }}
+              >
+                {coChair?.coChair?.image?.sourceUrl && (
+                  <Image
+                    src={coChair?.coChair?.image?.sourceUrl}
+                    width={75}
+                    height={75}
+                    alt={
+                      coChair?.coChair?.image?.altText ??
+                      coChair?.coChair?.image?.title
+                    }
+                  />
+                )}
+              </div>
+              <span className="ml-5 mr-2">
+                {sanitize(coChair?.coChair?.firstName)}{' '}
+                {sanitize(coChair?.coChair?.lastName)}
+              </span>
+              <a
+                className="text-brand-blue"
+                href={sanitize(coChair?.coChair?.associationUrl ?? '')}
+              >
+                {sanitize(coChair?.coChair?.associationText)}
+              </a>
+            </div>
+          ))}
         </div>
-        <div
-          className="flex items-center px-4 py-6 mb-2 bg-brand-gray-pale"
-          style={{ minHeight: 130 }}
-        >
-          <div className="rounded-full">
-            <Image
-              src="/images/larry-levine.png"
-              width={75}
-              height={75}
-              alt="Larry Levine"
-            />
-          </div>
-          <span className="ml-5 mr-2">Larry Levine</span>
-          <a className="text-brand-blue" href="#">
-            Natural Resources Defense Council
-          </a>
-        </div>
-      </div>
+      )}
     </Layout>
   );
 }
