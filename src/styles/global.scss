@@ -1,3 +1,19 @@
+@font-face {
+  font-family: "Nova";
+  src: url("../../public/fonts/Mark\ Simonson\ \ Proxima\ Nova\ Condensed\ Semibold\ TheFontsMaster.com.woff");
+  
+}
+@font-face {
+  font-family: "NovaM";
+  src: url("../../public/fonts/FontsFree-Net-pr2.ttf");
+  
+}
+@font-face {
+  font-family: "Museo";
+  src: url("../../public/fonts/Museo_Slab_500.otf");
+ 
+}
+
 .w-150 {
   width: 37.5rem;
 }
@@ -129,6 +145,10 @@
 
 .mb-12 {
   margin-bottom: 3rem;
+}
+
+.ml-5 {
+  margin-left: 1.25rem;
 }
 
 .translate-x-16 {
@@ -271,6 +291,13 @@
   }
 }
 
+.content {
+  p,
+  li {
+    margin-bottom: 0.75rem;
+  }
+}
+
 @media (min-width: 768px) {
   .md-w-4-5 {
     width: 80%;
@@ -391,4 +418,8 @@
 .rmsc .dropdown-container {
   border: none !important;
   border-radius: 0 !important;
+}
+
+.MuiAccordionSummary-expandIcon.Mui-expanded {
+  transform: rotate(90deg) !important;
 }

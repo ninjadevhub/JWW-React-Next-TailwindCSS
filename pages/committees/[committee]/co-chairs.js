@@ -7,7 +7,10 @@ import Layout from '../../../src/components/layout';
 import Image from 'next/image';
 import Select from 'react-select';
 import Link from 'next/link';
-import { FALLBACK, handleRedirectsAndReturnData } from '../../../src/utils/slug';
+import {
+  FALLBACK,
+  handleRedirectsAndReturnData,
+} from '../../../src/utils/slug';
 import { getCommitteeIconsByName } from '../../../src/utils/icons-map';
 import { sanitize } from '../../../src/utils/miscellaneous';
 
@@ -30,14 +33,16 @@ export default function CommitteeOverview({ data }) {
       label: name,
     })) ?? []),
   ];
-  const [committeeOption, setCommitteeOption] = useState(defaultCommitteeOption);
+  const [committeeOption, setCommitteeOption] = useState(
+    defaultCommitteeOption
+  );
 
   return (
     <Layout data={data}>
       <div className="w-full relative bg-brand-gray" style={{ height: 340 }}>
         {data?.committee?.Committee?.backgroundImage && (
           <Image
-            src={data?.committee?.Committee?.backgroundImage?.link}
+            src={data?.committee?.Committee?.backgroundImage?.sourceUrl}
             alt={
               data?.committee?.Committee?.backgroundImage?.altText ||
               data?.committee?.Committee?.backgroundImage?.title
@@ -67,10 +72,8 @@ export default function CommitteeOverview({ data }) {
       </div>
       <div className="flex justify-center bg-brand-gray mb-12">
         <Link href={`/committees/${slug}`}>
-		  <a className="w-52 h-15 flex justify-center items-center">
-            OVERVIEW
-          </a>
-		</Link>
+          <a className="w-52 h-15 flex justify-center items-center">OVERVIEW</a>
+        </Link>
         <Link href={`/committees/${slug}/work-plans`}>
           <a className="w-52 h-15 flex justify-center items-center">
             WORK PLANS
@@ -86,19 +89,49 @@ export default function CommitteeOverview({ data }) {
             RESOURCES
           </a>
         </Link>
-          <div className="w-52 h-15 flex justify-center items-center bg-white text-brand-blue">
-            CO-CHAIRS
-          </div>
+        <div className="w-52 h-15 flex justify-center items-center bg-white text-brand-blue">
+          CO-CHAIRS
+        </div>
         <Link href={`#`}>
           <a className="w-52 h-15 flex justify-center items-center">JOIN</a>
         </Link>
       </div>
-      <div
-        className="max-w-5xl mx-auto px-4 mb-20"
-        dangerouslySetInnerHTML={{
-          __html: sanitize(data?.committee?.description ?? ''),
-        }}
-      />
+      <div className="p-8 border border-solid border-brand-gray mb-20">
+        <div
+          className="flex items-center px-4 py-6 mb-2 bg-brand-gray-pale"
+          style={{ minHeight: 130 }}
+        >
+          <div className="rounded-full">
+            <Image
+              src="/images/dan-kennedy.png"
+              width={75}
+              height={75}
+              alt="Dan Kennedy"
+            />
+          </div>
+          <span className="ml-5 mr-2">Dan Kennedy</span>
+          <a className="text-brand-blue" href="#">
+            Utility and Transportation Contractors Association
+          </a>
+        </div>
+        <div
+          className="flex items-center px-4 py-6 mb-2 bg-brand-gray-pale"
+          style={{ minHeight: 130 }}
+        >
+          <div className="rounded-full">
+            <Image
+              src="/images/larry-levine.png"
+              width={75}
+              height={75}
+              alt="Larry Levine"
+            />
+          </div>
+          <span className="ml-5 mr-2">Larry Levine</span>
+          <a className="text-brand-blue" href="#">
+            Natural Resources Defense Council
+          </a>
+        </div>
+      </div>
     </Layout>
   );
 }
@@ -124,7 +157,12 @@ export async function getStaticProps({ params }) {
       revalidate: 60,
     };
 
-    return handleRedirectsAndReturnData(defaultProps, data, errors, 'committee');
+    return handleRedirectsAndReturnData(
+      defaultProps,
+      data,
+      errors,
+      'committee'
+    );
   } catch (err) {
     console.log({ error: err });
     return {

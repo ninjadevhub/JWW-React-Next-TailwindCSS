@@ -190,7 +190,7 @@ export default function Resources({ data }) {
             overrideStrings={{ selectSomeItems: 'By News Source' }}
             options={[
               { value: '', label: 'See All News Sources' },
-              ...(data?.news_sources?.nodes?.map((obj) => ({
+              ...(data?.newsSources?.nodes?.map((obj) => ({
                 value: obj.slug,
                 label: obj.name,
               })) || []),
@@ -362,7 +362,7 @@ export default function Resources({ data }) {
                       </Link>
                     </div>
                     <div className="flex-grow px-2">
-                      <Link href="#">
+                      <Link href="/videos/">
                         <a className="block py-2 px-3 bg-brand-blue text-center">
                           VIDEOS
                         </a>

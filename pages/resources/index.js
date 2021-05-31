@@ -402,7 +402,7 @@ export default function Resources({ data }) {
                       </Link>
                     </div>
                     <div className="flex-grow px-2">
-                      <Link href="#">
+                      <Link href="/videos/">
                         <a className="block py-2 px-3 bg-brand-blue text-center">
                           VIDEOS
                         </a>

@@ -43,13 +43,13 @@ const Layout = ( {data, isPost, children} ) => {
 Layout.propTypes = {
 	data: PropTypes.object,
 	isPost: PropTypes.bool,
-	children: PropTypes.object
+	children: PropTypes.array
 };
 
 Layout.defaultProps = {
 	data: {},
 	isPost: false,
-	children: {}
+	children: []
 };
 
 export default Layout;

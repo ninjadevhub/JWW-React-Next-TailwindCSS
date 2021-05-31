@@ -7,9 +7,45 @@ import Layout from '../../../src/components/layout';
 import Image from 'next/image';
 import Select from 'react-select';
 import Link from 'next/link';
-import { FALLBACK, handleRedirectsAndReturnData } from '../../../src/utils/slug';
+import MuiAccordion from '@material-ui/core/Accordion';
+import { withStyles } from '@material-ui/core/styles';
+import MuiAccordionSummary from '@material-ui/core/AccordionSummary';
+import MuiAccordionDetails from '@material-ui/core/AccordionDetails';
+import {
+  FALLBACK,
+  handleRedirectsAndReturnData,
+} from '../../../src/utils/slug';
 import { getCommitteeIconsByName } from '../../../src/utils/icons-map';
 import { sanitize } from '../../../src/utils/miscellaneous';
+
+const Accordion = withStyles({
+  root: {
+    margin: '0.5rem 0 !important',
+    boxShadow: 'none',
+    '&$expanded': {
+      margin: '0.5rem 0 !important',
+    },
+  },
+})(MuiAccordion);
+
+const AccordionSummary = withStyles({
+  root: {
+    minHeight: '76px',
+    paddingLeft: '2rem',
+    paddingRight: '2rem',
+    backgroundColor: '#e5e5e5',
+    fontSize: '1.5rem',
+  },
+})(MuiAccordionSummary);
+
+const AccordionDetails = withStyles({
+  root: {
+    backgroundColor: '#f3f3f3',
+    paddingTop: '1rem',
+    paddingRight: '5rem',
+    paddingLeft: '5rem',
+  }
+})(MuiAccordionDetails);
 
 export default function CommitteeOverview({ data }) {
   const router = useRouter();
@@ -30,14 +66,16 @@ export default function CommitteeOverview({ data }) {
       label: name,
     })) ?? []),
   ];
-  const [committeeOption, setCommitteeOption] = useState(defaultCommitteeOption);
+  const [committeeOption, setCommitteeOption] = useState(
+    defaultCommitteeOption
+  );
 
   return (
     <Layout data={data}>
       <div className="w-full relative bg-brand-gray" style={{ height: 340 }}>
         {data?.committee?.Committee?.backgroundImage && (
           <Image
-            src={data?.committee?.Committee?.backgroundImage?.link}
+            src={data?.committee?.Committee?.backgroundImage?.sourceUrl}
             alt={
               data?.committee?.Committee?.backgroundImage?.altText ||
               data?.committee?.Committee?.backgroundImage?.title
@@ -67,13 +105,11 @@ export default function CommitteeOverview({ data }) {
       </div>
       <div className="flex justify-center bg-brand-gray mb-12">
         <Link href={`/committees/${slug}`}>
-		  <a className="w-52 h-15 flex justify-center items-center">
-            OVERVIEW
-          </a>
-		</Link>     
-          <div className="w-52 h-15 flex justify-center items-center bg-white text-brand-blue">
-            WORK PLANS
-          </div>
+          <a className="w-52 h-15 flex justify-center items-center">OVERVIEW</a>
+        </Link>
+        <div className="w-52 h-15 flex justify-center items-center bg-white text-brand-blue">
+          WORK PLANS
+        </div>
         <Link href={`/committees/${slug}/accomplishments`}>
           <a className="w-52 h-15 flex justify-center items-center">
             ACCOMPLISHMENTS
@@ -93,12 +129,76 @@ export default function CommitteeOverview({ data }) {
           <a className="w-52 h-15 flex justify-center items-center">JOIN</a>
         </Link>
       </div>
-      <div
-        className="max-w-5xl mx-auto px-4 mb-20"
-        dangerouslySetInnerHTML={{
-          __html: sanitize(data?.committee?.description ?? ''),
-        }}
-      />
+      <div className="p-8 border border-solid border-brand-gray mb-20">
+        <div>
+          <Accordion>
+            <AccordionSummary
+              expandIcon={<span className="fas fa-chevron-right" />}
+              aria-controls="panel1a-content"
+              id="panel1a-header"
+            >
+              <span>2021</span>
+            </AccordionSummary>
+            <AccordionDetails>
+              <div>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                Suspendisse malesuada lacus ex, sit amet blandit leo lobortis
+                eget.
+              </div>
+            </AccordionDetails>
+          </Accordion>
+          <Accordion>
+            <AccordionSummary
+              expandIcon={<span className="fas fa-chevron-right" />}
+              aria-controls="panel2a-content"
+              id="panel2a-header"
+            >
+              <span>2020</span>
+            </AccordionSummary>
+            <AccordionDetails>
+              <div className="content">
+                <p>Advance water and sewer affordability for low-income customers
+                by:</p>
+                <ul>
+                  <li>
+                    Producing recommendations to implement the white paper state
+                    policy options report released in 2019
+                  </li>
+                  <li>
+                    Establishing a consensus methodology for measuring
+                    affordability issues, applying it to assess NJ communities,
+                    and publishing the findings
+                  </li>
+                  <li>
+                    Work with the Combined Sewer Overflow committee to identify
+                    ways to address affordability in Long Term Control Plans and
+                    recommend them to the New Jersey Department of Environmental
+                    Protection (DEP).
+                  </li>
+                </ul>
+              </div>
+            </AccordionDetails>
+          </Accordion>
+          <Accordion>
+            <AccordionSummary
+              expandIcon={<span className="fas fa-chevron-right" />}
+              aria-controls="panel3a-content"
+              id="panel3a-header"
+            >
+              <span>
+                2019
+              </span>
+            </AccordionSummary>
+            <AccordionDetails>
+              <div className="content">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                Suspendisse malesuada lacus ex, sit amet blandit leo lobortis
+                eget.
+              </div>
+            </AccordionDetails>
+          </Accordion>
+        </div>
+      </div>
     </Layout>
   );
 }
@@ -124,7 +224,12 @@ export async function getStaticProps({ params }) {
       revalidate: 60,
     };
 
-    return handleRedirectsAndReturnData(defaultProps, data, errors, 'committee');
+    return handleRedirectsAndReturnData(
+      defaultProps,
+      data,
+      errors,
+      'committee'
+    );
   } catch (err) {
     console.log({ error: err });
     return {

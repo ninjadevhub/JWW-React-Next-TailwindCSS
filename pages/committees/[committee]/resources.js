@@ -571,7 +571,7 @@ export default function Resources({ data }) {
       <div className="w-full relative bg-brand-gray" style={{ height: 340 }}>
         {data?.topic?.Topic?.backgroundImage && (
           <Image
-            src={data?.topic?.Topic?.backgroundImage?.link}
+            src={data?.topic?.Topic?.backgroundImage?.sourceUrl}
             alt={
               data?.topic?.Topic?.backgroundImage?.altText ||
               data?.topic?.Topic?.backgroundImage?.title
@@ -583,7 +583,7 @@ export default function Resources({ data }) {
         <div className="w-200 max-w-full absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col justify-center items-center p-8 border-b-thick-brand-green bg-white">
           {getCommitteeIconsByName(name)}
           <h1 className="mb-5 text-center text-3xl">
-            {data?.topic?.Topic?.title || data?.topic?.name}
+            {data?.committee?.Committee?.title || data?.committee?.name}
           </h1>
           <Select
             className="w-84"

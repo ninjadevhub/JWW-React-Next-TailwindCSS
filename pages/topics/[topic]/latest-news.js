@@ -334,7 +334,7 @@ export default function LatestNews({ data }) {
                       </Link>
                     </div>
                     <div className="flex-grow px-2">
-                      <Link href="#">
+                      <Link href="/videos/">
                         <a className="block py-2 px-3 bg-brand-blue text-center">
                           VIDEOS
                         </a>
@@ -494,7 +494,7 @@ export default function LatestNews({ data }) {
       <div className="w-full relative bg-brand-gray" style={{ height: 340 }}>
         {data?.topic?.Topic?.backgroundImage && (
           <Image
-            src={data?.topic?.Topic?.backgroundImage?.link}
+            src={data?.topic?.Topic?.backgroundImage?.sourceUrl}
             alt={
               data?.topic?.Topic?.backgroundImage?.altText ||
               data?.topic?.Topic?.backgroundImage?.title

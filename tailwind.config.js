@@ -25,7 +25,14 @@ module.exports = {
       'brand-gray': '#e5e5e5',
       'brand-gray-pale': '#f3f3f3',
     },
+   
     extend: {
+      fontFamily: {
+        'nova': ['Nova'],
+        'museo':['Museo'],
+        'novam':['NovaM'],
+           
+         },
         screens: {
           xm: '320px'
         },
@@ -43,6 +50,9 @@ module.exports = {
         },
     },
   },
+
+
+
   variants: {},
   plugins: [
 	  require( 'tailwindcss' ),

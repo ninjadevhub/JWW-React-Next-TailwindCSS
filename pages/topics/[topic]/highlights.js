@@ -36,7 +36,7 @@ export default function TopicHighlights({ data }) {
       <div className="w-full relative bg-brand-gray" style={{ height: 340 }}>
         {data?.topic?.Topic?.backgroundImage && (
           <Image
-            src={data?.topic?.Topic?.backgroundImage?.link}
+            src={data?.topic?.Topic?.backgroundImage?.sourceUrl}
             alt={
               data?.topic?.Topic?.backgroundImage?.altText ||
               data?.topic?.Topic?.backgroundImage?.title
