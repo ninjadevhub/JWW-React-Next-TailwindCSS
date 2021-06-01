@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import client from '../../../src/apollo/client';
 import { GET_COMMITTEES_SLUGS } from '../../../src/queries/taxonomies/get-committees-slugs';
 import { GET_COMMITTEE } from '../../../src/queries/taxonomies/get-committee';
@@ -35,6 +35,18 @@ export default function CommitteeOverview({ data }) {
   ];
   const [committeeOption, setCommitteeOption] = useState(
     defaultCommitteeOption
+  );
+
+  const coChairs = useMemo(
+    () =>
+      data?.coChairs?.nodes
+        ?.filter(
+          (node) => node.coChair?.committee?.slug === data?.committee?.slug
+        )
+        ?.sort((a, b) =>
+          a.coChair?.firstName < b.coChair?.firstName ? -1 : 1
+        ),
+    [data]
   );
 
   return (
@@ -96,9 +108,9 @@ export default function CommitteeOverview({ data }) {
           <a className="w-52 h-15 flex justify-center items-center">JOIN</a>
         </Link>
       </div>
-      {data?.coChairs?.nodes?.length > 0 && (
+      {coChairs?.length > 0 && (
         <div className="p-8 border border-solid border-brand-gray mb-20">
-          {data?.coChairs?.nodes?.map((coChair) => (
+          {coChairs?.map((coChair) => (
             <div
               key={coChair.coChairId}
               className="flex items-center px-4 py-6 mb-2 bg-brand-gray-pale"
