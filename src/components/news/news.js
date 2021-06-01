@@ -65,7 +65,11 @@ const News = ({ hit }) => {
         </div>
         <h2 className="my-4 text-2xl">{post_title}</h2>
         <div className="mb-6">{post_excerpt} ...</div>
-        <button className="inline-block py-2 px-8 bg-brand-orange text-center text-white" type="button">
+        <button
+          className="inline-block py-2 px-8 bg-brand-orange text-center text-white"
+          type="button"
+          onClick={handleReadArticleClick}
+        >
           READ ARTICLE
         </button>
       </div>

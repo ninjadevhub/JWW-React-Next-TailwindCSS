@@ -6,6 +6,7 @@ import News from '../../src/components/news/news';
 import Link from 'next/link';
 import Image from 'next/image';
 import MultiSelect from 'react-multi-select-component';
+import Modal from 'react-modal';
 import { GET_NEWS_PAGE } from '../../src/queries/pages/get-news-page';
 import { useEffect, useRef, useState } from 'react';
 import {
@@ -56,6 +57,24 @@ const yearOptions = [
   })),
 ];
 
+Modal.setAppElement('#__next');
+
+const modalStyles = {
+  content: {
+    border: 'thin solid #e5e5e5',
+    borderRadius: '0',  
+    width: '1200px',
+    maxWidth: 'calc(100vw - 660px)',
+    padding: '1rem',
+    top                   : '15rem',
+    left                  : '50%',
+    right                 : 'auto',
+    bottom                : 'auto',
+    marginRight           : '-50%',
+    transform             : 'translateX(-50%)'
+  }
+};
+
 export default function Resources({ data }) {
   const [searchMode, setSearchMode] = useState('');
   const [facetFilters, setFacetFilters] = useState([]);
@@ -66,6 +85,7 @@ export default function Resources({ data }) {
   const [selectedYears, setSelectedYears] = useState([]);
   const [dropTokensThreshold, setDropTokensThreshold] = useState(0);
   const [numTypos, setNumTypos] = useState(2);
+  const [currentNewsItem, setCurrentNewsItem] = useState(null);
   const textInputRef = useRef(null);
   const allRadioRef = useRef(null);
   const anyRadioRef = useRef(null);
@@ -528,11 +548,24 @@ export default function Resources({ data }) {
 
     return (
       <div class="ais-InfiniteHits">
+      {/*<Modal 
+        isOpen={!!currentNewsItem}
+        //onRequestClose={handleCloseNewsModal}
+        contentLabel="News Modal Title"
+        style={modalStyles}
+      >   
+        <NewsModal 
+          newsItem={currentNewsItem} 
+          //onNext={onShowNextNewsItem}
+          //onPrev={onShowPrevNewsItem}
+          //onClose={handleCloseNewsModal}
+        />
+      </Modal>*/}
         {filteredHits.length > 0 && (
           <ul class="ais-InfiniteHits-list">
             {filteredHits.map((hit) => (
               <li class="ais-InfiniteHits-item" key={hit.id}>
-                <News hit={hit} />
+                <News hit={hit} handleReadMoreClick={() => setCurrentNewsItem(hit)} />
               </li>
             ))}
           </ul>

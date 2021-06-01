@@ -1,16 +1,16 @@
 import * as React from 'react';
 import Image from 'next/image';
 
-const displayYoutubeIcon = (width, height) => (
+const displayEmailIcon = (width, height) => (
 	<Image
-		src="/images/youtube.png"
+		src="/images/email.png"
 		width={width || 37}
 		height={height || 37}
-		alt="Youtube Icon"
+		alt="Email Icon"
 	/>
 );
 
-function Youtube( props ) {
+function Email( props ) {
 	if (props.onClick) {
 		return (
 			<button
@@ -18,7 +18,7 @@ function Youtube( props ) {
 				className={`p-0 border-none bg-transparent${props.className ? ' ' + props.className : ''}`}
 				{...props}
 			>
-				{displayYoutubeIcon(props.width, props.height)}
+				{displayEmailIcon(props.width, props.height)}
 			</button>
 		);
 	}
@@ -29,9 +29,9 @@ function Youtube( props ) {
 			className={`inline-block${props.className ? ' ' + props.className : ''}`}
 			{...props}
 		>
-			{displayYoutubeIcon(props.width, props.height)}
+			{displayEmailIcon(props.width, props.height)}
 		</a>
 	);
 }
 
-export default Youtube;
+export default Email;
