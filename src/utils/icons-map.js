@@ -1,4 +1,4 @@
-import * as SvgIconsComponent from '../components/icons';
+import * as IconsComponent from '../components/icons';
 import Image from 'next/image';
 
 /**
@@ -9,10 +9,11 @@ import Image from 'next/image';
  */
 export const getIconComponentByName = ( name ) => {
 	const ComponentsMap = {
-		facebook: SvgIconsComponent.Facebook,
-		twitter: SvgIconsComponent.Twitter,
-		instagram: SvgIconsComponent.Instagram,
-		youtube: SvgIconsComponent.Youtube
+		facebook: IconsComponent.Facebook,
+		twitter: IconsComponent.Twitter,
+		instagram: IconsComponent.Instagram,
+		youtube: IconsComponent.Youtube,
+		email: IconsComponent.Email,
 	};
 
 	if ( name in ComponentsMap ) {
