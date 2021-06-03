@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 import { getTopicIconByName, getTypeIconByName, getCommitteeIconsByName } from '../../utils/icons-map';
 import { convertAmpersands } from '../../utils/miscellaneous';
 
-const News = ({ hit }) => {
+const News = ({ hit,onCardClick }) => {
   const {
     post_date,
     images,
@@ -68,7 +68,7 @@ const News = ({ hit }) => {
         <button
           className="inline-block py-2 px-8 bg-brand-orange text-center text-white"
           type="button"
-          onClick={handleReadArticleClick}
+          onClick={()=> onCardClick(hit)}
         >
           READ ARTICLE
         </button>

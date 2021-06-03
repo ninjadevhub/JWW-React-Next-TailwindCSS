@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 import { getTopicIconByName, getTypeIconByName, getCommitteeIconsByName } from '../../utils/icons-map';
 import { convertAmpersands } from '../../utils/miscellaneous';
 
-const Resource = ({ hit, committees }) => {
+const Resource = ({ hit, committees,onCardClick }) => {
   const {
     post_date,
     images,
@@ -13,6 +13,7 @@ const Resource = ({ hit, committees }) => {
     post_title,
     post_excerpt,
     content,
+    objectID
   } = hit;
 
   const resourceLink = content.match(/<a href="([^"]+)(?!<a href=")/)?.[1] ?? '';
@@ -66,9 +67,14 @@ const Resource = ({ hit, committees }) => {
         </div>
         <h2 className="my-4 text-2xl">{post_title}</h2>
         <div className="mb-6">{post_excerpt} ...</div>
-        <a href={resourceLink} className="inline-block py-2 px-8 bg-brand-orange text-center text-white" target="_blank">
+        {/* <a href={resourceLink} className="inline-block py-2 px-8 bg-brand-orange text-center text-white" target="_blank">
           VIEW RESOURCE
-        </a>
+        </a> */}
+          <button className="inline-block py-2 px-8 bg-brand-orange text-center text-white"
+                onClick={() => onCardClick(hit)}
+                >
+          VIEW RESOURCE   
+          </button> 
       </div>
       <div
         className="flex-grow-0 flex-shrink-0 flex flex-column justify-center items-center p-3 bg-brand-gray text-center"

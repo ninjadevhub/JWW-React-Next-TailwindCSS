@@ -27,6 +27,8 @@ module.exports = {
     },
    
     extend: {
+
+      
       fontFamily: {
         'nova': ['Nova'],
         'museo':['Museo'],
