@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import { FaTimes, FaCalendarAlt, FaAngleLeft, FaAngleRight, FaPlay } from 'react-icons/fa'
 import { Hits } from 'react-instantsearch-dom'
-import ReactPlayer from 'react-player'
 
 import { Facebook, Instagram, Twitter, Youtube } from '../icons'
 
@@ -52,7 +51,7 @@ import { Facebook, Instagram, Twitter, Youtube } from '../icons'
                         <h1 className="font-museo">{hit.content}</h1>
                     </div>
                     <div className="flex w-70">
-                        <img src={`${hit.images?.full?.url} || ''`}/>
+                        <img src={`${hit.images?.full?.url}`}/>
                     </div>
                     
                 

@@ -4,7 +4,9 @@ import dayjs from 'dayjs';
 import { getTopicIconByName, getTypeIconByName, getCommitteeIconsByName } from '../../utils/icons-map';
 import { convertAmpersands } from '../../utils/miscellaneous';
 
-const News = ({ hit,onCardClick }) => {
+const News = ({ hit,onCardClick,committees }) => {
+  console.log("NEWS88888888888888888",hit)
+
   const {
     post_date,
     images,
@@ -77,7 +79,7 @@ const News = ({ hit,onCardClick }) => {
         className="flex-grow-0 flex-shrink-0 flex flex-column justify-center items-center p-3 bg-brand-gray text-center"
         style={{ flexBasis: '190px', maxWidth: 190, minHeight: 362 }}
       >
-        {/*taxonomies_committee?.map((committee) => (
+        {/* taxonomies_committee?.map((committee) => (
           <div className="flex flex-col items-center pb-2">
             <div className="mb-4">{getCommitteeIconsByName(committee)}</div>
             <div className="mb-4">{committee}</div>
@@ -92,7 +94,7 @@ const News = ({ hit,onCardClick }) => {
               </a>
             </Link>
           </div>
-        ))*/}
+        )) */}
       </div>
     </div>
   );

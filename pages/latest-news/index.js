@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import client from '../../src/apollo/client';
 import Layout from '../../src/components/layout';
 import Autocomplete from '../../src/components/autocomplete';
@@ -22,6 +23,8 @@ import TypesenseInstantSearchAdapter from '../../src/typesense-instantsearch-ada
 import SwiperCore, { Autoplay, Pagination, EffectFade, A11y } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 //import styles from '../../src/styles/pages/resources/index.module.scss';
+import ResoursesModal from '../../src/components/ResoursesModal/ResoursesModal';
+
 SwiperCore.use([Autoplay, Pagination, EffectFade, A11y]);
 
 const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter({
@@ -59,33 +62,30 @@ const yearOptions = [
 
 Modal.setAppElement('#__next');
 
+
 const modalStyles = {
   content: {
-    border: 'thin solid #e5e5e5',
-    borderRadius: '0',  
-    width: '1200px',
-    maxWidth: 'calc(100vw - 660px)',
+    position: 'fixed',
+    border: '0',
+    borderRadius: '4px',  
+    width: '1250px',
     padding: '1rem',
-    top                   : '15rem',
-    left                  : '50%',
-    right                 : 'auto',
-    bottom                : 'auto',
-    marginRight           : '-50%',
-    transform             : 'translateX(-50%)'
+    top: '4%',
+    margin: '0 auto',
+    zIndex: '1000'
   }
 };
 
 export default function Resources({ data }) {
   const [searchMode, setSearchMode] = useState('');
   const [facetFilters, setFacetFilters] = useState([]);
-  //const [committees, setCommittees] = useState([]);
+  const [committees, setCommittees] = useState([]);
   const [topics, setTopics] = useState([]);
-  //const [types, setTypes] = useState([]);
+  const [types, setTypes] = useState([]);
   const [newsSources, setNewsSources] = useState([]);
   const [selectedYears, setSelectedYears] = useState([]);
   const [dropTokensThreshold, setDropTokensThreshold] = useState(0);
   const [numTypos, setNumTypos] = useState(2);
-  const [currentNewsItem, setCurrentNewsItem] = useState(null);
   const textInputRef = useRef(null);
   const allRadioRef = useRef(null);
   const anyRadioRef = useRef(null);
@@ -532,6 +532,51 @@ export default function Resources({ data }) {
   );
 
   const InfiniteHits = ({ hits, hasMore, refineNext }) => {
+    console.log("latest",hits)
+
+    const [currentResource, setCurrentResource] = useState(null);
+    const router = useRouter();
+
+    const handleOpenResourcesModal = (hit) => {
+      router.push(`/latest-news/?latestnewsId=${hit.id}`, `/latest-news/?latestnewsId=${hit.id}`);
+    };
+    const handleCloseResourcesModal = () => {
+      setCurrentResource(null);
+      router.push('/latest-news');
+    };
+
+    const onShowNextResources = (latestnewsId) => {
+      const currentIndex = hits.findIndex(v => v.id === latestnewsId);
+      if(currentIndex < hits.length) {
+        const nextResources = hits[currentIndex + 1];
+        if(nextResources) {
+          setCurrentResource(nextResources);
+          router.push(`/latest-news/?latestnewsId=${hits.id}`);
+        }
+      }
+  };
+
+  const onShowPrevResources = (latestnewsId) => {
+    const currentIndex = hits.findIndex(v => v.id === latestnewsId);
+    if(currentIndex > 0) {
+      const prevResources = hits[currentIndex - 1];
+      if(prevResources) {
+        setCurrentResource(prevResources);
+        router.push(`/latest-newsId/?latest-newsId=${hits.id}`);
+      }
+    }
+  };
+
+    useEffect(() => {
+      if(router.query.latestnewsId) {
+        const current = hits.find(v => v.id === router.query.latestnewsId);
+        setCurrentResource(current);
+      }
+    }, [router]);
+
+
+
+
     const query = textInputRef.current?.value?.toLowerCase() ?? '';
     const queryTokens = query.toLowerCase().split(/\s+/) ?? [];
     let filteredHits;
@@ -544,28 +589,30 @@ export default function Resources({ data }) {
     } else {
       filteredHits = hits;
     }
-    console.log(filteredHits[0])
 
     return (
       <div class="ais-InfiniteHits">
-      {/*<Modal 
-        isOpen={!!currentNewsItem}
-        //onRequestClose={handleCloseNewsModal}
-        contentLabel="News Modal Title"
-        style={modalStyles}
-      >   
-        <NewsModal 
-          newsItem={currentNewsItem} 
-          //onNext={onShowNextNewsItem}
-          //onPrev={onShowPrevNewsItem}
-          //onClose={handleCloseNewsModal}
-        />
-      </Modal>*/}
+     <Modal 
+            isOpen={!!currentResource}
+            contentLabel="LatestNews modal Title"
+            style={modalStyles}
+          >   
+            <ResoursesModal
+              hit={currentResource}
+              onNext={onShowNextResources}
+              onPrev={onShowPrevResources}
+              onClose={handleCloseResourcesModal} 
+            />
+          </Modal>
+
         {filteredHits.length > 0 && (
           <ul class="ais-InfiniteHits-list">
             {filteredHits.map((hit) => (
               <li class="ais-InfiniteHits-item" key={hit.id}>
-                <News hit={hit} handleReadMoreClick={() => setCurrentNewsItem(hit)} />
+                <News 
+                hit={hit} 
+                onCardClick={handleOpenResourcesModal}
+                />
               </li>
             ))}
           </ul>
@@ -583,7 +630,7 @@ export default function Resources({ data }) {
 
   return (
     <Layout data={data}>
-      <div className="relative w-full bg-brand-gray" style={{ height: 430 }}>
+      <div className="relative w-full bg-brand-gray" style={{ height: 430,zIndex:'-1' }}>
         {data?.page?.latestNews?.sliderImages?.length > 0 && (
           <Swiper
             autoplay={{ delay: 5000 }}

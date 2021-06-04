@@ -5,6 +5,7 @@ import { getTopicIconByName, getTypeIconByName, getCommitteeIconsByName } from '
 import { convertAmpersands } from '../../utils/miscellaneous';
 
 const Resource = ({ hit, committees,onCardClick }) => {
+  console.log("resource",hit)
   const {
     post_date,
     images,
