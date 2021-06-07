@@ -1,4 +1,5 @@
 import React from 'react'
+import Link from 'next/link'
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import { FaLongArrowAltRight } from "react-icons/fa";
@@ -6,7 +7,8 @@ import { FaLongArrowAltRight } from "react-icons/fa";
 
 
 
-const HomeSlider = ({data}) => {
+const HomeSlider = ({resourceData,latestNewsDatat}) => {
+  console.log("dddasdasd",latestNewsDatat)
     const responsive = {
         superLargeDesktop: {
           breakpoint: { max: 4000, min: 3000 },
@@ -32,7 +34,7 @@ const HomeSlider = ({data}) => {
             arrows={false}
             responsive={responsive}>
                 {
-                    data.map((item)=>(
+                    resourceData.map((item)=>(
                         <div>
                             <img src={`${item.featuredImage?.node?.sourceUrl}`}/>
                         </div>
@@ -41,14 +43,42 @@ const HomeSlider = ({data}) => {
                
             </Carousel>
             <div>
-                <button class="flex flex-row bg-brand-blue items-center	 text-white  py-2 px-4 rounded">
-                    RESOURSES
-                    <FaLongArrowAltRight
-                        color={'white'}
-                        className='ml-4'
-                        />
-                </button>
+                <Link href="/resources">
+                    <button class="flex flex-row bg-brand-blue items-center	 text-white  py-2 px-4 rounded">
+                        RESOURSES
+                        <FaLongArrowAltRight
+                            color={'white'}
+                            className='ml-4'
+                            />
+                    </button>
+                </Link>
+              
             </div>
+            <Carousel 
+            arrows={false}
+            responsive={responsive}>
+                {
+                    latestNewsDatat.map((item)=>(
+                        <div>
+                            <img src={`${item.featuredImage?.node?.sourceUrl}`}/>
+                        </div>
+                    ))
+                }
+               
+            </Carousel>
+            <div >
+                <Link href="/latest-news">
+                    <button class="flex flex-row bg-brand-blue items-center	 text-white  py-2 px-4 rounded">
+                        LATEST NEWS
+                        <FaLongArrowAltRight
+                            color={'white'}
+                            className='ml-4'
+                            />
+                    </button>
+                </Link>
+              
+            </div>
+            
         </div>
     )
 }

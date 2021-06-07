@@ -7,7 +7,6 @@ import HomeContent from '../src/components/HomeContent/HomeContent';
 //import {handleRedirectsAndReturnData} from '../src/utils/slug';
 
 export default function Home( {data} ) {
-	console.log("4545454545",data)
 	return (
 		<Layout data={data}>
 			<div dangerouslySetInnerHTML={{__html: sanitize( data?.page?.content ?? '' )}}/>

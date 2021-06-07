@@ -7,75 +7,7 @@ export const GET_HOME_PAGE = gql`
 
 query MyQuery {
     ${HeaderFooter}
-    
-    resources(first: 5) {
-      nodes {
-        content(format: RENDERED)
-        resourceId
-        title(format: RENDERED)
-        date
-        committees {
-          nodes {
-            slug
-            name
-          }
-        }
-        slug
-        featuredImage {
-          node {
-            altText
-            sourceUrl(size: LARGE)
-            title(format: RENDERED)
-          }
-        }
-      }
-    }
-    topics {
-      nodes {
-        slug
-        name
-      }
-    }
-    types {
-      nodes {
-        name
-        slug
-      }
-    }
-    videos(first: 1) {
-      nodes {
-        date
-        content(format: RENDERED)
-        title(format: RENDERED)
-        video {
-          video
-          videoId
-        }
-      }
-    }
-    posts(first: 6) {
-      nodes {
-        postId
-        title(format: RENDERED)
-        slug
-        excerpt(format: RENDERED)
-        featuredImage {
-          node {
-            altText
-            title(format: RENDERED)
-            sourceUrl(size: LARGE)
-          }
-        }
-        content(format: RENDERED)
-        date
-        newsSources {
-          nodes {
-            name
-            slug
-          }
-        }
-      }
-    }
+   
 
     pageBy(uri: "/") {
             home {
@@ -139,6 +71,77 @@ query MyQuery {
         whatsNewSectionHeading
         }
       }
+       
+    resources(first: 5) {
+      nodes {
+      content(format: RENDERED)
+      resourceId
+      title(format: RENDERED)
+      date
+      committees {
+      nodes {
+      slug
+      name
+      }
+      }
+      slug
+      featuredImage {
+      node {
+      altText
+      sourceUrl(size: LARGE)
+      title(format: RENDERED)
+      }
+      }
+      }
+      }
+      topics {
+      nodes {
+      slug
+      name
+      }
+      }
+      types {
+      nodes {
+      name
+      slug
+      }
+      }
+      videos(first: 1) {
+      nodes {
+      date
+      content(format: RENDERED)
+      title(format: RENDERED)
+      video {
+      video
+      videoId
+      }
+      }
+      }
+      posts(first: 6) {
+      nodes {
+      postId
+      title(format: RENDERED)
+      slug
+      excerpt(format: RENDERED)
+      featuredImage {
+      node {
+      altText
+      title(format: RENDERED)
+      sourceUrl(size: LARGE)
+      }
+      }
+      content(format: RENDERED)
+      date
+      newsSources {
+      nodes {
+      name
+      slug
+      }
+      }
+      }
+      }
+      
     }
+    
 
  `;

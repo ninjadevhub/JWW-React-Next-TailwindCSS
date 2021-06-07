@@ -713,7 +713,13 @@ export default function Resources({ data }) {
               hit={currentResource}
               onNext={onShowNextResources}
               onPrev={onShowPrevResources}
-              onClose={handleCloseResourcesModal} 
+              onClose={handleCloseResourcesModal}
+              committees={
+                currentResource?.taxonomies_committee?.map((committee) => [
+                  committeesMap[committee] ?? '',
+                  committee,
+                ]) ?? []
+              } 
             />
           </Modal>
 

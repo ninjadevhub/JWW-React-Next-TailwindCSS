@@ -18,7 +18,6 @@ class HomeCarusel extends Component {
         const carusel = this.props.carusel
         const data = this.props.data.pageBy.home
 
-        console.log('asdsad',data)
         return (
             <Carousel 
                     showThumbs={false}

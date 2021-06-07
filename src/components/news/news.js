@@ -5,7 +5,6 @@ import { getTopicIconByName, getTypeIconByName, getCommitteeIconsByName } from '
 import { convertAmpersands } from '../../utils/miscellaneous';
 
 const News = ({ hit,onCardClick,committees }) => {
-  console.log("NEWS88888888888888888",hit)
 
   const {
     post_date,

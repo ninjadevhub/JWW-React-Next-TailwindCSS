@@ -23,7 +23,7 @@ import TypesenseInstantSearchAdapter from '../../src/typesense-instantsearch-ada
 import SwiperCore, { Autoplay, Pagination, EffectFade, A11y } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 //import styles from '../../src/styles/pages/resources/index.module.scss';
-import ResoursesModal from '../../src/components/ResoursesModal/ResoursesModal';
+import NewsModal from '../../src/components/NewsModal/NewsModal';
 
 SwiperCore.use([Autoplay, Pagination, EffectFade, A11y]);
 
@@ -597,7 +597,7 @@ export default function Resources({ data }) {
             contentLabel="LatestNews modal Title"
             style={modalStyles}
           >   
-            <ResoursesModal
+            <NewsModal
               hit={currentResource}
               onNext={onShowNextResources}
               onPrev={onShowPrevResources}

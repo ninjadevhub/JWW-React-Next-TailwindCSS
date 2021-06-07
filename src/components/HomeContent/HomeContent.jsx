@@ -12,7 +12,8 @@ import HomeSlider from "../HomeSlider/HomeSlider";
 const HomeContent = ({data}) => {
     const { home: carusel } = data.pageBy;
     const { nodes: resourceData } = data.resources;
-
+    const { nodes: latestNewsDatat } = data.posts
+    console.log('.......-----',data)
 
 
     return(
@@ -90,7 +91,10 @@ z                                         className="ml-0.5"
                 
                
                         
-                        <HomeSlider  data={resourceData}/>
+                        <HomeSlider  
+                        resourceData={resourceData}
+                        latestNewsDatat={latestNewsDatat}
+                        />
                       
 
                 

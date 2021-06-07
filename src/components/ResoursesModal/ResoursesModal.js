@@ -5,7 +5,7 @@ import { Hits } from 'react-instantsearch-dom'
 import { Facebook, Instagram, Twitter, Youtube } from '../icons'
 
 
- const ResoursesModal = ({hit, onNext, onPrev, onClose}) => {
+ const ResoursesModal = ({hit, onNext, onPrev, onClose,}) => {
     if(!hit) {
         return null
     }
@@ -45,10 +45,10 @@ import { Facebook, Instagram, Twitter, Youtube } from '../icons'
                     }
                 </div>
             </div>
-            <div className='flex flex-row justify-center pt-12'>
+            <div className='flex flex-row justify-between w-3/5 m-auto mt-12'>
  
                     <div className="flex w-96" >
-                        <h1 className="font-museo">{hit.content}</h1>
+                        <p className="font-museo">{hit.content}</p>
                     </div>
                     <div className="flex w-70">
                         <img src={`${hit.images?.full?.url}`}/>
@@ -56,12 +56,29 @@ import { Facebook, Instagram, Twitter, Youtube } from '../icons'
                     
                 
             </div>
-            <div className='flex flex-row justify-center mt-8'>
-                <div className="flex w-96" >
-                    <h1>SHARE</h1>
+            <div className='flex flex-row justify-around w-2/4	m-auto mt-8'>
+                <div className="flex flex-row w-96 items-center" >
+                    <div className='mr-4'>
+                         <p className='font-museo'>SHARE</p>
+                    </div>
+                    <div className='pr-1'>
+                         <Facebook/>
+                    </div>
+                    <div className='pr-1'>
+                         <Instagram/>
+                    </div>
+                    <div className='pr-1'>
+                    
+                         <Twitter/>
+                    </div>
+                    <div className='pr-1'>
+                         <Youtube/>
+                    </div>
                 </div>
                 <div className="flex w-70">
-                    <button>VIEW RESOURCE</button>
+                    <button className='bg-brand-orange  p-2 rounded  text-white font-museo '>
+                        VIEW RESOURCE
+                    </button>
                 </div>
 
             </div>
@@ -69,7 +86,7 @@ import { Facebook, Instagram, Twitter, Youtube } from '../icons'
                 <div className='flex justify-between pt-6'>
                     <div>
                         <button 
-                            className="flex items-center justify-between bg-transparent bg-brand-orange w-40 h-12 px-6 text-white font-semibold py-2 px-4 border border-brand-orange"
+                            className="flex items-center justify-between bg-transparent bg-brand-orange w-40 h-12 px-6 text-white font-navy py-2 px-4 border border-brand-orange"
                             onClick={() => onPrev(hit.id)}
                         >
                             <div className='border bg-gray-50 rounded-full mr-2'>                               
@@ -96,6 +113,9 @@ import { Facebook, Instagram, Twitter, Youtube } from '../icons'
                          </button>     
                     </div>
 
+                </div>
+                <div>
+                    {/* {hit.} */}
                 </div>
         </div>
 

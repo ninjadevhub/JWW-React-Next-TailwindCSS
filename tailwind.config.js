@@ -24,9 +24,12 @@ module.exports = {
       'brand-green': '#03a399',
       'brand-gray': '#e5e5e5',
       'brand-gray-pale': '#f3f3f3',
+      'brand-gray-typo':"#474747",
+      'brand-purple-icon':'#914a81'
     },
    
     extend: {
+      backgroundColor: ['active'],
 
       
       fontFamily: {
