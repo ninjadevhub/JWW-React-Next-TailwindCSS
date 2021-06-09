@@ -1,5 +1,6 @@
-import React from 'react'
-import Link from 'next/link'
+import React from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import { FaLongArrowAltRight } from "react-icons/fa";
@@ -35,8 +36,13 @@ const HomeSlider = ({resourceData,latestNewsDatat}) => {
             responsive={responsive}>
                 {
                     resourceData.map((item)=>(
-                        <div>
-                            <img src={`${item.featuredImage?.node?.sourceUrl}`}/>
+                        <div className="w-full bg-brand-gray" style={{ paddingBottom: '66.67%' }}>
+                            <Image
+                                src={`${item.featuredImage?.node?.sourceUrl}`}
+                                layout="fill"
+                                objectFit="cover"
+                                alt={item.featuredImage?.node?.altText ? item.featuredImage?.node?.altText : item.featuredImage?.node?.title}
+                            />
                         </div>
                     ))
                 }
@@ -59,8 +65,13 @@ const HomeSlider = ({resourceData,latestNewsDatat}) => {
             responsive={responsive}>
                 {
                     latestNewsDatat.map((item)=>(
-                        <div>
-                            <img src={`${item.featuredImage?.node?.sourceUrl}`}/>
+                        <div className="w-full bg-brand-gray" style={{ paddingBottom: '66.67%' }}>
+                            <Image
+                                src={`${item.featuredImage?.node?.sourceUrl}`}
+                                layout="fill"
+                                objectFit="cover"
+                                alt={item.featuredImage?.node?.altText ? item.featuredImage?.node?.altText : item.featuredImage?.node?.title}
+                            />
                         </div>
                     ))
                 }

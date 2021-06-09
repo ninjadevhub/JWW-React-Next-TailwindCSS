@@ -1,6 +1,5 @@
-
-      import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
+import React, { Component } from 'react';
+import Image from 'next/image';
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from 'react-responsive-carousel';
 import { urlObjectKeys } from 'next/dist/next-server/lib/utils';
