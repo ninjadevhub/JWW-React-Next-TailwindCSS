@@ -1,4 +1,5 @@
 import React, { useState} from "react"
+import { sanitize } from '../../utils/miscellaneous';
 import InvolvedMemberTable from "./InvolvedMemberTable/InvolvedMemberTable"
 
 
@@ -16,9 +17,12 @@ const GetInvolved = ({dataInvovled}) => {
                 >   
                      <div className="flex flex-col items-center  justify-center  bg-white w-2/5  m-auto mr-20">
                         <p className='mt-6 mb-6 font-museo text-3xl text-brand-gray-typo '>{dataInvovled.headerTitle}</p>
-                        <p className='text-xl mb-6 ml-2 font-nova text-brand-gray-typo'>
-                           {dataInvovled.headerText}
-                        </p>
+                        <div 
+                            className='text-xl mb-6 ml-2 font-nova text-brand-gray-typo'
+                            dangerouslySetInnerHTML={{
+                                __html: sanitize(dataInvovled.headerText ?? ''),
+                            }}
+                        />
                     </div>
                 </div>
 
