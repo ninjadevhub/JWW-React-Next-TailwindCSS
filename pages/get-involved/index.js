@@ -1,10 +1,10 @@
 import { useRouter } from 'next/router';
+import React from 'react'
 import SwiperCore, { Autoplay, Pagination, EffectFade, A11y } from 'swiper';
 import client from '../../src/apollo/client';
-import GetInvolved from '../../src/components/Get-Involved/GetInvoled';
+import GetInvolved from '../../src/components/GetInvolved/GetInvolved';
 import Layout from '../../src/components/layout'
-
-import { GET_INVOLVED} from '../../src/queries/get-involved/get-involved';
+import { GET_INVOLVED } from '../../src/queries/involved/involved';
 
 
 SwiperCore.use([Autoplay, Pagination, EffectFade, A11y]);
@@ -13,15 +13,13 @@ SwiperCore.use([Autoplay, Pagination, EffectFade, A11y]);
 
 export default function Water101 ({data}) {
 
-  const { water101: dataInvovled } = data.pageBy;
+  const { getInvolved: dataInvovled } = data.pageBy;
 
-
- const router = useRouter();
 
     return (
         
-        <Layout data={dataInvovled}>
-            <GetInvolved/>
+        <Layout data={data}>
+          <GetInvolved  dataInvovled = {dataInvovled}/>
         </Layout>
 
     )

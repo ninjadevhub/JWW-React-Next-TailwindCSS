@@ -25,7 +25,14 @@ module.exports = {
       'brand-gray': '#e5e5e5',
       'brand-gray-pale': '#f3f3f3',
       'brand-gray-typo':"#474747",
-      'brand-purple-icon':'#914a81'
+      'brand-purple-icon':'#914a81',
+      'brand-table':'#e5e5e5',
+      'brand-form-bg1':'#fafafa',
+      'brand-form-bg2':'#ebebeb',
+      'brand-form-bg-footer':'#f5f5f5',
+
+      
+
     },
    
     extend: {
