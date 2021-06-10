@@ -1,13 +1,80 @@
-import React from 'react'
+import React,{useState} from 'react'
+import Modal from 'react-modal';
+import InvolvedModal from '../InvolvedModal/InvolvedModal';
+import InvolvedSubmitModal from '../InvolvedModalSubmit/InvolvedSubmitModal';
+
+
+Modal.setAppElement('#__next')
+
+const customStyles = {
+    content: {
+        position: 'fixed',
+        border: '0',
+        borderRadius: '4px',  
+        width: '1250px',
+        padding: '1rem',
+        top: '4%',
+        margin: '0 auto',
+        zIndex: '1000'
+    }
+  };
+
 
 
 const InvolvedSignupForom = ({data}) => {
 
+    const [showModal, setShowModal] = useState(false)
+    const [showModalSubmit, setShowModalSubmit] = useState(false)
+
+    const openModalSubmit = ()  => {
+        setShowModalSubmit(true)
+    }
+    const closeModalSubmit = () => {
+        setShowModalSubmit(false)
+    }
+
+
+    const openModal = ()  => {
+        setShowModal(true)
+    }
+    const closeModal = () => {
+        setShowModal(false)
+    }
+
+
+
     return(
         <div className= "bg-brand-form-bg1 flex flex-col m-auto w-11/12 justify-center mt-12">
-            <div className='flex '>
-                <button class="w-72 bg-brand-blue font-nova text-base m-auto text-white font-bold py-2 px-4 rounded">
-                     {data.accordionTab1ButtonText}
+                    <Modal
+                        isOpen={showModal}
+                        //  onAfterOpen={afterOpenModal}
+                        onRequestClose={closeModal}
+                        style={customStyles}
+                        contentLabel="Example Modal"
+                   >
+           
+                    <InvolvedModal 
+                        data={data}
+                        onClose={closeModal}
+                    />
+                   </Modal>
+                   <Modal
+                        isOpen={showModalSubmit}
+                        //  onAfterOpen={afterOpenModal}
+                        onRequestClose={closeModalSubmit}
+                        style={customStyles}
+                        contentLabel="Example Modal"
+                   >
+           
+                    <InvolvedSubmitModal 
+                        data={data}
+                        onClose={closeModalSubmit}
+                    />
+                   </Modal>
+                 
+            <div className='flex'>
+                <button onClick={openModal} class="w-72 bg-brand-blue font-nova text-base m-auto text-white font-bold py-2 px-4 rounded">
+                    {data.accordionTab1ButtonText}
                 </button>
             </div>
 
@@ -16,7 +83,7 @@ const InvolvedSignupForom = ({data}) => {
                         <p className='font-museo text-lg text-brand-gray-typo'>{data.form1Heading}</p>
                     </div>
 
-                    <div className='flex flex-row m-auto w-3/4'>
+                    <div className='flex flex-row m-auto '>
                                 <form className="rounded grid  grid-cols-2 gap-4 px-8 pt-8 pb-8 mb-4">
 
                                     {data.form1Fields.map((item) => (
@@ -40,7 +107,7 @@ const InvolvedSignupForom = ({data}) => {
                     <div className=" w-2/3 m-auto grid  grid-cols-2 gap-4 pt-4">
                         {data.form2Checkboxes.map((item) => (
                             <label className="flex items-center">
-                            <input type="checkbox" class="form-checkbox"/>
+                            <input type="checkbox" className="form-checkbox"/>
                             <span className="ml-2 font-nova text-brand-gray-typo text-sm">{item.labelAndValue}</span>
                         </label>
                         ))}
@@ -57,8 +124,8 @@ const InvolvedSignupForom = ({data}) => {
 
                     </div>
                     <div className='flex m-auto mt-12 mb-12'>
-                        <button class="w-48 bg-brand-blue font-nova text-base m-auto text-white font-bold py-2 px-4 rounded">
-                            {data.form1SubmitButtonText}
+                        <button onClick={openModalSubmit} class="w-48 bg-brand-blue font-nova text-base m-auto text-white font-bold py-2 px-4 rounded">
+                          {data.form1SubmitButtonText}
                         </button>
                     </div>
              </div>
