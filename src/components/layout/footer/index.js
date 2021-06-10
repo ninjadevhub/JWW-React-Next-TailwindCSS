@@ -16,7 +16,7 @@ const Footer = ({ siteLogoUrl, footer }) => {
               </div>
             </div>
             <div className="w-1/4 px-5 py-2 text-center">
-              <div className="my-3 border-solid border-brand-green border-l">
+         z     <div className="my-3 border-solid border-brand-green border-l">
                 Supporting Members
                 <div className="text-xl">611</div>
               </div>
@@ -83,13 +83,11 @@ const Footer = ({ siteLogoUrl, footer }) => {
             {!isEmpty(footer?.socialLinks) && isArray(footer?.socialLinks) ? (
               <ul className="flex items-center mb-12">
                 {footer.socialLinks.map((socialLink) => (
-                  <li key={socialLink?.iconName} className="mr-6">
-                    <a
-                      className="flex justify-center items-center w-10 h-10 rounded-full bg-gray-500"
-                      href={socialLink?.iconUrl}
-                    >
-                      {getIconComponentByName(socialLink?.iconName)}
-                    </a>
+                  <li 
+                    key={socialLink?.iconName}
+                    className="mr-6 flex justify-center items-center w-10 h-10"
+                  >
+                    {getIconComponentByName(socialLink?.iconName, { uri: socialLink?.iconUrl })}
                   </li>
                 ))}
               </ul>
