@@ -1,5 +1,6 @@
 import React, { useState} from "react"
 import InvolvedSignupTable from "./InvolvedSignupTable/InvolvedSignupTable"
+import Image from 'next/image';
 
 
 const GetInvolved = ({dataInvovled}) => {
@@ -9,7 +10,8 @@ const GetInvolved = ({dataInvovled}) => {
         return(
             <div className='flex flex-col items-center'>
 
-
+                                     
+                                           
 
                 <div className="flex flex-col jutify-center items-center" 
                     style={{backgroundImage:`url(${dataInvovled?.headerImage?.sourceUrl})`,
@@ -80,7 +82,16 @@ const GetInvolved = ({dataInvovled}) => {
                         </div>
                     </div>
                 </div>
+                
                 <InvolvedSignupTable data={dataInvovled}/>
+                <div className='mt-8'>
+                          <Image
+                            src="/images/blue-circle-with-orange-circle-drop.png"
+                            width={151}
+                            height={151}
+                            alt="purple-circle"
+                            />
+                </div>
             </div>
         )
 

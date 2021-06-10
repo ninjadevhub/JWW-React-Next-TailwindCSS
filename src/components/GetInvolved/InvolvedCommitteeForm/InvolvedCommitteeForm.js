@@ -1,5 +1,6 @@
 import React,{useState} from 'react'
 import Modal from 'react-modal';
+import InvolvedCommitteeSubmitModal from '../InvolvedCommitteeSubmitModal/InvolvedCommitteeSubmitModal';
 import InvolvedModal from '../InvolvedModal/InvolvedModal';
 import InvolvedSubmitModal from '../InvolvedModalSubmit/InvolvedSubmitModal';
 
@@ -21,7 +22,7 @@ const customStyles = {
 
 
 
-const InvolvedSignupForom = ({data}) => {
+const InvolvedCommitteeForm = ({data}) => {
 
     const [showModal, setShowModal] = useState(false)
     const [showModalSubmit, setShowModalSubmit] = useState(false)
@@ -66,27 +67,22 @@ const InvolvedSignupForom = ({data}) => {
                         contentLabel="Example Modal"
                    >
            
-                    <InvolvedSubmitModal 
+                    <InvolvedCommitteeSubmitModal 
                         data={data}
                         onClose={closeModalSubmit}
                     />
                    </Modal>
                  
-            <div className='flex'>
-                <button onClick={openModal} class="w-72 bg-brand-blue font-nova text-base m-auto text-white font-bold py-2 px-4 rounded">
-                    {data.accordionTab1ButtonText}
-                </button>
-            </div>
 
             <div className='flex flex-col w-11/12 m-auto bg-brand-form-bg2 mt-12 pt-8'>
                     <div className='flex justify-center'>
-                        <p className='font-museo text-lg text-brand-gray-typo'>{data.form1Heading}</p>
+                        <p className='font-museo text-lg text-brand-gray-typo'>{data.form2Heading}</p>
                     </div>
 
                     <div className='flex flex-row m-auto '>
                                 <form className="rounded grid  grid-cols-2 gap-4 px-8 pt-8 pb-8 mb-4">
 
-                                    {data.form1Fields.map((item) => (
+                                    {data.form2Fields.map((item) => (
                                         <div className="mb-4  ">
                                             <input className="w-full py-4 px-8 text-black-500 leading-tight focus:outline-none focus:shadow-outline" id="username" type="text" placeholder={`${item.label}`}/>
                                         </div>
@@ -115,11 +111,8 @@ const InvolvedSignupForom = ({data}) => {
                     </div>
 
                     <div className='w-3/4 m-auto bg-brand-form-bg-footer mt-12 flex flex-col items-center justify-center'>
-                            <div className='mt-8' >
-                                <p className="font-museo text-brand-gray-typo text-base">{data.form1FooterHeading}</p>
-                            </div>
                             <div className='w-3/4 m-auto mt-4'>
-                                <p className='font-nova text-brand-gray-typo text-base'>{data.form1FooterText}</p>
+                                <p className=' pb-4 font-nova text-brand-gray-typo text-base'>{data.form2FooterText}</p>
                             </div>
 
                     </div>
@@ -134,4 +127,4 @@ const InvolvedSignupForom = ({data}) => {
     )
 }
 
-export default InvolvedSignupForom
+export default InvolvedCommitteeForm
