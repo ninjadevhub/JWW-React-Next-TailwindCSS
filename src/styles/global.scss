@@ -14,6 +14,105 @@
  
 }
 
+body {
+  font-family: 'Nova', sans-serif;
+}
+
+h1,
+h2,
+h3 {
+  font-family: 'Museo', sans-serif;
+}
+
+.accessibility-color-contrast {
+  .bg-brand-blue {
+    background: $brand-blue-2 !important;
+  }
+
+  .text-brand-blue {
+    color: $brand-blue-2 !important;
+  }
+
+  .border-brand-blue {
+    border-color: $brand-blue-2 !important;
+  }
+
+  .bg-brand-orange {
+    background: $brand-orange-2 !important;
+  }
+
+  .text-brand-orange {
+    color: $brand-orange-2 !important;
+  }
+
+  .border-brand-orange {
+    border-color: $brand-orange-2 !important;
+  }
+
+  .bg-brand-purple {
+    background: $brand-purple-2 !important;
+  }
+
+  .text-brand-purple {
+    color: $brand-purple-2 !important;
+  }
+
+  .border-brand-purple {
+    border-color: $brand-purple-2 !important;
+  }
+
+  .bg-brand-teal,
+  .bg-brand-green {
+    background: $brand-teal-2 !important;
+  }
+
+  .text-brand-teal,
+  .text-brand-green {
+    color: $brand-teal-2 !important;
+  }
+
+  .border-brand-teal,
+  .border-brand-green {
+    border-color: $brand-teal-2 !important;
+  }
+}
+
+.accessibility-highlight-links {
+  a,
+  button {
+    background: $brand-purple-dark !important;
+    color: #fff !important;
+  }
+}
+
+.accessibility-letter-spacing {
+  &-1 {
+    * {
+      letter-spacing: 0.06em !important;
+    }
+  }
+
+  &-2 {
+    * {
+      letter-spacing: 0.12em !important;
+    }
+  }
+}
+
+.accessibility-cursor-size {
+  &-1 {
+    * {
+      cursor: url('/images/cursor-1.png'), default !important;
+    }
+  }
+  
+  &-2 {
+    * {
+      cursor: url('/images/cursor-2.png'), default !important;
+    }
+  }
+}
+
 .w-150 {
   width: 37.5rem;
 }
@@ -180,9 +279,21 @@
   box-shadow: 25vw 0 $brand-green;
 }
 
+.text-1-5xl {
+  font-size: 1.375em;
+}
+
+.text-2-5xl {
+  font-size: 1.6875rem;
+}
+
 .text-4xl {
   font-size: 2.25rem;
   line-height: 2.5rem;
+}
+
+.tracking-wider-2 {
+  letter-spacing: 0.075em;
 }
 
 .swiper-pagination {

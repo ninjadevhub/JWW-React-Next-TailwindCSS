@@ -109,7 +109,7 @@ const Footer = ({ siteLogoUrl, footer }) => {
                   about it?
                 </div>
                 <Link href="#">
-                  <a className="inline-block px-3 py-4 border-solid border-white border-2 text-sm">
+                  <a className="inline-block px-3 py-4 border-solid border-white border-8 text-sm">
                     FIND OUT HOW YOU CAN MAKE A DIFFERENCE
                   </a>
                 </Link>
@@ -136,7 +136,7 @@ const Footer = ({ siteLogoUrl, footer }) => {
                   Stay Informed
                 </div>
                 <Link href="#">
-                  <a className="inline-block px-3 py-4 border-solid border-white border-2 text-sm">
+                  <a className="inline-block px-3 py-4 border-solid border-white border-8 text-sm">
                     SUBSCRIBE TO OUR NEWSLETTER
                   </a>
                 </Link>

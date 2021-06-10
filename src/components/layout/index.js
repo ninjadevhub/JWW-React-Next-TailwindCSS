@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Header from './header';
 import Footer from './footer';
 import Accessibility from '../Accessibility/Accessibility';
@@ -18,6 +18,14 @@ const Layout = ( {data, isPost, children} ) => {
 		cursorSize: 0,
 	});
 
+	useEffect(() => {
+		if (accessibilitySettings.textSize > 0) {
+			document.body.style.fontSize = `${100 + (accessibilitySettings.textSize * 50)}%`;
+		} else {
+			document.body.style.fontSize = '100%';
+		}
+	}, [accessibilitySettings.textSize]);
+
 	const {page, post, posts, header, footer } = data || {};
 
 	// If it does not have either post or page.
@@ -30,7 +38,14 @@ const Layout = ( {data, isPost, children} ) => {
 	console.log(accessibilitySettings)
 
 	return (
-		<div>
+		<div className={
+			(accessibilitySettings.colorContrast ? 'accessibility-color-contrast' : '') + 
+			(accessibilitySettings.highlightLinks ? ' accessibility-highlight-links' : '') +
+			(accessibilitySettings.textSize > 0 ? ` accessibility-text-size-${accessibilitySettings.textSize}` : '') +
+			(accessibilitySettings.letterSpacing > 0 ? ` accessibility-letter-spacing-${accessibilitySettings.letterSpacing}` : '') +
+			(accessibilitySettings.pauseAnimations ? ' accessibility-pause-animations' : '') +
+			(accessibilitySettings.cursorSize > 0 ? ` accessibility-cursor-size-${accessibilitySettings.cursorSize}` : '')
+		}>
 			<Seo seo={seo} uri={uri}/>
 			<Head>
 				<link rel="shortcut icon" href={header?.favicon}/>
@@ -47,7 +62,10 @@ const Layout = ( {data, isPost, children} ) => {
 			<div className="md:container pb-24 mx-auto min-h-almost-screen">
 				{children}
 			</div>
-			<Accessibility setAccessibilitySettings={setAccessibilitySettings} />
+			<Accessibility 
+			  accessibilitySettings={accessibilitySettings}
+			  setAccessibilitySettings={setAccessibilitySettings}
+			/>
 			<Footer siteLogoUrl={header?.siteLogoUrl} footer={footer}/>
 		</div>
 	);
