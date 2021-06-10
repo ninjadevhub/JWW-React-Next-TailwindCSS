@@ -42,7 +42,7 @@ const Header = ({ header }) => {
               <Link href="#">
                 <a className="mr-3 text-brand-blue">About Jersey Water Works</a>
               </Link>
-              <Link href="#">
+              <Link href="/get-involved/">
                 <a className="ml-3 text-brand-green">Get Involved</a>
               </Link>
             </div>
