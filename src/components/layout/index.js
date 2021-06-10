@@ -21,9 +21,9 @@ const Layout = ( {data, isPost, children} ) => {
 
 	useEffect(() => {
 		if (accessibilitySettings.textSize > 0) {
-			document.body.style.fontSize = `${100 + (accessibilitySettings.textSize * 50)}%`;
+			document.documentElement.style.fontSize = `${100 + (accessibilitySettings.textSize * 50)}%`;
 		} else {
-			document.body.style.fontSize = '100%';
+			document.documentElement.style.fontSize = '100%';
 		}
 	}, [accessibilitySettings.textSize]);
 
