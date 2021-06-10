@@ -40,7 +40,8 @@ const Layout = ( {data, isPost, children} ) => {
 
 	return (
 		<div className={
-			(accessibilitySettings.colorContrast ? 'accessibility-color-contrast' : '') + 
+			'app' +
+			(accessibilitySettings.colorContrast ? ' accessibility-color-contrast' : '') + 
 			(accessibilitySettings.highlightLinks ? ' accessibility-highlight-links' : '') +
 			(accessibilitySettings.textSize > 0 ? ` accessibility-text-size-${accessibilitySettings.textSize}` : '') +
 			(accessibilitySettings.letterSpacing > 0 ? ` accessibility-letter-spacing-${accessibilitySettings.letterSpacing}` : '') +
