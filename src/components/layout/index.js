@@ -6,10 +6,11 @@ import Head from 'next/head';
 import Seo from '../seo';
 import {isEmpty} from 'lodash';
 import {sanitize} from '../../utils/miscellaneous';
+import useLocalStorageState from '../../utils/useLocalStorageState';
 import PropTypes from 'prop-types';
 
 const Layout = ( {data, isPost, children} ) => {
-	const [accessibilitySettings, setAccessibilitySettings] = useState({
+	const [accessibilitySettings, setAccessibilitySettings] = useLocalStorageState('accessibilitySettings', {
 		colorContrast: false,
 		highlightLinks: false,
 		textSize: 0,

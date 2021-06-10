@@ -38,7 +38,7 @@ const Header = ({ header }) => {
         </div>
         <div className="flex flex-col justify-between flex-1 pb-3">
           <div className="flex justify-end">
-            <div className="flex px-6 py-1 text-sm">
+            <div className="flex px-6 py-1 text-lg-2">
               <Link href="#">
                 <a className="mr-3 text-brand-blue">About Jersey Water Works</a>
               </Link>

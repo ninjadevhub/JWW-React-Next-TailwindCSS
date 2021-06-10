@@ -18,6 +18,10 @@ body {
   font-family: 'Nova', sans-serif;
 }
 
+#__next {
+  font-size: 1.0625rem;
+}
+
 h1,
 h2,
 h3 {
@@ -277,6 +281,14 @@ h3 {
 
 .box-shadow-r-long-brand-green {
   box-shadow: 25vw 0 $brand-green;
+}
+
+.text-base-2 {
+  font-size: 1.0625rem;
+}
+
+.text-lg-2 {
+  font-size: 1.1875rem;
 }
 
 .text-1-5xl {
