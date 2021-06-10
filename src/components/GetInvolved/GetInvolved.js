@@ -1,12 +1,17 @@
 import React, { useState} from "react"
 import { sanitize } from '../../utils/miscellaneous';
-import InvolvedMemberTable from "./InvolvedMemberTable/InvolvedMemberTable"
+import InvolvedSignupTable from "./InvolvedSignupTable/InvolvedSignupTable"
 
 
 const GetInvolved = ({dataInvovled}) => {
     console.log("d",dataInvovled)
+
+
         return(
             <div className='flex flex-col items-center'>
+
+
+
                 <div className="flex flex-col jutify-center items-center" 
                     style={{backgroundImage:`url(${dataInvovled?.headerImage?.sourceUrl})`,
                         width:'100%',
@@ -79,8 +84,7 @@ const GetInvolved = ({dataInvovled}) => {
                         </div>
                     </div>
                 </div>
-                <InvolvedMemberTable data={dataInvovled}/>
-                
+                <InvolvedSignupTable data={dataInvovled}/>
             </div>
         )
 
