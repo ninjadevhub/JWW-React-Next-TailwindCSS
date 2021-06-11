@@ -1,5 +1,6 @@
 import React from "react"
 import { FaTimes,  FaCheck} from 'react-icons/fa'
+import Image from '../../image/index'
 
 
 const ModalEquity = ({data,onClose}) => {
@@ -22,7 +23,7 @@ const ModalEquity = ({data,onClose}) => {
                 </div>    
                 <div className='flex flex-col items-center justify-center mt-12 mb-12'>
                     <div>
-                       <img src= {data.modalIcon.sourceUrl}/>
+                       <Image sourceUrl= {data.modalIcon.sourceUrl}/>
                     </div>
                     <div className='flex items-center pt-8 '>
                         <p className='font-museo text-3xl text-brand-gray-typo'>{data.modalHeading}</p>

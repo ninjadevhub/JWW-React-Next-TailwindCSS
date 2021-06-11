@@ -1,5 +1,5 @@
-import { data } from "autoprefixer"
 import React from "react"
+import Image from '../../image/index'
 
 
 
@@ -17,12 +17,14 @@ const Leaders = ({data,dataLeadersSteering}) => {
                            <p className='text-2xl font-nova text-brand-gray-typo'>{data.honoraryCoChairsHeading}</p>
                     </div>
                 {data.honoraryCoChairs.map((item) => (
-                    <div className='flex flex-row bg-brand-table  border-b-2 border-brand-green '
+                    <div className='flex flex-row bg-brand-table   '
                         //    { `${data.honoraryCoChairs.length-1 ? 'className='border-none'' : ''}`}
                     >
                         <div className='w-1/6 ml-4 mb-12'>
-                           <img 
-                           src={item.coChairProfilePicture.sourceUrl}/>
+                           <Image 
+                           width={60}
+                           height={60}
+                           sourceUrl={item.coChairProfilePicture.sourceUrl}/>
                         </div>
                       
                         <div className=''>
@@ -50,8 +52,10 @@ const Leaders = ({data,dataLeadersSteering}) => {
                     {data.committeeRoles.map((item) => (
                         <div className='flex flex-row bg-white mt-2 p-2 items-center'>
                             <div className=' flex item-center'>
-                                <img 
-                                src={item.roleIcon.sourceUrl}/>
+                                <Image 
+                                width={50}
+                                height={45}
+                                sourceUrl={item.roleIcon.sourceUrl}/>
                             </div>  
                             
                             <div className='pl-4'>
@@ -71,7 +75,7 @@ const Leaders = ({data,dataLeadersSteering}) => {
                     <div className='flex flex-row'>
 
                         <div>
-                            <img src={`${item.committeeMember.profileImage}`} />
+                            <Image sourceUrl={`/${item.committeeMember.profileImage}`} />
                         </div>
 
                         <div className='flex flex-row'>

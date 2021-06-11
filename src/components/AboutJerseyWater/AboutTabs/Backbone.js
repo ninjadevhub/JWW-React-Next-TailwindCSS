@@ -1,8 +1,8 @@
 import React, { useState } from "react"
 import { FaAngleRight,FaAngleDown, } from "react-icons/fa";
+import Image from '../../image/index'
 
-
-const Backbone = ({data,dataLeadersSteering}) => {
+const Backbone = ({data,dataLeadersSteering,src}) => {
 
     const [arrows,setArrows] = useState([]);
     const [showInfo,setShowInfo] = useState(false)
@@ -35,10 +35,11 @@ const Backbone = ({data,dataLeadersSteering}) => {
                                         <div className='flex flex-col'>
                                             <div className='flex flex-row'>
                                                 <div>
-                                                    <img 
-                                                    src={item.backboneStaff.profilePicture}/>
+                                                    <Image 
+                                                   
+                                                    sourceUrl={item.backboneStaff.profilePicture}/>
                                                 </div>    
-                                                <div className='flex flex-col'>
+                                                <div className='flex flex-col ml-8'>
                                                     <div className='flex flex-row'>
                                                         <div>
                                                             <p className='text-brand-gray-typo'>{item.backboneStaff.firstName}</p>
@@ -47,17 +48,18 @@ const Backbone = ({data,dataLeadersSteering}) => {
                                                             <p className='text-brand-gray-typo'>{item.backboneStaff.lastName}</p>
                                                         </div>    
                                                     </div>    
+                                                    <div className='flex flex-row'>
+                                                        <div>
+                                                            <p className='font-nova text-xl text-brand-gray-typo'>{item.backboneStaff.title}</p>
+                                                        </div> 
+                                                        <div className='ml-4'>
+                                                            <a className='font-nova text-xl text-brand-blue' href={`${item.backboneStaff.linkUrl}`}>{item.backboneStaff.linkText}</a>
+                                                        </div>    
+                                                    </div>  
                                                 </div>    
                                             
                                             </div>   
-                                            <div className='flex flex-row'>
-                                                <div>
-                                                    <p className='font-nova text-xl text-brand-gray-typo'>{item.backboneStaff.title}</p>
-                                                </div> 
-                                                <div className='ml-4'>
-                                                    <a className='font-nova text-xl text-brand-blue' href={`${item.backboneStaff.linkUrl}`}>{item.backboneStaff.linkText}</a>
-                                                </div>    
-                                            </div>  
+                                         
                                         </div>   
 
                                         <div className='flex items-center'>
@@ -73,7 +75,7 @@ const Backbone = ({data,dataLeadersSteering}) => {
   
                                           <div className='flex flex-row mt-4'>
                                               <div className='w-40 flex flex items-center  '>
-                                                   <img src={item.backboneStaff.workLogo.sourceUrl} />
+                                                   <Image sourceUrl={item.backboneStaff.workLogo.sourceUrl} />
                                               </div>
                                               <div className='flex items-center ml-4'>
                                                    <p className='font-nova text-brand-gray-typo text-xl'>{item.backboneStaff.workText}</p>
@@ -93,7 +95,10 @@ const Backbone = ({data,dataLeadersSteering}) => {
 
                 <div className='flex flex-row mt-12'>
                     <div className='w-40 	'>
-                        <img src={data.backboneStaffWork1Logo.sourceUrl} />
+                        <Image 
+                        width={170}
+                        height={70}
+                        sourceUrl={data.backboneStaffWork1Logo.sourceUrl} />
                     </div>
                     <div className='ml-4 flex items-center'>
                             <p>{data.backboneStaffWork1Text}</p>
@@ -103,7 +108,10 @@ const Backbone = ({data,dataLeadersSteering}) => {
 
                 <div className='flex flex-row mt-12'>
                     <div className='w-40 flex flex items-center justify-center '>
-                        <img src={data.backboneStaffWork2Logo.sourceUrl} />
+                        <Image
+                         width={180}
+                         height={100}   
+                         sourceUrl={data.backboneStaffWork2Logo.sourceUrl} />
                     </div>
                     <div className='ml-4 flex items-center'>
                             <p>{data.backboneStaffWork2Text}</p>
