@@ -16,7 +16,7 @@ export default function About ({data}) {
     return (
         
         <Layout data={data}>
-          <AboutJerseyWater  data={jerseydata} />
+          <AboutJerseyWater  data={jerseydata} dataLeadersSteering={data} />
         </Layout>
 
     )
