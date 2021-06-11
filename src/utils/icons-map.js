@@ -7,7 +7,7 @@ import Image from 'next/image';
  * @param {string} name Icon Name.
  * @returns {*}
  */
-export const getIconComponentByName = ( name ) => {
+export const getIconComponentByName = ( name, props ) => {
 	const ComponentsMap = {
 		facebook: IconsComponent.Facebook,
 		twitter: IconsComponent.Twitter,
@@ -18,7 +18,7 @@ export const getIconComponentByName = ( name ) => {
 
 	if ( name in ComponentsMap ) {
 		const IconComponent = ComponentsMap[name];
-		return <IconComponent />;
+		return <IconComponent {...props} />;
 	} else {
 		return null;
 	}

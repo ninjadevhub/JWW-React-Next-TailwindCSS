@@ -72,13 +72,13 @@ class HomeCarusel extends Component {
                             
                         </div>
                     </div>
-                    <div >
+                    {/*<div >
                         <img src="assets/2.jpeg" />
                     </div>
 
                     <div>
                         <img src="assets/3.jpeg" />
-                    </div>
+                    </div>*/}
               
             </Carousel>
         );
