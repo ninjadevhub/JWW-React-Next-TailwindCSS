@@ -10,7 +10,6 @@ const tabs = {
 }
 
 const Water101Content = ({dataWater,}) => {
-    console.log("dddd",dataWater)
     const [activeTab, setActiveTab] = useState(tabs.individuals);
 
         return(

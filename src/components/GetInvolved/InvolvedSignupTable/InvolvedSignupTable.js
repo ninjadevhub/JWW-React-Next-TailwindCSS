@@ -1,5 +1,6 @@
 import React, { useState } from "react"
 import { FaAngleRight,FaAngleDown } from "react-icons/fa";
+import InvolvedCommitteeForm from "../InvolvedCommitteeForm/InvolvedCommitteeForm";
 import InvolvedSignupForom from "../InvolvedSignupForm/InolvedSignupForm";
 
 const InvolvedSignupTable = ({data}) => {
@@ -41,7 +42,7 @@ const InvolvedSignupTable = ({data}) => {
                     </div>
                 </div>
             </div>
-            {showCommitMember ? <InvolvedSignupForom data={data} /> : ''} 
+            {showCommitMember ? <InvolvedCommitteeForm data={data} /> : ''} 
             
 
         </div>
