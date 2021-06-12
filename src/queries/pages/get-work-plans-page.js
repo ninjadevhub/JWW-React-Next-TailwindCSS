@@ -23,20 +23,19 @@ export const GET_WORK_PLANS_PAGE = gql`
 				...SeoFragment
 			}
 		}
-		workPlans {
+		workPlans(first: 100) {
 			nodes {
-				title(format: RENDERED)
-				content(format: RENDERED)
 				workPlan {
-					backgroundImage {
-						altText
-						title(format: RENDERED)
-						sourceUrl(size: LARGE)
-					}
 					year
-					committee {
-						slug
-						name
+					committeeName
+					committeeDescription
+					boxes {
+						text
+						image {
+							altText
+							title(format: RENDERED)
+							sourceUrl(size: LARGE)
+						}
 					}
 				}
 			}

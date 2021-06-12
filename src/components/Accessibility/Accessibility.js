@@ -35,7 +35,7 @@ export default function Accessibility({
         style={{ width: 400, maxHeight: 'calc(100vh - 12rem)' }}
       >
         <div className="flex justify-between items-center py-6 px-4">
-          <h3 className="text-2-5xl color-brand-blue">Accessibility Tools</h3>
+          <h3 className="text-2xl-3 color-brand-blue">Accessibility Tools</h3>
           <button
             className={`px-2 py-1 border-none bg-brand-green-dark text-white${
               settingsAreDefault ? ' hidden' : ''
@@ -72,7 +72,7 @@ export default function Accessibility({
               alt="Color contrast"
             />
             <div
-              className="mt-2 mb-1 text-1-5xl tracking-wider-2"
+              className="mt-2 mb-1 text-xl-2 tracking-wider-2"
               style={{ lineHeight: 1.2727 }}
             >
               COLOR
@@ -106,7 +106,7 @@ export default function Accessibility({
               alt="Highlight links"
             />
             <div
-              className="mt-2 mb-1 text-1-5xl tracking-wider-2"
+              className="mt-2 mb-1 text-xl-2 tracking-wider-2"
               style={{ lineHeight: 1.2727 }}
             >
               HIGHLIGHT
@@ -141,7 +141,7 @@ export default function Accessibility({
               alt="Text size"
             />
             <div
-              className="mt-2 mb-1 text-1-5xl tracking-wider-2"
+              className="mt-2 mb-1 text-xl-2 tracking-wider-2"
               style={{ lineHeight: 1.2727 }}
             >
               TEXT
@@ -182,7 +182,7 @@ export default function Accessibility({
               alt="Letter spacing"
             />
             <div
-              className="mt-2 mb-1 text-1-5xl tracking-wider-2"
+              className="mt-2 mb-1 text-xl-2 tracking-wider-2"
               style={{ lineHeight: 1.2727 }}
             >
               LETTER
@@ -222,7 +222,7 @@ export default function Accessibility({
               alt="Pause animations"
             />
             <div
-              className="mt-2 mb-1 text-1-5xl tracking-wider-2"
+              className="mt-2 mb-1 text-xl-2 tracking-wider-2"
               style={{ lineHeight: 1.2727 }}
             >
               PAUSE
@@ -257,7 +257,7 @@ export default function Accessibility({
               alt="Cursor size"
             />
             <div
-              className="mt-2 mb-1 text-1-5xl tracking-wider-2"
+              className="mt-2 mb-1 text-xl-2 tracking-wider-2"
               style={{ lineHeight: 1.2727 }}
             >
               CURSOR

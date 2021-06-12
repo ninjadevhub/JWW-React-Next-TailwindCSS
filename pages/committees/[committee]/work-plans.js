@@ -152,9 +152,14 @@ export default function CommitteeOverview({ data }) {
                   <span>{node.workPlan?.year}</span>
                 </AccordionSummary>
                 <AccordionDetails>
-                  <div className="content" dangerouslySetInnerHTML={{
-                    __html: sanitize(node.content ?? ''),
-                  }} />
+                  <div className="content">
+                    {node.workPlan?.committeeDescription}
+                    <ul>
+                      {node.workPlan?.boxes?.map((box, i) => (
+                        <li key={i}>{box.text}</li>
+                      ))}
+                    </ul>
+                  </div>
                 </AccordionDetails>
               </Accordion>
             ))}
