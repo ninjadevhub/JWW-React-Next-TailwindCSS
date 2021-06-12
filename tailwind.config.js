@@ -41,8 +41,6 @@ module.exports = {
       'brand-table':'#e5e5e5',
       'brand-form-bg1':'#fafafa',
       'brand-form-bg2':'#ebebeb',
-      'brand-form-bg-footer':'#f5f5f5',
-      'brand-borderB-color':"#b2c6d6"
 
       
 
