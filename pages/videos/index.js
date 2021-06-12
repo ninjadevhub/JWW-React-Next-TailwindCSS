@@ -32,7 +32,7 @@ const modalStyles = {
 
 export default function Videos({ data }) {
   const { nodes: videos } = data?.videos;
-
+  
   const router = useRouter();
   const [currentVideo, setCurrentVideo] = useState(null);
   
