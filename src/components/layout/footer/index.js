@@ -16,7 +16,7 @@ const Footer = ({ siteLogoUrl, footer }) => {
               </div>
             </div>
             <div className="w-1/4 px-5 py-2 text-center">
-         z     <div className="my-3 border-solid border-brand-green border-l">
+              <div className="my-3 border-solid border-brand-green border-l">
                 Supporting Members
                 <div className="text-xl">611</div>
               </div>

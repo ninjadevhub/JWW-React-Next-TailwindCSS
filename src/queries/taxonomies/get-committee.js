@@ -44,17 +44,24 @@ export const GET_COMMITTEE = gql`
 				slug
 			}
 		}
-		workPlans {
+		workPlans(first: 100) {
 			nodes {
-				title(format: RENDERED)
 				workPlan {
 					year
 					committee {
-						name
 						slug
 					}
+					committeeName
+					committeeDescription
+					boxes {
+						text
+						image {
+							altText
+							title(format: RENDERED)
+							sourceUrl(size: LARGE)
+						}
+					}
 				}
-				content(format: RENDERED)
 			}
 		}
 		accomplishments {
