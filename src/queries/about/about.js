@@ -134,16 +134,21 @@ query MyQuery {
       }
     }
   }
-  yearHighlights {
+  yearHighlights(first: 100) {
     nodes {
-      title(format: RENDERED)
-      yearHighlightId
       yearHighlights {
-        slides {
-          slideHeading
-          slideText
+        heading
+        year
+        description
+        boxes {
+          heading
+          text
+          image {
+            altText
+            title(format: RENDERED)
+            sourceUrl(size: LARGE)
+          }
         }
-        yearHeading
       }
     }
   }

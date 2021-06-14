@@ -16,14 +16,14 @@ import {
 
 SwiperCore.use([Autoplay, Navigation, Pagination, EffectFade, A11y]);
 
-export default function YearsCarousel({ name, data }) {
+export default function YearsCarousel({ name, data, asc }) {
   const [activeYear, setActiveYear] = useState();
   const [slidesCountPerYear, setSlidesCountPerYear] = useState(1);
   const [activeSlideOffsetForYear, setActiveSlideOffsetForYear] = useState(0);
   //const yearButtonsRef = useRef({});
   const swiperRef = useRef(null);
   const years = [...new Set(data.map((item) => item[name]?.year))];
-  const initialSlide = findYearSlideIndex(data, name, years[years.length - 1]);
+  const initialSlide = asc ? 0 : findYearSlideIndex(data, name, years[years.length - 1]);
 
   return (
     <div className="years-carousel">

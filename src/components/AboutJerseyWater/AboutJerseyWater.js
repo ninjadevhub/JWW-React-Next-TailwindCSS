@@ -1,6 +1,7 @@
 import React,{useState} from "react"
 import AboutTab from "./AboutTabs/AboutTab";
 import Goals from "./AboutTabs/Goals";
+import History from "./AboutTabs/History";
 import Leaders from "./AboutTabs/Leaders";
 import Members from "./AboutTabs/Members";
 import Backbone from "./AboutTabs/Backbone";
@@ -120,6 +121,7 @@ const AboutJerseyWater = ({data,dataLeadersSteering}) => {
 
                     {activeTab === tabs.about && <AboutTab data={data}/>  }
                     {activeTab === tabs.goals && <Goals data={data} /> }
+                    {activeTab === tabs.history && <History data={dataLeadersSteering} /> }
                     {activeTab === tabs.members && <Members data={data} /> }
                     {activeTab === tabs.leaders && <Leaders data={data} dataLeadersSteering={dataLeadersSteering} /> }
                     {activeTab === tabs.backbone && <Backbone data={data}  dataLeadersSteering={dataLeadersSteering} /> }

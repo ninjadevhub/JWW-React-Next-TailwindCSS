@@ -630,7 +630,7 @@ export default function Resources({ data }) {
 
   return (
     <Layout data={data}>
-      <div className="relative w-full bg-brand-gray" style={{ height: 430,zIndex:'-1' }}>
+      <div className="relative w-full bg-brand-gray" style={{ height: 430 }}>
         {data?.page?.latestNews?.sliderImages?.length > 0 && (
           <Swiper
             autoplay={{ delay: 5000 }}
