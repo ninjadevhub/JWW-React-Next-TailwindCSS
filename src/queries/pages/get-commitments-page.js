@@ -23,21 +23,24 @@ export const GET_COMMITMENTS_PAGE = gql`
 				...SeoFragment
 			}
 		}
-		commitments {
+		commitments(first: 100) {
 			nodes {
-        title(format: RENDERED)
-        content(format: RENDERED)
-        slug
 				commitment {
-					backgroundImage {
-						altText
-						title(format: RENDERED)
-						sourceUrl(size: LARGE)
-					}
+					heading
+					description
 					year
+					boxes {
+						text
+						heading
+						image {
+							altText
+							sourceUrl(size: LARGE)
+							title(format: RENDERED)
+						}
+					}
 				}
 			}
-	  }
+		}
 	}
 	${SeoFragment}
 `;

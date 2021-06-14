@@ -51,8 +51,8 @@ export const GET_COMMITTEE = gql`
 					committee {
 						slug
 					}
-					committeeName
-					committeeDescription
+					heading
+					description
 					boxes {
 						text
 						image {

@@ -1,17 +1,14 @@
 @font-face {
-  font-family: "Nova";
-  src: url("../../public/fonts/Mark\ Simonson\ \ Proxima\ Nova\ Condensed\ Semibold\ TheFontsMaster.com.woff");
-  
+  font-family: 'Nova';
+  src: url('../../public/fonts/Mark\ Simonson\ \ Proxima\ Nova\ Condensed\ Semibold\ TheFontsMaster.com.woff');
 }
 @font-face {
-  font-family: "NovaM";
-  src: url("../../public/fonts/FontsFree-Net-pr2.ttf");
-  
+  font-family: 'NovaM';
+  src: url('../../public/fonts/FontsFree-Net-pr2.ttf');
 }
 @font-face {
-  font-family: "Museo";
-  src: url("../../public/fonts/Museo_Slab_500.otf");
- 
+  font-family: 'Museo';
+  src: url('../../public/fonts/Museo_Slab_500.otf');
 }
 
 body {
@@ -109,7 +106,7 @@ h3 {
       cursor: url('/images/cursor-1.png'), default !important;
     }
   }
-  
+
   &-2 {
     * {
       cursor: url('/images/cursor-2.png'), default !important;
@@ -220,6 +217,10 @@ h3 {
 
 .border-4 {
   border-width: 4px !important;
+}
+
+.border-b-5 {
+  border-bottom-width: 5px;
 }
 
 .border-b-thick-brand-green {
@@ -414,6 +415,12 @@ h3 {
   }
 }
 
+.years-carousel {
+  .overflow-y-auto {
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
 .slider-content {
   p {
     margin-bottom: 1.25rem;
@@ -435,7 +442,7 @@ h3 {
       border-bottom: 5px solid $brand-gray;
     }
   }
-  
+
   .swiper-slide {
     height: auto;
   }

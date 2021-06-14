@@ -27,8 +27,8 @@ export const GET_WORK_PLANS_PAGE = gql`
 			nodes {
 				workPlan {
 					year
-					committeeName
-					committeeDescription
+					heading
+					description
 					boxes {
 						text
 						image {

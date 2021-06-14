@@ -15,7 +15,7 @@ export default function WorkPlans({ data }) {
         return +a.workPlan?.year - +b.workPlan?.year;
       }
 
-      return a.workPlan?.committeeName < b.workPlan?.committeeName ? -1 : 1;
+      return a.workPlan?.heading < b.workPlan?.heading ? -1 : 1;
     }) ?? [];
 
   return (
