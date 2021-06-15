@@ -5,25 +5,22 @@
     @apply flex flex-wrap justify-center;
 
     & > li {
-      @apply relative mx-6 mb-2;
+      @apply relative mb-2;
 
       & a {
-        @apply block;
+        @apply block pt-1 px-4 pb-3;
 
         &:hover,
-        &:focus {
-          @apply underline;
-        }
-
+        &:focus,
         &.active {
-          @apply underline;
+          @apply bg-brand-blue text-white;
         }
       }
 
       &:hover,
       &:focus-within {
         & > ul {
-          @apply block;
+          @apply inline-block;
         }
       }
 
@@ -36,17 +33,19 @@
 
     /* Nested ul / Drop Menu */
     & ul {
-      @apply hidden absolute left-0 z-50 p-2 shadow-sm rounded border;
+      @apply hidden absolute left-0 z-50 p-2 border-solid border-t-0 border-brand-blue mt-1 bg-white bg-clip-padding;
 
       top: 100%;
-      width: 220px;
-      background-color: #fff;
+      border-right: 0.5rem solid rgba(255, 255, 255, 0.7);
+      border-bottom: 0.5rem solid rgba(255, 255, 255, 0.7);
+      border-left: 0.5rem solid rgba(255, 255, 255, 0.7);
+      box-shadow: 0 -0.25rem 0 #4579a1; 
 
       & > li {
         font-size: 1.0625rem;
 
         & > a {
-          @apply p-2;
+          @apply p-2 whitespace-nowrap;
         }
       }
     }

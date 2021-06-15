@@ -36,7 +36,7 @@ const Header = ({ header }) => {
             </a>
           </Link>
         </div>
-        <div className="flex flex-col justify-between flex-1 pb-3">
+        <div className="flex flex-col justify-between flex-1">
           <div className="flex justify-end">
             <div className="flex px-6 py-1 text-lg-2">
               <Link href="/about/">
@@ -53,7 +53,7 @@ const Header = ({ header }) => {
               styles={styles}
               className={styles.primaryMenu}
             />
-            <div className="flex border-solid border-gray-500 border-b-2">
+            <div className="flex border-solid border-gray-500 border-b-2 mb-6">
               <input
                 className="border-none bg-transparent w-32"
                 placeholder="Search"

@@ -19,6 +19,16 @@ export const HeaderFooter = `
           path
           target
           title
+          childItems {
+            nodes {
+              id
+              parentId
+              label
+              path
+              target
+              title
+            }
+          }
         }
       }
     }
