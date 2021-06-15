@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import client from '../../src/apollo/client';
 import Layout from '../../src/components/layout';
-import Autocomplete from '../../src/components/autocomplete';
+import Autocomplete from '../../src/components/Autocomplete/Autocomplete';
 import News from '../../src/components/news/news';
 //import Button from '../../src/components/buttons';
 import Link from 'next/link';

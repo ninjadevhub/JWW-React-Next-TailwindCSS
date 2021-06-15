@@ -3,7 +3,7 @@ import client from '../../src/apollo/client';
 import { GET_COMMITMENTS_PAGE } from '../../src/queries/pages/get-commitments-page.js';
 //import { useRouter } from 'next/router';
 import Layout from '../../src/components/layout';
-import Button from '../../src/components/buttons';
+import Button from '../../src/components/Button/Button';
 import YearsCarousel from '../../src/components/YearsCarousel/YearsCarousel';
 import Image from 'next/image';
 import Link from 'next/link';

@@ -12,7 +12,7 @@ import {
   handleRedirectsAndReturnData,
 } from '../../../src/utils/slug';
 import { getCommitteeIconsByName } from '../../../src/utils/icons-map';
-import Autocomplete from '../../../src/components/autocomplete';
+import Autocomplete from '../../../src/components/Autocomplete/Autocomplete';
 import Resource from '../../../src/components/resources/resource';
 import MultiSelect from 'react-multi-select-component';
 import {

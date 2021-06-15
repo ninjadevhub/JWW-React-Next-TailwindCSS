@@ -2,29 +2,29 @@
 import { useRouter } from 'next/router';
 import client from '../../src/apollo/client';
 import Layout from '../../src/components/layout';
-import Autocomplete from '../../src/components/autocomplete';
+// import Autocomplete from '../../src/components/Autocomplete/Autocomplete';
 import Resource from '../../src/components/resources/resource';
-import Button from '../../src/components/buttons';
+//import Button from '../../src/components/Button/Button';
 import Modal from "react-modal";
-
-import Link from 'next/link';
+import CustomWidgets from '../../src/components/CustomWidgets/CustomWidgets';
+//import Link from 'next/link';
 import Image from 'next/image';
-import MultiSelect from 'react-multi-select-component';
+//import MultiSelect from 'react-multi-select-component';
 import { GET_RESOURCES_PAGE } from '../../src/queries/pages/get-resources-page';
 import { useEffect, useRef, useState } from 'react';
 import {
   Configure,
-  connectCurrentRefinements,
-  connectSearchBox,
+  //connectCurrentRefinements,
+  //connectSearchBox,
   connectInfiniteHits,
   InstantSearch,
-  Stats,
+  //Stats,
 } from 'react-instantsearch-dom';
 import { sanitize } from '../../src/utils/miscellaneous';
 import TypesenseInstantSearchAdapter from '../../src/typesense-instantsearch-adapter';
 import SwiperCore, { Autoplay, Pagination, EffectFade, A11y } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import styles from '../../src/styles/pages/resources/index.module.scss';
+//import styles from '../../src/styles/pages/resources/index.module.scss';
 import ResoursesModal from '../../src/components/ResoursesModal/ResoursesModal';
 SwiperCore.use([Autoplay, Pagination, EffectFade, A11y]);
 
@@ -48,7 +48,7 @@ const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter({
 
 const searchClient = typesenseInstantsearchAdapter.searchClient;
 
-const years = [];
+/*const years = [];
 const thisYear = new Date().getFullYear();
 for (let year = thisYear; year >= 2015; year--) {
   years.push(year);
@@ -60,7 +60,7 @@ const yearOptions = [
     value: year,
     label: year,
   })),
-];
+];*/
 
 
 
@@ -150,7 +150,7 @@ export default function Resources({ data }) {
     }
   };
 
-  const CustomWidgets = connectSearchBox(
+  /*const CustomWidgets = connectSearchBox(
     ({ currentRefinement, isSearchStalled, refine }) => {
       const handleSearchModeChange = (event) => {
         const newSearchMode = event.currentTarget.value;
@@ -643,7 +643,7 @@ export default function Resources({ data }) {
         </>
       );
     }
-  );
+  );*/
 
   const InfiniteHits = ({ hits, hasMore, refineNext }) => {
     console.log("dddd",hits)
@@ -801,7 +801,27 @@ export default function Resources({ data }) {
             numTypos={numTypos}
             hitsPerPage={5}
           />
-          <CustomWidgets />
+          <CustomWidgets
+            setDropTokensThreshold={setDropTokensThreshold}
+            setNumTypos={setNumTypos}
+            setSearchMode={setSearchMode}
+            setFacetFilters={setFacetFilters}
+            setCommittees={setCommittees}
+            setTopics={setTopics}
+            setTypes={setTypes}
+            setSelectedYears={setSelectedYears}
+            textInputRef={textInputRef}
+            allRadioRef={allRadioRef}
+            searchMode={searchMode}
+            anyRadioRef={anyRadioRef}
+            exactRadioRef={exactRadioRef}
+            data={data}
+            committees={committees}
+            setMultiFacetFilters={setMultiFacetFilters}
+            topics={topics}
+            types={types}
+            selectedYears={selectedYears}
+          />
           <CustomInfiniteHits />
         </InstantSearch>
       </div>
