@@ -54,14 +54,14 @@ function CustomWidgets({
     setTimeout(() => refine(currentRefinement));
   };
 
-  const clearAll = (items) => {
+  const clearAll = () => {
     setFacetFilters([]);
     setSearchMode('All');
     setCommittees([]);
     setTopics([]);
     setTypes([]);
     setSelectedYears([]);
-    setTimeout(() => refine(items));
+    setTimeout(() => refine(''));
   };
 
   const hasNoFilter =

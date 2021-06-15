@@ -10,7 +10,7 @@ function ClearRefinements({
     <div className={`ais-ClearRefinements${hasNoFilter ? ' hidden' : ''}`}>
       <button
         className="ais-ClearRefinements-button"
-        onClick={() => clearAll(items)}
+        onClick={() => clearAll()}
       >
         CLEAR SEARCH
       </button>
