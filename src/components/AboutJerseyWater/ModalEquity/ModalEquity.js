@@ -7,7 +7,7 @@ const ModalEquity = ({data,onClose}) => {
     if(!data) {
         return null
     }
-    console.log("datamodal",data)
+    //console.log("datamodal",data)
 
     return(
         <div className="relative flex flex-col "

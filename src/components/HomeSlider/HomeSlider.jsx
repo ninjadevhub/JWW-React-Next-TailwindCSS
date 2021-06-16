@@ -9,7 +9,7 @@ import { FaLongArrowAltRight } from "react-icons/fa";
 
 
 const HomeSlider = ({resourceData,latestNewsDatat}) => {
-  console.log("dddasdasd",latestNewsDatat)
+  //console.log("dddasdasd",latestNewsDatat)
     const responsive = {
         superLargeDesktop: {
           breakpoint: { max: 4000, min: 3000 },

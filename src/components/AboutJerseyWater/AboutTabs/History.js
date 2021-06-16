@@ -1,7 +1,7 @@
 import YearsCarousel from '../../YearsCarousel/YearsCarousel';
 
 const History = ({ data }) => {
-  console.log('hdata', data)
+  //console.log('hdata', data)
   const yearHighlights =
     data?.yearHighlights?.nodes?.sort((a, b) => {
       if (a.yearHighlights?.year !== b.yearHighlights?.year) {

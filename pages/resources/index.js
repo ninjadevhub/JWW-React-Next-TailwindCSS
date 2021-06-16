@@ -120,7 +120,7 @@ export default function Resources({ data }) {
   };
 
   const InfiniteHits = ({ hits, hasMore, refineNext }) => {
-    console.log("dddd",hits)
+    //console.log("dddd",hits)
     const [currentResource, setCurrentResource] = useState(null);
     const router = useRouter();
 

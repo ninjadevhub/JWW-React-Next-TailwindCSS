@@ -13,7 +13,7 @@ const HomeContent = ({data}) => {
     const { home: carusel } = data.pageBy;
     const { nodes: resourceData } = data.resources;
     const { nodes: latestNewsDatat } = data.posts
-    console.log('.......-----',data)
+    //console.log('.......-----',data)
 
 
     return(

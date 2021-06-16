@@ -36,7 +36,7 @@ const Layout = ( {data, isPost, children} ) => {
 
 	const seo = isPost ? ( post?.seo ?? {} ) : ( page?.seo ?? {} );
 	const uri = isPost ? ( post?.uri ?? {} ) : ( page?.uri ?? {} );
-	console.log(accessibilitySettings)
+	//console.log(accessibilitySettings)
 
 	return (
 		<div className={

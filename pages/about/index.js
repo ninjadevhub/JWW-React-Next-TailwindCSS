@@ -12,7 +12,7 @@ export default function About ({data}) {
 
     const { about: jerseydata } = data.pageBy;
 
-      console.log("-------------------",data)
+      //console.log("-------------------",data)
     return (
         
         <Layout data={data}>

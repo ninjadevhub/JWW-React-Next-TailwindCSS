@@ -8,7 +8,7 @@ const Backbone = ({data,dataLeadersSteering,src}) => {
     const [showInfo,setShowInfo] = useState(false)
 
     const arrowHandler = (current) => {
-    console.log(current)
+    //console.log(current)
 
         if(arrows.includes(current)){
             setArrows(state => state.filter(id => id !== current));
@@ -16,7 +16,7 @@ const Backbone = ({data,dataLeadersSteering,src}) => {
         }
         setArrows(state => [...state, current]);
     }
-    console.log(data)
+    //console.log(data)
     return(
         <div className='flex flex-col mt-24 w-10/12 m-auto '>
                 <div>

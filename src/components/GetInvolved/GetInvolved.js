@@ -5,7 +5,7 @@ import Image from 'next/image';
 
 
 const GetInvolved = ({dataInvovled}) => {
-    console.log("d",dataInvovled)
+    //console.log("d",dataInvovled)
 
 
         return(
