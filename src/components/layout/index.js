@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import Header from './header';
-import Footer from './footer';
+import { useEffect } from 'react';
+import Header from './header/Header';
+import Footer from './footer/Footer';
 import Accessibility from '../Accessibility/Accessibility';
 import Head from 'next/head';
 import Seo from '../seo';

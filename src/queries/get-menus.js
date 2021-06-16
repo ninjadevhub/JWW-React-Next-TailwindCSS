@@ -62,6 +62,21 @@ export const HeaderFooter = `
         slug
       }
     }
+        latestNewsMegaMenu {
+          block1Button1Color
+          block1Button1Text
+          block1Button1Url
+          block1Button2Color
+          block1Button2Text
+          block1Button2Url
+          block2Heading
+          block2Topics2 {
+            topic {
+              name
+              slug
+            }
+          }
+        }
     resourcesMegaMenu {
       block4Heading
       block4Types {
@@ -71,7 +86,7 @@ export const HeaderFooter = `
         }
       }
       block2Heading
-      block2Topics {
+      block2Topics1 {
         topic {
           name
           slug

@@ -459,9 +459,25 @@ h3 {
   z-index: 30;
 }
 
+.latest-news-mega-menu {
+  width: 100%;
+}
+
 @media (min-width: 768px) {
   .md-w-4-5 {
     width: 80%;
+  }
+
+  .latest-news-mega-menu {
+    width: calc(100% + 1rem);
+  }
+}
+
+@media (min-width: 1024px) {
+  .latest-news-mega-menu {
+    width: calc(100% + 3rem);
+    padding-left: 4.5rem;
+    padding-right: 4.5rem;
   }
 }
 

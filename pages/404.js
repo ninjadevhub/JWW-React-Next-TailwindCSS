@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import client from '../src/apollo/client';
-import Header from '../src/components/layout/header';
-import Footer from '../src/components/layout/footer';
+import Header from '../src/components/layout/header/Header';
+import Footer from '../src/components/layout/footer/Footer';
 import {GET_MENUS} from '../src/queries/get-menus';
 
 function Error404( {data} ) {
