@@ -33,6 +33,36 @@ export const HeaderFooter = `
       }
     }
   },
+  sitewideSettings {
+    committeesMegaMenu {
+      button1Color
+      button1Text
+      button1Url
+      button2Color
+      button2Text
+      button2Url
+      block2Committee {
+        slug
+        name
+      }
+      block3Committee {
+        slug
+        name
+      }
+      block4Committee {
+        name
+        slug
+      }
+      block5Committee {
+        name
+        slug
+      }
+      block6Committee {
+        name
+        slug
+      }
+    }
+  },
   footer: getFooter {
     copyrightText
     sidebarOne

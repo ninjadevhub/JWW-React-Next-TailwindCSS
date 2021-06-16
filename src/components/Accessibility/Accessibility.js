@@ -7,6 +7,9 @@ export default function Accessibility({
   setAccessibilitySettings,
 }) {
   const [menuIsOpen, setMenuIsOpen] = useState(false);
+  const not2xl =
+    typeof window !== 'undefined' ? window.innerWidth < 1536 : true;
+
   if (!menuIsOpen) {
     return (
       <button
@@ -16,8 +19,8 @@ export default function Accessibility({
       >
         <Image
           src="/images/accessibility.png"
-          width={94}
-          height={94}
+          width={not2xl ? 47 : 94}
+          height={not2xl ? 47 : 94}
           alt="Accessibility"
         />
       </button>
@@ -29,15 +32,17 @@ export default function Accessibility({
   );
 
   return (
-    <div className="fixed left-0 top-44 z-50 p-2 border-solid border-r-8 border-brand-blue-2 bg-brand-gray">
+    <div className="fixed left-0 top-44 z-50 p-2 border-solid border-r-4 2xl:border-r-8 border-brand-blue-2 bg-brand-gray">
       <div
         className="relative overflow-y-auto"
-        style={{ width: 400, maxHeight: 'calc(100vh - 12rem)' }}
+        style={{ width: not2xl ? 200 : 400, maxHeight: 'calc(100vh - 12rem)' }}
       >
-        <div className="flex justify-between items-center py-6 px-4">
-          <h3 className="text-2xl-3 color-brand-blue">Accessibility Tools</h3>
+        <div className="flex justify-between items-center py-3 px-2 2xl:py-6 2xl:px-4">
+          <h3 className="text-base 2xl:text-2xl-3 color-brand-blue">
+            Accessibility Tools
+          </h3>
           <button
-            className={`px-2 py-1 border-none bg-brand-green-dark text-white${
+            className={`px-2 py-1 border-none bg-brand-green-dark text-xs 2xl:text-base text-white${
               settingsAreDefault ? ' hidden' : ''
             }`}
             onClick={() =>
@@ -56,7 +61,7 @@ export default function Accessibility({
         </div>
         <div className="flex flex-wrap">
           <button
-            className="w-1/2 p-4 border-solid border-brand-gray border-8 bg-white text-center text-brand-navy"
+            className="w-1/2 p-2 2xl:p-4 border-solid border-brand-gray border-4 2xl:border-8 bg-white text-center text-brand-navy"
             type="button"
             onClick={() =>
               setAccessibilitySettings((prevSettings) => ({
@@ -67,12 +72,12 @@ export default function Accessibility({
           >
             <Image
               src="/images/color-contrast.png"
-              width={45}
-              height={45}
+              width={not2xl ? 23 : 45}
+              height={not2xl ? 23 : 45}
               alt="Color contrast"
             />
             <div
-              className="mt-2 mb-1 text-xl-2 tracking-wider-2"
+              className="mt-2 mb-1 text-sm 2xl:text-xl-2 tracking-wider-2"
               style={{ lineHeight: 1.2727 }}
             >
               COLOR
@@ -85,12 +90,12 @@ export default function Accessibility({
                   !accessibilitySettings.colorContrast ? 'opacity-0' : ''
                 }
                 color="#793e69"
-                size="1.375rem"
+                size={not2xl ? '0.875rem' : '1.375rem'}
               />
             </div>
           </button>
           <button
-            className="w-1/2 p-4 border-solid border-brand-gray border-8 bg-white text-center text-brand-navy"
+            className="w-1/2 p-2 2xl:p-4 border-solid border-brand-gray border-4 2xl:border-8 bg-white text-center text-brand-navy"
             type="button"
             onClick={() =>
               setAccessibilitySettings((prevSettings) => ({
@@ -101,12 +106,12 @@ export default function Accessibility({
           >
             <Image
               src="/images/highlight-links.png"
-              width={38}
-              height={38}
+              width={not2xl ? 19 : 38}
+              height={not2xl ? 19 : 38}
               alt="Highlight links"
             />
             <div
-              className="mt-2 mb-1 text-xl-2 tracking-wider-2"
+              className="mt-2 mb-1 text-sm 2xl:text-xl-2 tracking-wider-2"
               style={{ lineHeight: 1.2727 }}
             >
               HIGHLIGHT
@@ -119,12 +124,12 @@ export default function Accessibility({
                   !accessibilitySettings.highlightLinks ? 'opacity-0' : ''
                 }
                 color="#793e69"
-                size="1.375rem"
+                size={not2xl ? '0.875rem' : '1.375rem'}
               />
             </div>
           </button>
           <button
-            className="w-1/2 p-4 border-solid border-brand-gray border-8 bg-white text-center text-brand-navy"
+            className="w-1/2 p-2 2xl:p-4 border-solid border-brand-gray border-4 2xl:border-8 bg-white text-center text-brand-navy"
             type="button"
             onClick={() =>
               setAccessibilitySettings((prevSettings) => ({
@@ -136,12 +141,12 @@ export default function Accessibility({
           >
             <Image
               src="/images/text-size.png"
-              width={48}
-              height={32}
+              width={not2xl ? 24 : 48}
+              height={not2xl ? 16 : 32}
               alt="Text size"
             />
             <div
-              className="mt-2 mb-1 text-xl-2 tracking-wider-2"
+              className="mt-2 mb-1 text-sm 2xl:text-xl-2 tracking-wider-2"
               style={{ lineHeight: 1.2727 }}
             >
               TEXT
@@ -153,17 +158,20 @@ export default function Accessibility({
                 accessibilitySettings.textSize === 0 ? ' opacity-0' : ''
               }`}
             >
-              <div className="h-2 flex-1 mr-4 bg-brand-gray">
+              <div className="h-2 flex-1 mr-2 2xl:mr-4 bg-brand-gray">
                 <div
                   className="h-2 bg-brand-green-dark"
                   style={{ width: `${accessibilitySettings.textSize * 50}%` }}
                 />
               </div>
-              <FaCheckCircle color="#793e69" size="1.375rem" />
+              <FaCheckCircle
+                color="#793e69"
+                size={not2xl ? '0.875rem' : '1.375rem'}
+              />
             </div>
           </button>
           <button
-            className="w-1/2 p-4 border-solid border-brand-gray border-8 bg-white text-center text-brand-navy"
+            className="w-1/2 p-2 2xl:p-4 border-solid border-brand-gray border-4 2xl:border-8 bg-white text-center text-brand-navy"
             type="button"
             onClick={() =>
               setAccessibilitySettings((prevSettings) => ({
@@ -177,12 +185,12 @@ export default function Accessibility({
           >
             <Image
               src="/images/letter-spacing.png"
-              width={50}
-              height={44}
+              width={not2xl ? 25 : 50}
+              height={not2xl ? 22 : 44}
               alt="Letter spacing"
             />
             <div
-              className="mt-2 mb-1 text-xl-2 tracking-wider-2"
+              className="mt-2 mb-1 text-sm 2xl:text-xl-2 tracking-wider-2"
               style={{ lineHeight: 1.2727 }}
             >
               LETTER
@@ -194,7 +202,7 @@ export default function Accessibility({
                 accessibilitySettings.letterSpacing === 0 ? ' opacity-0' : ''
               }`}
             >
-              <div className="h-2 flex-1 mr-4 bg-brand-gray">
+              <div className="h-2 flex-1 mr-2 2xl:mr-4 bg-brand-gray">
                 <div
                   className="h-2 bg-brand-green-dark"
                   style={{
@@ -202,12 +210,14 @@ export default function Accessibility({
                   }}
                 />
               </div>
-              <FaCheckCircle color="#793e69" size="1.375rem" />
+              <FaCheckCircle
+                color="#793e69"
+                size={not2xl ? '0.875rem' : '1.375rem'}
+              />
             </div>
           </button>
           <button
-            className="w-1/2 p-4 border-solid border-brand-gray border-8 bg-white text-center text-brand-navy"
-            type="button"
+            className="w-1/2 p-2 2xl:p-4 border-solid border-brand-gray border-4 2xl:border-8 bg-white text-center text-brand-navy"
             onClick={() =>
               setAccessibilitySettings((prevSettings) => ({
                 ...prevSettings,
@@ -217,12 +227,12 @@ export default function Accessibility({
           >
             <Image
               src="/images/pause-animations.png"
-              width={46}
-              height={46}
+              width={not2xl ? 23 : 46}
+              height={not2xl ? 23 : 46}
               alt="Pause animations"
             />
             <div
-              className="mt-2 mb-1 text-xl-2 tracking-wider-2"
+              className="mt-2 mb-1 text-sm 2xl:text-xl-2 tracking-wider-2"
               style={{ lineHeight: 1.2727 }}
             >
               PAUSE
@@ -235,12 +245,12 @@ export default function Accessibility({
                   !accessibilitySettings.pauseAnimations ? 'opacity-0' : ''
                 }
                 color="#793e69"
-                size="1.375rem"
+                size={not2xl ? '0.875rem' : '1.375rem'}
               />
             </div>
           </button>
           <button
-            className="w-1/2 p-4 border-solid border-brand-gray border-8 bg-white text-center text-brand-navy"
+            className="w-1/2 p-2 2xl:p-4 border-solid border-brand-gray border-4 2xl:border-8 bg-white text-center text-brand-navy"
             type="button"
             onClick={() =>
               setAccessibilitySettings((prevSettings) => ({
@@ -252,12 +262,12 @@ export default function Accessibility({
           >
             <Image
               src="/images/cursor-size.png"
-              width={32}
-              height={44}
+              width={not2xl ? 16 : 32}
+              height={not2xl ? 22 : 44}
               alt="Cursor size"
             />
             <div
-              className="mt-2 mb-1 text-xl-2 tracking-wider-2"
+              className="mt-2 mb-1 text-sm 2xl:text-xl-2 tracking-wider-2"
               style={{ lineHeight: 1.2727 }}
             >
               CURSOR
@@ -269,26 +279,29 @@ export default function Accessibility({
                 accessibilitySettings.cursorSize === 0 ? ' opacity-0' : ''
               }`}
             >
-              <div className="h-2 flex-1 mr-4 bg-brand-gray">
+              <div className="h-2 flex-1 mr-2 2xl:mr-4 bg-brand-gray">
                 <div
                   className="h-2 bg-brand-green-dark"
                   style={{ width: `${accessibilitySettings.cursorSize * 50}%` }}
                 />
               </div>
-              <FaCheckCircle color="#793e69" size="1.375rem" />
+              <FaCheckCircle
+                color="#793e69"
+                size={not2xl ? '0.875rem' : '1.375rem'}
+              />
             </div>
           </button>
         </div>
       </div>
       <button
         type="button"
-        className="absolute right-0 top-4 transform translate-x-full p-0 border-none bg-transparent"
+        className="absolute right-0 top-2 2xl:top-4 transform translate-x-full p-0 border-none bg-transparent"
         onClick={() => setMenuIsOpen(false)}
       >
         <Image
           src="/images/close-accessibility.png"
-          width={94}
-          height={94}
+          width={not2xl ? 47 : 94}
+          height={not2xl ? 47 : 94}
           alt="Close accessibility menu"
         />
       </button>

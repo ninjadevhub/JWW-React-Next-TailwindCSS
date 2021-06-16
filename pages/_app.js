@@ -13,13 +13,13 @@ Router.events.on('routeChangeComplete', () => NProgress.done());
 Router.events.on('routeChangeError', () => NProgress.done());
 
 function MyApp({ Component, pageProps }) {
-  const { menus, algolia, ...passThruProps } = pageProps?.data || {};
-
+  const { menus, sitewideSettings, algolia, ...passThruProps } = pageProps?.data || {};
   const [wp] = useState({
     algolia: {
       indexName: algolia?.indexName,
     },
     menus: menus,
+    sitewideSettings: sitewideSettings,
   });
 
   return (

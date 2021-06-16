@@ -14,7 +14,7 @@ export default function Button({
   const finalClassName = `${defaultClassName} bg-${color}${
     fullWidth ? ' w-full' : ''
   } ${className}`;
-  if (uri) {
+  if (typeof uri !== 'undefined') {
     return (
       <Link href={uri}>
         <a className={finalClassName} style={style ? style : {}}>{children}</a>
@@ -27,4 +27,6 @@ export default function Button({
       </button>
     );
   }
+
+  return null;
 }

@@ -8,7 +8,7 @@ function Error404( {data} ) {
 	const {header, footer, headerMenus, footerMenus} = data || {};
 	return (
 		<>
-			<Header header={header} headerMenus={headerMenus?.edges}/>
+			<Header header={header} />
 			<div className="h-almost-screen">
 				<section className="text-gray-600 body-font">
 					<div className="container mx-auto flex px-5 py-24 md:flex-row flex-col items-center">

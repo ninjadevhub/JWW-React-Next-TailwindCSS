@@ -4,8 +4,12 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import styles from '../../../styles/components/layout/header/navigation.module.scss';
 
-export default function Navigation({ menu, className }) {
+export default function Navigation({ menu, className, committeesMegaMenuRef, committeesMegaMenuIsActive }) {
   const { asPath } = useRouter();
+  const megaMenuMap = {
+    '/committees/asset-management-and-finance-committee/': committeesMegaMenuRef,
+  };
+
   return (
     <>
       {!!menu?.length && (
@@ -25,8 +29,18 @@ export default function Navigation({ menu, className }) {
                         target={item.target ? item.target : '_self'}
                         className={cn(
                           'nav-item',
-                          isLinkActive(asPath, item.path) && styles.active
+                          (isLinkActive(asPath, item.path) || (item.path === '/committees/asset-management-and-finance-committee/' && committeesMegaMenuIsActive)) && styles.active  
                         )}
+                        onMouseEnter={() => {
+                          const megaMenuClassList = megaMenuMap[item.path]?.current?.classList;
+                          megaMenuClassList?.remove('hidden');
+                          megaMenuClassList?.add('flex');
+                        }}
+                        onMouseLeave={() => {
+                          const megaMenuClassList = megaMenuMap[item.path]?.current?.classList;
+                          megaMenuClassList?.remove('flex');
+                          megaMenuClassList?.add('hidden');
+                        }}
                       >
                         {item.label}
                       </a>
