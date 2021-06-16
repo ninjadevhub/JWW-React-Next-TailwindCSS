@@ -36,7 +36,7 @@ const Resource = ({ hit, committees,onCardClick }) => {
         )}
         {Date.now() - post_date * 1000 < 61 * 24 * 60 * 60 * 1000 && (
           <div className="absolute left-4 top-4">
-            <Image src="/images/new.png" width={49} height={49} />
+            <Image src="/images/new.svg" width={49} height={49} />
           </div>
         )}
       </div>
