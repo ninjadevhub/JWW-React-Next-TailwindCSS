@@ -4,10 +4,18 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import styles from '../../../styles/components/layout/header/navigation.module.scss';
 
-export default function Navigation({ menu, className, committeesMegaMenuRef, committeesMegaMenuIsActive }) {
+export default function Navigation({
+  menu,
+  className,
+  committeesMegaMenuRef,
+  committeesMegaMenuIsActive,
+  resourcesMegaMenuRef,
+  resourcesMegaMenuIsActive,
+}) {
   const { asPath } = useRouter();
   const megaMenuMap = {
     '/committees/asset-management-and-finance-committee/': committeesMegaMenuRef,
+    '/resources/': resourcesMegaMenuRef,
   };
 
   return (
@@ -29,7 +37,9 @@ export default function Navigation({ menu, className, committeesMegaMenuRef, com
                         target={item.target ? item.target : '_self'}
                         className={cn(
                           'nav-item',
-                          (isLinkActive(asPath, item.path) || (item.path === '/committees/asset-management-and-finance-committee/' && committeesMegaMenuIsActive)) && styles.active  
+                          (isLinkActive(asPath, item.path) || 
+                          (item.path === '/committees/asset-management-and-finance-committee/' && committeesMegaMenuIsActive) ||
+                          (item.path === '/resources/' && resourcesMegaMenuIsActive)) && styles.active  
                         )}
                         onMouseEnter={() => {
                           const megaMenuClassList = megaMenuMap[item.path]?.current?.classList;
