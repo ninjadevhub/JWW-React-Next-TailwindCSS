@@ -9,6 +9,8 @@ import {sanitize} from '../../utils/miscellaneous';
 import Modal from 'react-modal';
 import useLocalStorageState from '../../utils/useLocalStorageState';
 import PropTypes from 'prop-types';
+import { useRouter } from 'next/router';
+import Image from 'next/image';
 
 const customStyles = {
   content: {
@@ -57,6 +59,8 @@ const Layout = ( {data, isPost, children} ) => {
   };
 
   const closeSearchModal = () => setSearchModalIsOpen(false);
+	const router = useRouter();
+	//console.log(router.pathname);
 
 	return (
 		<div className={
@@ -88,6 +92,48 @@ const Layout = ( {data, isPost, children} ) => {
 			  accessibilitySettings={accessibilitySettings}
 			  setAccessibilitySettings={setAccessibilitySettings}
 			/>
+			{(router.pathname === '/committees') ?
+      <div className="committee-cta">
+        <div className="committee-become">
+          <div class="com-cta-bg">
+						<Image
+							src="/images/committees/become-a-member.jpg"
+							width="953"
+							height="286"
+						/>
+					</div>
+          <div class="com-cta-button">
+						<a href="#">Become a Member
+							<Image
+								src="/images/right-arrow.png"
+								width={51}
+								height={26}
+								alt="Right Arrow"
+							/>
+						</a>
+					</div>
+        </div>
+        <div className="committee-join">
+          <div class="com-cta-bg">
+						<Image
+							src="/images/committees/join-a-committee.jpg"
+							width="953"
+							height="286"
+						/>
+					</div>
+          <div class="com-cta-button">
+						<a href="#">Already a Member? Join a Committee
+							<Image
+								src="/images/right-arrow.png"
+								width={51}
+								height={26}
+								alt="Right Arrow"
+							/>
+						</a>
+					</div>
+        </div>
+      </div> : ""
+			}
 			<Footer siteLogoUrl={header?.siteLogoUrl} footer={footer}/>
 			<Modal
         isOpen={searchModalIsOpen}

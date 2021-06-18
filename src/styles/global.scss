@@ -600,3 +600,172 @@ h3 {
 .MuiAccordionSummary-expandIcon.Mui-expanded {
   transform: rotate(90deg) !important;
 }
+
+.com-flow {
+  display: flex;
+  flex-wrap: wrap;
+  position: relative;
+  margin-bottom: 20px;
+  padding: 40px 0 0;
+  border-bottom: 5px solid #04a39a;
+}
+.com-flow:before {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 140px;
+  background-color: #e5e5e5;
+}
+.com-flow-item {
+  width: 25%;
+  text-align: center;
+}
+.com-flow-title {
+  margin: 0 auto 30px;
+  max-width: 250px;
+  color: #4d4d4d;
+  font-size: 25px;
+}
+.com-flow-title i {
+  font-size: 23px;
+}
+.com-flow-icon {
+  margin-bottom: -20px;
+}
+.com-flow-icon > div {
+  vertical-align: middle;
+}
+.com-buttons {
+  display: flex;
+  flex-wrap: wrap;
+}
+.com-button {
+  width: 50%;
+}
+.com-button-task {
+  padding-right: 24px;
+  text-align: right;
+}
+.com-button-data {
+  padding-left: 24px;
+}
+.com-button a {
+  display: inline-block;
+  width: 536px;
+  padding: 30px 0;
+  background-color: #04a39a;
+  color: #fff;
+  font-family: Museo, sans-serif;
+  font-size: 23px;
+  font-weight: 500;
+  text-transform: uppercase;
+  text-align: center;
+}
+.com-button-task a {
+  padding-left: 70px;
+}
+.com-button-data a {
+  padding-right: 70px;
+}
+.com-button-icon {
+  display: inline-block;
+  position: relative;
+  width: 120px;
+  height: 120px;
+  border: 5px solid #04a39a;
+  border-radius: 60px;
+  background-color: #fff;
+  vertical-align: middle;
+  text-align: center;
+}
+.com-button-task .com-button-icon {
+  margin-right: -70px;
+}
+.com-button-data .com-button-icon {
+  margin-left: -70px;
+}
+.com-button-icon > div {
+  transform: translateY(50%);
+}
+.committee-cta {
+  display: flex;
+  flex-wrap: wrap;
+}
+.committee-cta > div {
+  position: relative;
+  width: 50%;
+}
+.com-cta-bg > div {
+  vertical-align: middle;
+}
+.com-cta-button {
+  position: absolute;
+  left: 50%;
+  bottom: 20px;
+  transform: translateX(-50%);
+  width: 650px;
+  background-color: rgba(255, 255, 255, .9);
+  text-align: center;
+}
+.com-cta-button a {
+  display: inline-block;
+  width: 100%;
+  color: #1c3c53;
+  font-family: Museo, sans-serif;
+  font-size: 25px;
+  font-weight: 500;
+  line-height: 64px;
+}
+.com-cta-button a > div {
+  margin-left: 20px !important;
+  vertical-align: middle;
+}
+@media (max-width: 1279px) {
+  .com-button a {
+    width: 430px;
+    font-size: 20px;
+  }
+  .com-cta-button {
+    width: 400px;
+  }
+  .com-cta-button a {
+    font-size: 16px;
+    line-height: 48px;
+  }
+}
+@media (max-width: 1023px) {
+  .com-flow {
+    padding-top: 80px;
+  }
+  .com-flow:before {
+    display: none;
+  }
+  .com-flow-item {
+    margin-bottom: 80px;
+    width: 50%;
+  }
+  .com-button a {
+    width: 300px;
+    font-size: 14px;
+  }
+  .com-cta-button {
+    width: 320px;
+  }
+  .com-cta-button a > div {
+    display: none !important;
+  }
+}
+@media (max-width: 767px) {
+  .com-flow-item {
+    width: 100%;
+  }
+  .com-button {
+    width: 100%;
+    padding: 0;
+  }
+  .committee-cta > div {
+    width: 100%;
+  }
+}
