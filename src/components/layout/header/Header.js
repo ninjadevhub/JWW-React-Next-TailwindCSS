@@ -8,7 +8,7 @@ import ResourcesMegaMenu from './ResourcesMegaMenu';
 import LatestNewsMegaMenu from './LatestNewsMegaMenu';
 import styles from '../../../styles/components/layout/header/index.module.scss';
 
-const Header = ({ header }) => {
+const Header = ({ header, openSearchModal }) => {
   const [committeesMegaMenuIsActive, setCommitteesMegaMenuIsActive] = useState(false);
   const [resourcesMegaMenuIsActive, setResourcesMegaMenuIsActive] = useState(false);
   const [latestNewsMegaMenuIsActive, setLatestNewsMegaMenuIsActive] = useState(false);
@@ -78,6 +78,7 @@ const Header = ({ header }) => {
                 type="button"
                 title="Submit your search query."
                 className=""
+                onClick={openSearchModal}
               >
                 <svg
                   className="ais-SearchBox-submitIcon"

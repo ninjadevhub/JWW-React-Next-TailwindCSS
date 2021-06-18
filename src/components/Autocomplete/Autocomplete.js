@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, memo } from 'react';
 //import PropTypes from 'prop-types';
 import { connectAutoComplete } from 'react-instantsearch-dom';
 //import AutoSuggest from 'react-autosuggest';
@@ -46,8 +46,8 @@ function AutoComplete({
               newQuery = value?.replace(/"+/g, '') || '';
             }*/
 
-            searchRefine(value);
-            setSuggestionsVisibility(value !== '');
+            searchRefine(value ?? '');
+            setSuggestionsVisibility(!!value);
             //setQuery(value);
           }}
           onBlur={(event) => {
@@ -101,7 +101,7 @@ function AutoComplete({
         }`}
         style={{top: 40, left: 0, zIndex: 10}}
       >
-        {hits.map((hit) => (
+        {hits?.map((hit) => (
           <li
             className="suggestion px-6 py-2"
             key={hit.post_id}
@@ -119,4 +119,4 @@ function AutoComplete({
   );
 }
 
-export default connectAutoComplete(AutoComplete);
+export default memo(connectAutoComplete(AutoComplete));

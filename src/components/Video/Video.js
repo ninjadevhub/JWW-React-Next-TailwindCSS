@@ -1,12 +1,17 @@
 import { memo } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import ReactPlayer from 'react-player';
 import dayjs from 'dayjs';
-import { getTopicIconByName, getTypeIconByName, getCommitteeIconsByName } from '../../utils/icons-map';
+import {
+  getTopicIconByName,
+  getTypeIconByName,
+  getCommitteeIconsByName,
+} from '../../utils/icons-map';
 import { convertAmpersands } from '../../utils/miscellaneous';
+import { FaPlay } from 'react-icons/fa';
 
-const News = ({ hit,onCardClick,committees }) => {
-
+const Video = ({ hit, onCardClick }) => {
   const {
     post_date,
     images,
@@ -17,18 +22,27 @@ const News = ({ hit,onCardClick,committees }) => {
     content,
   } = hit;
 
+  const videoId = (content ?? '').trim();
+
   return (
     <div className="w-full flex border-solid border-b border-color-brand-gray text-gray-700">
       <div
         className="relative flex-grow-0 flex-shrink-0 mb-10"
-        style={{ flexBasis: '292px', maxWidth: 292, height: 362 }}
+        style={{ flexBasis: '292px', maxWidth: 292, height: 164 }}
       >
-        {images?.full?.url ? (
-          <Image
-            src={images.full.url}
-            alt={(images.full.alt || images.full.title) ?? ''}
-            layout="fill"
-            objectFit="cover"
+        {videoId ? (
+          <ReactPlayer
+            className="absolute"
+            width="100%"
+            height="100%"
+            playing
+            playIcon={
+              <div className="rounded-full bg-brand-navy p-2">
+                <FaPlay size={30} color={'white'} />
+              </div>
+            }
+            light={true}
+            url={`https://www.youtube.com/watch?v=${videoId}`}
           />
         ) : (
           <div className="w-full h-full bg-brand-gray"></div>
@@ -50,29 +64,28 @@ const News = ({ hit,onCardClick,committees }) => {
                     {source}
                   </div>
                 ))}
-            {taxonomies_topic?.length > 0 && (
-              <div className="mr-6">
-                {taxonomies_topic?.map((t) => (
-                  <div className="flex items-center pb-2">
-                    <div className="mr-3">{getTopicIconByName(t)}</div>
-                    {t}
+                {taxonomies_topic?.length > 0 && (
+                  <div className="mr-6">
+                    {taxonomies_topic?.map((t) => (
+                      <div className="flex items-center pb-2">
+                        <div className="mr-3">{getTopicIconByName(t)}</div>
+                        {t}
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-            )}
+                )}
               </div>
             )}
           </div>
           <div className="">{dayjs(post_date * 1000).format('MM/DD/YY')}</div>
         </div>
         <h2 className="my-4 text-2xl">{post_title}</h2>
-        <div className="mb-6">{post_excerpt || (content ?? '').split(' ').slice(0, 55).join(' ')} ...</div>
         <button
           className="inline-block py-2 px-8 bg-brand-orange text-center text-white"
           type="button"
-          onClick={()=> onCardClick(hit)}
+          onClick={() => onCardClick(hit)}
         >
-          READ ARTICLE
+          WATCH VIDEO
         </button>
       </div>
       <div
@@ -100,4 +113,4 @@ const News = ({ hit,onCardClick,committees }) => {
   );
 };
 
-export default memo(News);
+export default memo(Video);

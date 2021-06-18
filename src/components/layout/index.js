@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Header from './header/Header';
 import Footer from './footer/Footer';
 import Accessibility from '../Accessibility/Accessibility';
@@ -6,10 +6,23 @@ import Head from 'next/head';
 import Seo from '../seo';
 import {isEmpty} from 'lodash';
 import {sanitize} from '../../utils/miscellaneous';
+import Modal from 'react-modal';
 import useLocalStorageState from '../../utils/useLocalStorageState';
 import PropTypes from 'prop-types';
 
+const customStyles = {
+  content: {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)',
+  },
+};
+
 const Layout = ( {data, isPost, children} ) => {
+	const [searchModalIsOpen, setSearchModalIsOpen] = useState(false);
 	const [accessibilitySettings, setAccessibilitySettings] = useLocalStorageState('accessibilitySettings', {
 		colorContrast: false,
 		highlightLinks: false,
@@ -38,6 +51,13 @@ const Layout = ( {data, isPost, children} ) => {
 	const uri = isPost ? ( post?.uri ?? {} ) : ( page?.uri ?? {} );
 	//console.log(accessibilitySettings)
 
+	const openSearchModal = () => setSearchModalIsOpen(true);
+  const afterOpenSearchModal = () => {
+    
+  };
+
+  const closeSearchModal = () => setSearchModalIsOpen(false);
+
 	return (
 		<div className={
 			'app' +
@@ -60,7 +80,7 @@ const Layout = ( {data, isPost, children} ) => {
 					/>
 				) : null}
 			</Head>
-			<Header header={header}/>
+			<Header header={header} openSearchModal={openSearchModal} />
 			<div className="md:container pb-24 mx-auto min-h-almost-screen">
 				{children}
 			</div>
@@ -69,6 +89,15 @@ const Layout = ( {data, isPost, children} ) => {
 			  setAccessibilitySettings={setAccessibilitySettings}
 			/>
 			<Footer siteLogoUrl={header?.siteLogoUrl} footer={footer}/>
+			<Modal
+        isOpen={searchModalIsOpen}
+        onAfterOpen={afterOpenSearchModal}
+        onRequestClose={closeSearchModal}
+        style={customStyles}
+        contentLabel="Search Modal"
+      >
+				<h1>Search Modal</h1>
+			</Modal>
 		</div>
 	);
 };

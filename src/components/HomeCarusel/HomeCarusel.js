@@ -28,7 +28,7 @@ class HomeCarusel extends Component {
 
                     <div  className='flex flex-col w-100 bg-cover'
                         style={{
-                                backgroundImage: `url(${carusel.slideImage.sourceUrl})`,
+                                backgroundImage: `url(${carusel.slideImage?.sourceUrl})`,
                                 width:'100%',
                                 height:'450px',
 

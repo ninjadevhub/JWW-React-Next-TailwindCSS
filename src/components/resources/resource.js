@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import dayjs from 'dayjs';
@@ -53,7 +54,7 @@ const Resource = ({ hit, committees,onCardClick }) => {
                 ))}
               </div>
             )}
-            {taxonomies_jww_type.length > 0 && (
+            {taxonomies_jww_type?.length > 0 && (
               <div className="mr-6">
                 {taxonomies_jww_type?.map((type) => (
                   <div className="flex items-center pb-2">
@@ -67,7 +68,7 @@ const Resource = ({ hit, committees,onCardClick }) => {
           <div className="">{dayjs(post_date * 1000).format('MM/DD/YY')}</div>
         </div>
         <h2 className="my-4 text-2xl">{post_title}</h2>
-        <div className="mb-6">{post_excerpt} ...</div>
+        <div className="mb-6">{post_excerpt || (content ?? '').split(' ').slice(0, 55).join(' ')} ...</div>
         {/* <a href={resourceLink} className="inline-block py-2 px-8 bg-brand-orange text-center text-white" target="_blank">
           VIEW RESOURCE
         </a> */}
@@ -102,4 +103,4 @@ const Resource = ({ hit, committees,onCardClick }) => {
   );
 };
 
-export default Resource;
+export default memo(Resource);
