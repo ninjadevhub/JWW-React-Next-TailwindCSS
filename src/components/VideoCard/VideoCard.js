@@ -16,14 +16,12 @@ const VideoCard = ({video, onCardClick}) => {
         return { main: colors[ind].a, icon: colors[ind].b };
     }, []);
 
-    
-
     return (
         <div className="flex flex-col p-5px">
             <div>
                 <ReactPlayer 
                     width={'auto'}
-                    height={250}
+                    height={200}
                     playing
                     playIcon={
                         <div className='rounded-full bg-brand-navy p-2'>
@@ -38,13 +36,13 @@ const VideoCard = ({video, onCardClick}) => {
            
             <div 
                 className={`flex flex-col justify-center items-center text-white cursor-pointer bg-${bgColor.main} pb-2`}
-                style={{ height: 250 }}
-                onClick={() => onCardClick(video)}
+                style={{ height: 200 }}
+                onClick={() => onCardClick(video.video)}
             >
                 <div className="text-center flex items-center justify-center flex-grow">
-                    <h3 className="font-nova text-2xl">
+                    <div className="font-museo text-xl px-3">
                         {video.title}
-                    </h3>
+                    </div>
                 </div>
               
               <div className="flex flex-col items-center">
@@ -53,7 +51,7 @@ const VideoCard = ({video, onCardClick}) => {
                 </div>
 
                 <div>
-                    <p>#events</p>
+                    <p>{video.videoTags.nodes.length ? `#${video.videoTags.nodes[0].name}` : '#events'}</p>
                 </div>
               </div>
               

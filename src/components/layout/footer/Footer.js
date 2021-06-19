@@ -43,7 +43,7 @@ const Footer = ({ siteLogoUrl, footer }) => {
       <div className="relative md:container px-5 mx-auto">
         <div className="flex -mx-5">
           <div className="w-1/2 px-5">
-            <div className="mt-8 mb-4">
+            <div className="mt-8 mb-4 w-84 max-w-full mx-auto">
               {siteLogoUrl && (
                 <Link href="/">
                   <a>
@@ -52,7 +52,7 @@ const Footer = ({ siteLogoUrl, footer }) => {
                 </Link>
               )}
             </div>
-            <div class="mb-4">
+            <div className="mb-4 w-84 max-w-full mx-auto">
               <a
                 className="no-underline text-gray-500"
                 href="tel:1-609-393-0008"
@@ -60,7 +60,7 @@ const Footer = ({ siteLogoUrl, footer }) => {
                 609-393-0008 ex. 112
               </a>
             </div>
-            <div class="mb-4">
+            <div className="mb-4 w-84 max-w-full mx-auto">
               <a
                 className="no-underline text-gray-500"
                 href="mailto:info@jerseywaterworks.org"
@@ -68,12 +68,12 @@ const Footer = ({ siteLogoUrl, footer }) => {
                 info@jerseywaterworks.org
               </a>
             </div>
-            <div className="mb-10">
+            <div className="mb-10 w-84 max-w-full mx-auto">
               16 W. Lafayette Street
               <br />
               Trenton, NJ 08608
             </div>
-            <div className="mb-12">
+            <div className="mb-12 w-84 max-w-full mx-auto">
               <Link href="#">
                 <a className="inline-block px-12 py-4 bg-gray-100 text-sm">
                   CONTACT US
@@ -81,7 +81,7 @@ const Footer = ({ siteLogoUrl, footer }) => {
               </Link>
             </div>
             {!isEmpty(footer?.socialLinks) && isArray(footer?.socialLinks) ? (
-              <ul className="flex items-center mb-12">
+              <ul className="flex items-center mb-12 w-84 max-w-full mx-auto">
                 {footer.socialLinks.map((socialLink) => (
                   <li 
                     key={socialLink?.iconName}
@@ -92,7 +92,7 @@ const Footer = ({ siteLogoUrl, footer }) => {
                 ))}
               </ul>
             ) : null}
-            <div className="mb-6">
+            <div className="mb-6 w-84 max-w-full mx-auto">
               {footer?.copyrightText
                 ? footer.copyrightText
                 : `©${new Date().getFullYear()} Jersey Water Works. All Rights Reserved.`}
@@ -100,14 +100,14 @@ const Footer = ({ siteLogoUrl, footer }) => {
           </div>
           <div className="w-1/2 bg-brand-green box-shadow-r-long-brand-green text-white">
             <div className="px-5 border-solid border-gray-500 border-b bg-brand-blue box-shadow-r-long-brand-blue">
-              <div className="w-84 max-w-full py-8 mx-auto">
-                <div className="mb-5 text-xl">
+              <div className="w-84 max-w-full pt-8 pb-14 mx-auto">
+                <div className="mb-8 text-xl font-museo">
                   New Jersey&rsquo;s water infrastructure needs an estimated $25
                   billion in upgrades over the next 20 years. What can we do
                   about it?
                 </div>
                 <Link href="#">
-                  <a className="inline-block px-3 py-4 border-solid border-white border-8 text-sm">
+                  <a className="inline-block px-3 py-4 border-solid border-white border-2 text-sm">
                     FIND OUT HOW YOU CAN MAKE A DIFFERENCE
                   </a>
                 </Link>
@@ -121,20 +121,19 @@ const Footer = ({ siteLogoUrl, footer }) => {
                       About Jersey Water Works
                     </a>
                   </Link>
-                  |
                   <Link href="#">
                     <a className="inline-block ml-2">Equity Statement</a>
                   </Link>
                 </div>
               </div>
             </div>
-            <div className="px-5 bg-brand-green box-shadow-r-long-brand-green">
-              <div className="w-84 max-w-full py-8 mx-auto">
-                <div className="mb-5 text-xl">
+            <div className="px-5 pb-12 bg-brand-green box-shadow-r-long-brand-green">
+              <div className="w-84 max-w-full py-9 mx-auto">
+                <div className="mb-8 text-xl font-museo">
                   Stay Informed
                 </div>
                 <Link href="#">
-                  <a className="inline-block px-3 py-4 border-solid border-white border-8 text-sm">
+                  <a className="inline-block px-3 py-4 border-solid border-white border-2 text-sm">
                     SUBSCRIBE TO OUR NEWSLETTER
                   </a>
                 </Link>
