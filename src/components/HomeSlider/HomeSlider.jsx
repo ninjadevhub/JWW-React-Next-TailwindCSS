@@ -5,11 +5,8 @@ import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import { FaLongArrowAltRight } from "react-icons/fa";
 
+const HomeSlider = ({resourceData,latestNewsData}) => {
 
-
-
-const HomeSlider = ({resourceData,latestNewsDatat}) => {
-  //console.log("dddasdasd",latestNewsDatat)
     const responsive = {
         superLargeDesktop: {
           breakpoint: { max: 4000, min: 3000 },
@@ -31,55 +28,62 @@ const HomeSlider = ({resourceData,latestNewsDatat}) => {
 
     return(
         <div>
-            <Carousel 
-            arrows={false}
-            responsive={responsive}>
-                {
-                    resourceData.map((item)=>(
-                        <div className="w-full bg-brand-gray" style={{ paddingBottom: '66.67%' }}>
-                            <Image
-                                src={`${item.featuredImage?.node?.sourceUrl}`}
-                                layout="fill"
-                                objectFit="cover"
-                                alt={item.featuredImage?.node?.altText ? item.featuredImage?.node?.altText : item.featuredImage?.node?.title}
-                            />
+            <Carousel arrows={true} responsive={responsive}>
+                {resourceData.map((item, index)=> (
+                    <div key={index} className="w-full bg-brand-gray" style={{ paddingBottom: '66.67%' }}>
+                        <Image
+                            src={item.featuredImage ? `${item.featuredImage?.node?.sourceUrl}`: '/images/image-placeholder.png'}
+                            layout="fill"
+                            objectFit="cover"
+                            alt={item.featuredImage ? item.featuredImage?.node?.altText : item.featuredImage?.node?.title}
+                        />
+                        <div className="m-1.5 inline-block">
+                            <Image src='/images/new.png' width={30} height={30} />
                         </div>
-                    ))
-                }
-               
+                    </div>
+                   )  
+                )}
             </Carousel>
-            <div>
+            <div className="mt-2 mb-8 flex" >
                 <Link href="/resources">
-                    <button class="flex flex-row bg-brand-blue items-center	 text-white  py-2 px-4 rounded">
-                        RESOURSES
+                    <button className="flex flex-row bg-brand-blue items-center text-white py-2 px-4">
+                        RESOURCES
                         <FaLongArrowAltRight
                             color={'white'}
                             className='ml-4'
                             />
                     </button>
                 </Link>
-              
+              <div className='relative bg-brand-orange flex-1 self-center h-px ml-6'>
+                  <div 
+                    className='absolute h-2 bg-brand-orange'
+                    style={{
+                        height: '5px',
+                        width: `calc(100%/${resourceData.length})`,
+                        top: '-2px',
+                    }} 
+                    />
+              </div>
             </div>
-            <Carousel 
-            arrows={false}
-            responsive={responsive}>
-                {
-                    latestNewsDatat.map((item)=>(
-                        <div className="w-full bg-brand-gray" style={{ paddingBottom: '66.67%' }}>
+            <Carousel arrows={true} responsive={responsive}>
+                {latestNewsData.map((item, index)=> (
+                        <div key={index} className="w-full bg-brand-gray" style={{ paddingBottom: '66.67%' }}>
                             <Image
-                                src={`${item.featuredImage?.node?.sourceUrl}`}
+                                src={item.featuredImage ? `${item.featuredImage?.node?.sourceUrl}` : '/images/image-placeholder.png'}
                                 layout="fill"
                                 objectFit="cover"
                                 alt={item.featuredImage?.node?.altText ? item.featuredImage?.node?.altText : item.featuredImage?.node?.title}
                             />
+                            <div className="m-1.5 inline-block">
+                                <Image src='/images/new.png' width={30} height={30} />
+                            </div>
                         </div>
-                    ))
-                }
-               
+                    ) 
+                )}
             </Carousel>
-            <div >
+            <div className='flex' >
                 <Link href="/latest-news">
-                    <button class="flex flex-row bg-brand-blue items-center	 text-white  py-2 px-4 rounded">
+                    <button className="flex flex-row bg-brand-blue items-center	text-white py-2 px-4 mt-2">
                         LATEST NEWS
                         <FaLongArrowAltRight
                             color={'white'}
@@ -87,7 +91,16 @@ const HomeSlider = ({resourceData,latestNewsDatat}) => {
                             />
                     </button>
                 </Link>
-              
+                <div className='relative bg-brand-orange flex-1 self-center h-px ml-6'>
+                  <div 
+                    className='absolute h-2 bg-brand-orange'
+                    style={{
+                        height: '5px',
+                        width: `calc(100%/${resourceData.length})`,
+                        top: '-2px',
+                    }} 
+                    />
+              </div>
             </div>
             
         </div>

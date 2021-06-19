@@ -14,13 +14,13 @@ export default function Accessibility({
     return (
       <button
         type="button"
-        className="fixed left-0 top-40 z-50 p-0 border-none bg-transparent"
+        className="fixed left-0 top-36 z-50 p-0 border-none bg-transparent"
         onClick={() => setMenuIsOpen(true)}
       >
         <Image
           src="/images/accessibility.png"
-          width={not2xl ? 47 : 94}
-          height={not2xl ? 47 : 94}
+          width={60}
+          height={60}
           alt="Accessibility"
         />
       </button>
@@ -32,7 +32,7 @@ export default function Accessibility({
   );
 
   return (
-    <div className="fixed left-0 top-44 z-50 p-2 border-solid border-r-4 2xl:border-r-8 border-brand-blue-2 bg-brand-gray">
+    <div className="fixed left-0 top-40 z-50 p-2 border-solid border-r-8 border-brand-blue-2 bg-brand-gray">
       <div
         className="relative overflow-y-auto"
         style={{ width: not2xl ? 200 : 400, maxHeight: 'calc(100vh - 12rem)' }}
@@ -300,8 +300,8 @@ export default function Accessibility({
       >
         <Image
           src="/images/close-accessibility.png"
-          width={not2xl ? 47 : 94}
-          height={not2xl ? 47 : 94}
+          width={60}
+          height={60}
           alt="Close accessibility menu"
         />
       </button>

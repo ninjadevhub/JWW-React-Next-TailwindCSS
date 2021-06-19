@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import Header from './header/Header';
 import Footer from './footer/Footer';
 import Accessibility from '../Accessibility/Accessibility';
+import Subscribe from '../Subscribe/Subscribe';
 import Head from 'next/head';
 import Seo from '../seo';
 import {isEmpty} from 'lodash';
@@ -92,6 +93,7 @@ const Layout = ( {data, isPost, children} ) => {
 			  accessibilitySettings={accessibilitySettings}
 			  setAccessibilitySettings={setAccessibilitySettings}
 			/>
+			<Subscribe />
 			{(router.pathname === '/committees') ?
       <div className="committee-cta">
         <div className="committee-become">

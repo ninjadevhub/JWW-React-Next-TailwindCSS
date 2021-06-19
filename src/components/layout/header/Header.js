@@ -2,6 +2,7 @@ import { useState, useRef } from 'react';
 import { useWordPressContext } from '../../common/WordPressProvider';
 import Link from 'next/link';
 import Image from 'next/image';
+import { FaChevronRight } from 'react-icons/fa'
 import Navigation from './Navigation';
 import CommitteesMegaMenu from './CommitteesMegaMenu';
 import ResourcesMegaMenu from './ResourcesMegaMenu';
@@ -25,12 +26,15 @@ const Header = ({ header, openSearchModal }) => {
     <header className={styles.header}>
       <div className=" bg-brand-blue text-white">
         <div className="md:container mx-auto py-2 flex justify-center items-center">
-          <span className="mr-8">
-            April 26: Water Exchange Speaker Series: Preparing for Climate
-            Change in the Wake of Houston&rsquo;s Water Crisis
-          </span>
-          <Link href="">
-            <a className="text-white text-semibold">Join Us</a>
+          <div className="mr-8 font-light">
+              April 26: Water Exchange Speaker Series: Preparing for Climate Change
+              in the Wake of Houston&rsquo;s Water Crisis  
+          </div>
+          <Link href="#">
+            <a className="flex items-center text-white text-semibold text-center">
+              <span>Join Us</span>
+              <FaChevronRight className='ml-1 mb-0.5 text-xs' />
+            </a>
           </Link>
         </div>
       </div>
@@ -69,15 +73,11 @@ const Header = ({ header, openSearchModal }) => {
               styles={styles}
               className={styles.primaryMenu}
             />
-            <div className="flex border-solid border-gray-500 border-b-2 mb-6">
-              <input
-                className="border-none bg-transparent w-32"
-                placeholder="Search"
-              />
-              <button
+            <div className="flex border-solid border-gray-500 text-yellow-500 mb-2.5">
+            <button
                 type="button"
                 title="Submit your search query."
-                className=""
+                className="mr-2"
                 onClick={openSearchModal}
               >
                 <svg
@@ -87,9 +87,13 @@ const Header = ({ header, openSearchModal }) => {
                   height="10"
                   viewBox="0 0 40 40"
                 >
-                  <path d="M26.804 29.01c-2.832 2.34-6.465 3.746-10.426 3.746C7.333 32.756 0 25.424 0 16.378 0 7.333 7.333 0 16.378 0c9.046 0 16.378 7.333 16.378 16.378 0 3.96-1.406 7.594-3.746 10.426l10.534 10.534c.607.607.61 1.59-.004 2.202-.61.61-1.597.61-2.202.004L26.804 29.01zm-10.426.627c7.323 0 13.26-5.936 13.26-13.26 0-7.32-5.937-13.257-13.26-13.257C9.056 3.12 3.12 9.056 3.12 16.378c0 7.323 5.936 13.26 13.258 13.26z"></path>
+                  <path d="M26.804 29.01c-2.832 2.34-6.465 3.746-10.426 3.746C7.333 32.756 0 25.424 0 16.378 0 7.333 7.333 0 16.378 0c9.046 0 16.378 7.333 16.378 16.378 0 3.96-1.406 7.594-3.746 10.426l10.534 10.534c.607.607.61 1.59-.004 2.202-.61.61-1.597.61-2.202.004L26.804 29.01zm-10.426.627c7.323 0 13.26-5.936 13.26-13.26 0-7.32-5.937-13.257-13.26-13.257C9.056 3.12 3.12 9.056 3.12 16.378c0 7.323 5.936 13.26 13.258 13.26z" fill="#fbbf24"></path>
                 </svg>
               </button>
+              <input
+                className="focus:outline-none bg-transparent w-32 placeholder-yellow-500 placeholder-opacity-100"
+                placeholder="Search"
+              />
             </div>
           </div>
         </div>

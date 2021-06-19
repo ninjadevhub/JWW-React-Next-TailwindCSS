@@ -22,6 +22,7 @@ function MyApp({ Component, pageProps }) {
     sitewideSettings: sitewideSettings,
   });
 
+
   return (
     <ApolloProvider client={client}>
       <WordPressProvider value={wp}>

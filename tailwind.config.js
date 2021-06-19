@@ -15,6 +15,8 @@ module.exports = {
       gray: colors.trueGray,
       blue: colors.blue,
       red: colors.red,
+      yellow: colors.yellow,
+      green: colors.green,
       'brand-blue': '#4579a1',
       'brand-blue-2': '#325976',
       'brand-navy': '#1b3c53',
