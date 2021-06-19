@@ -8,7 +8,7 @@ import { GET_ABOUT_JERSEY_WATER } from '../../src/queries/about/about';
 
 
 
-export default function About ({data}) {
+export default function BackboneStaff ({data}) {
 
     const { about: jerseydata } = data.pageBy;
 
@@ -16,7 +16,7 @@ export default function About ({data}) {
     return (
         
         <Layout data={data}>
-          <AboutJerseyWater  data={jerseydata} dataLeadersSteering={data} activeTab="About" />
+          <AboutJerseyWater  data={jerseydata} dataLeadersSteering={data} activeTab="Backbone" />
         </Layout>
 
     )

@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import { FaAngleRight,FaAngleDown, } from "react-icons/fa";
-import Image from '../../image/index'
+//import Image from '../../image/index'
+import Image from 'next/image';
 
 const Backbone = ({data,dataLeadersSteering,src}) => {
 
@@ -34,10 +35,13 @@ const Backbone = ({data,dataLeadersSteering,src}) => {
                                     <div className='flex flex-row justify-between mt-4 bg-brand-table p-6'>
                                         <div className='flex flex-col'>
                                             <div className='flex flex-row'>
-                                                <div>
-                                                    <Image 
-                                                   
-                                                    sourceUrl={item.backboneStaff.profilePicture}/>
+                                                <div className="rounded-full">
+                                                    <Image
+                                                      src={item.backboneStaff?.profilePicture?.sourceUrl}
+                                                      width={80}
+                                                      height={80}
+                                                      alt={(item.backboneStaff?.profilePicture?.altText || item.backboneStaff?.profilePicture?.title) ?? ''}
+                                                    />
                                                 </div>    
                                                 <div className='flex flex-col ml-8'>
                                                     <div className='flex flex-row'>
@@ -75,7 +79,14 @@ const Backbone = ({data,dataLeadersSteering,src}) => {
   
                                           <div className='flex flex-row mt-4'>
                                               <div className='w-40 flex flex items-center  '>
-                                                   <Image sourceUrl={item.backboneStaff.workLogo.sourceUrl} />
+                                                  <div style={{ width: 100, height: 80 }}>
+                                                    <Image
+                                                      src={item.backboneStaff?.workLogo?.sourceUrl}
+                                                      layout="fill"
+                                                      objectFit="cover"
+                                                      alt={(item.backboneStaff?.workLogo?.altText || item.backboneStaff?.workLogo?.title) ?? ''}
+                                                    />
+                                                  </div>
                                               </div>
                                               <div className='flex items-center ml-4'>
                                                    <p className='font-nova text-brand-gray-typo text-xl'>{item.backboneStaff.workText}</p>
@@ -98,7 +109,9 @@ const Backbone = ({data,dataLeadersSteering,src}) => {
                         <Image 
                         width={170}
                         height={70}
-                        sourceUrl={data.backboneStaffWork1Logo.sourceUrl} />
+                        src={data.backboneStaffWork1Logo?.sourceUrl}
+                        alt={(data.backboneStaffWork1Logo?.altText || data.backboneStaffWork1Logo?.title) ?? ''}
+                        />
                     </div>
                     <div className='ml-4 flex items-center'>
                             <p>{data.backboneStaffWork1Text}</p>
@@ -111,7 +124,9 @@ const Backbone = ({data,dataLeadersSteering,src}) => {
                         <Image
                          width={180}
                          height={100}   
-                         sourceUrl={data.backboneStaffWork2Logo.sourceUrl} />
+                         src={data.backboneStaffWork2Logo?.sourceUrl}
+                         alt={(data.backboneStaffWork2Logo?.altText || data.backboneStaffWork2Logo?.title) ?? ''}
+                         />
                     </div>
                     <div className='ml-4 flex items-center'>
                             <p>{data.backboneStaffWork2Text}</p>

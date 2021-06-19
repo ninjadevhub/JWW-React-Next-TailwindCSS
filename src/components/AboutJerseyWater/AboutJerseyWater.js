@@ -1,4 +1,5 @@
-import React,{useState} from "react"
+import React,{useState} from "react";
+import Link from 'next/link';
 import AboutTab from "./AboutTabs/AboutTab";
 import Goals from "./AboutTabs/Goals";
 import History from "./AboutTabs/History";
@@ -39,8 +40,7 @@ const customStyles = {
 
 
 
-const AboutJerseyWater = ({data,dataLeadersSteering}) => {
-    const [activeTab, setActiveTab] = useState(tabs.about);
+const AboutJerseyWater = ({data, dataLeadersSteering, activeTab}) => {
 
     const [showModal, setShowModal] = useState(false)
 
@@ -97,25 +97,39 @@ const AboutJerseyWater = ({data,dataLeadersSteering}) => {
 
                 <div className='flex flex-row justify-around items-center bg-brand-gray h-12 w-full font-nova text-base'>
                     <div>
-                         <a className='bg-green-500 active:text-green-700 cursor-pointer' onClick={() => setActiveTab(tabs.about)}>ABOUT</a>
+                        <Link href="/about/">
+                         <a className='cursor-pointer'>ABOUT</a>
+                        </Link>
                     </div>
                     <div>
-                         <a className='cursor-pointer ' onClick={() => setActiveTab(tabs.goals) }>GOALS</a>
+                        <Link href="/about/goals/">
+                         <a className='cursor-pointer'>GOALS</a>
+                        </Link>
                     </div>
                     <div>
-                         <a className='cursor-pointer' onClick={() => setActiveTab(tabs.theCollaborative)}>THE COLLABORATIVE</a>
+                        <Link href="/about/the-collaborative/">
+                         <a className='cursor-pointer'>THE COLLABORATIVE</a>
+                        </Link>
                     </div>
                     <div>
-                         <a className='cursor-pointer' onClick={() => setActiveTab(tabs.history)}>HISTORY</a>
+                        <Link href="/about/history/">
+                         <a className='cursor-pointer'>HISTORY</a>
+                        </Link>
                     </div>
                     <div>
-                         <a className='cursor-pointer' onClick={() => setActiveTab(tabs.members)}>MEMBERS</a>
+                        <Link href="/about/members/">
+                         <a className='cursor-pointer'>MEMBERS</a>
+                        </Link>
                     </div>
                     <div>
-                         <a className='cursor-pointer' onClick={() => setActiveTab(tabs.leaders)}>LEADERS</a>
+                        <Link href="/about/leaders/">
+                         <a className='cursor-pointer'>LEADERS</a>
+                        </Link>
                     </div>
                     <div>
-                         <a className='cursor-pointer' onClick={() => setActiveTab(tabs.backbone)}>Backbone Staff</a>
+                        <Link href="/about/backbone-staff/">
+                         <a className='cursor-pointer'>BACKBONE STAFF</a>
+                        </Link>
                     </div>
                 </div>
 
