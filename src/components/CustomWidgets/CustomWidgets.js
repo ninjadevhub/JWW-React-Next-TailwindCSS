@@ -66,10 +66,10 @@ function CustomWidgets({
 
   const hasNoFilter =
     !currentRefinement &&
-    (committees.length === 0 || committees[0].value === '') &&
-    (topics.length === 0 || topics[0].value === '') &&
-    (types.length === 0 || types[0].value === '') &&
-    (selectedYears.length === 0 || selectedYears[0].value === '');
+    (committees?.length === 0 || committees[0]?.value === '') &&
+    (topics?.length === 0 || topics[0]?.value === '') &&
+    (types?.length === 0 || types[0]?.value === '') &&
+    (selectedYears?.length === 0 || selectedYears[0]?.value === '');
 
   return (
     <>
@@ -201,10 +201,10 @@ function CustomWidgets({
             </div>
           </div>
           {(currentRefinement ||
-            (committees.length > 0 && committees[0]?.value) ||
-            (topics.length > 0 && topics[0]?.value) ||
-            (types.length > 0 && types[0]?.value) ||
-            (selectedYears.length > 0 && selectedYears[0]?.value)) && (
+            (committees?.length > 0 && committees[0]?.value) ||
+            (topics?.length > 0 && topics[0]?.value) ||
+            (types?.length > 0 && types[0]?.value) ||
+            (selectedYears?.length > 0 && selectedYears[0]?.value)) && (
             <div className="pb-6 pl-6 pr-6">
               <div className="flex justify-end pt-2 text-brand-green">
                 <CustomClearRefinements
@@ -231,7 +231,7 @@ function CustomWidgets({
                     </button>
                   </div>
                 )}
-                {committees.length > 0 &&
+                {committees?.length > 0 &&
                   committees[0]?.value &&
                   committees.map((committee) => (
                     <div
@@ -260,8 +260,8 @@ function CustomWidgets({
                       </button>
                     </div>
                   ))}
-                {topics.length > 0 &&
-                  topics[0].value !== '' &&
+                {topics?.length > 0 &&
+                  topics[0]?.value !== '' &&
                   topics.map((topic) => (
                     <div
                       className="relative pl-4 pr-8 mr-4 mt-2 rounded-full bg-brand-gray"
@@ -286,8 +286,8 @@ function CustomWidgets({
                       </button>
                     </div>
                   ))}
-                {types.length > 0 &&
-                  types[0].value !== '' &&
+                {types?.length > 0 &&
+                  types[0]?.value !== '' &&
                   types.map((type) => (
                     <div
                       className="relative pl-4 pr-8 mr-4 mt-2 rounded-full bg-brand-gray"
@@ -312,8 +312,8 @@ function CustomWidgets({
                       </button>
                     </div>
                   ))}
-                {selectedYears.length > 0 &&
-                  selectedYears[0].value !== '' &&
+                {selectedYears?.length > 0 &&
+                  selectedYears[0]?.value !== '' &&
                   selectedYears.map((selectedYear) => (
                     <div
                       className="relative pl-4 pr-8 mr-4 mt-2 rounded-full bg-brand-gray"
@@ -343,7 +343,7 @@ function CustomWidgets({
           )}
         </div>
       </div>
-      {topics.length > 0 && topics[0].value && (
+      {topics?.length > 0 && topics[0]?.value && (
         <div className="flex w-full mt-8">
           <div className="w-52 min-h-33 flex justify-center items-center px-8 py-4 text-center bg-brand-green text-white text-2xl">
             Topic Overviews
@@ -361,7 +361,7 @@ function CustomWidgets({
           </div>
         </div>
       )}
-      {committees.length > 0 && committees[0].value && (
+      {committees?.length > 0 && committees[0]?.value && (
         <div className="flex w-full mt-4">
           <div className="w-52 min-h-33 flex justify-center items-center px-8 py-4 text-center bg-brand-green text-white text-2xl">
             Topic Overviews

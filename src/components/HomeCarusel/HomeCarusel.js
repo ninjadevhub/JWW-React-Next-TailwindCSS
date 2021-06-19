@@ -18,7 +18,6 @@ class HomeCarusel extends Component {
                     showArrows={true}
                     showStatus={false}
                 >
-
                 {carusel.map((item, index)=> (
                   <div key={index} className='flex flex-col w-100 bg-cover'
                   style={{
@@ -64,11 +63,7 @@ class HomeCarusel extends Component {
                       
                   </div>
               </div>
-                ))}
-
-                    
-                    
-              
+                ))}	
             </Carousel>
         );
     }

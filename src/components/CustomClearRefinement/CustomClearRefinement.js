@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { connectCurrentRefinements } from 'react-instantsearch-dom';
 
 function ClearRefinements({
@@ -18,4 +19,4 @@ function ClearRefinements({
   );
 }
 
-export default connectCurrentRefinements(ClearRefinements);
+export default memo(connectCurrentRefinements(ClearRefinements));
