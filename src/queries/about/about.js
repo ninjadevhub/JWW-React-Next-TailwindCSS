@@ -125,12 +125,10 @@ query MyQuery {
           sourceUrl(size: LARGE)
         }
         title
-        workLogo {
-          altText
-          title(format: RENDERED)
-          sourceUrl(size: LARGE)
-        }
-        workText
+        roleAtJww
+        roleAtNjf
+        workplace
+        staffBio
       }
     }
   }

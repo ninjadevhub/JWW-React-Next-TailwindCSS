@@ -2,6 +2,7 @@ import React, { useState } from "react"
 import { FaAngleRight,FaAngleDown, } from "react-icons/fa";
 //import Image from '../../image/index'
 import Image from 'next/image';
+import { sanitize } from '../../../utils/miscellaneous';
 
 const Backbone = ({data,dataLeadersSteering,src}) => {
 
@@ -77,21 +78,57 @@ const Backbone = ({data,dataLeadersSteering,src}) => {
                                     {arrows.includes(item.backboneStaffMemberId) ?
                                           <div className='bg-brand-form-bg1 p-8 flex flex-col border-b-4 border-brand-borderB-color'>
   
+                                          <div 
+                                            className=''
+                                            dangerouslySetInnerHTML={{
+                                                __html: sanitize(
+                                                  item.backboneStaff?.staffBio ?? ''
+                                                ),
+                                              }}
+                                            />
+
+                                          {item.backboneStaff?.workplace?.includes('Jersey Water Works') &&
                                           <div className='flex flex-row mt-4'>
                                               <div className='w-40 flex flex items-center  '>
-                                                  <div style={{ width: 100, height: 80 }}>
                                                     <Image
-                                                      src={item.backboneStaff?.workLogo?.sourceUrl}
-                                                      layout="fill"
-                                                      objectFit="cover"
-                                                      alt={(item.backboneStaff?.workLogo?.altText || item.backboneStaff?.workLogo?.title) ?? ''}
+                                                      src="/images/jersey-water-works-logo.png"
+                                                      width={252}
+                                                      height={99}
+                                                      alt="Jersey Water Works"
                                                     />
-                                                  </div>
-                                              </div>
+                                                </div>
                                               <div className='flex items-center ml-4'>
-                                                   <p className='font-nova text-brand-gray-typo text-xl'>{item.backboneStaff.workText}</p>
+                                                   <div 
+                                                     className='font-nova text-brand-gray-typo text-xl'
+                                                     dangerouslySetInnerHTML={{
+                                                        __html: sanitize(
+                                                          item.backboneStaff?.roleAtJww ?? ''
+                                                        ),
+                                                      }}
+                                                    />
                                               </div>     
-                                          </div>    
+                                          </div>}
+                                          {item.backboneStaff?.workplace?.includes('New Jersey Future') &&
+                                          <div className='flex flex-row mt-4'>
+                                              <div className='w-40 flex flex items-center  '>
+                                                    <Image
+                                                      src="/images/new-jersey-future-logo.png"
+                                                      width={252}
+                                                      height={99}
+                                                      alt="New Jersey Future"
+                                                    />
+                                                </div>
+                                              <div className='flex items-center ml-4'>
+                                                   <div 
+                                                     className='font-nova text-brand-gray-typo text-xl'
+                                                     dangerouslySetInnerHTML={{
+                                                        __html: sanitize(
+                                                          item.backboneStaff?.roleAtNjf ?? ''
+                                                        ),
+                                                      }}
+                                                    />
+                                              </div>     
+                                          </div>}
                                       </div>   
                                       : null
                                     }
