@@ -12,6 +12,7 @@ import {
   cycle3Colors,
   findYearSlideIndex,
   getSlidesCountForYear,
+  sanitize,
 } from '../../utils/miscellaneous';
 
 SwiperCore.use([Autoplay, Navigation, Pagination, EffectFade, A11y]);
@@ -82,7 +83,7 @@ export default function YearsCarousel({ name, data, asc }) {
                 >
                   <h2 className="mb-4 text-3xl-2">{item[name]?.year}</h2>
                   <h3 className="mb-4 text-2xl-2">{item[name]?.heading}</h3>
-                  <div className="text-xl">{item[name]?.description}</div>
+                  <div className="text-xl" dangerouslySetInnerHTML={{__html: sanitize(item[name]?.description ?? '' )}} />
                 </div>
               </div>
             </SwiperSlide>
@@ -113,7 +114,7 @@ export default function YearsCarousel({ name, data, asc }) {
                     </div>
                     <div className="h-full flex-1 overflow-y-auto p-10 bg-brand-gray">
                       <h3 className="mb-4 text-2xl-2">{box.heading}</h3>
-                      <div className="">{box.text}</div>
+                      <div dangerouslySetInnerHTML={{__html: sanitize(box.text)}}/>
                     </div>
                   </div>
                 </div>
