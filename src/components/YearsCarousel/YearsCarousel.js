@@ -14,6 +14,7 @@ import {
   getSlidesCountForYear,
   sanitize,
 } from '../../utils/miscellaneous';
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
 SwiperCore.use([Autoplay, Navigation, Pagination, EffectFade, A11y]);
 
@@ -51,12 +52,34 @@ export default function YearsCarousel({ name, data, asc }) {
         })}
       </div>
       <Swiper
+        className="relative"
         initialSlide={initialSlide}
-        slidesPerView={4}
-        spaceBetween={30}
+        slidesPerView={1}
         ref={swiperRef}
-        observer={true}
-        observeParents={true}
+        navigation={{
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev',
+        }}
+        breakpoints={{
+          700: {
+            slidesPerView: 2.3,
+            spaceBetween: 30
+          },
+          1300: {
+            slidesPerView: 3.3,
+            spaceBetween: 30
+          },
+          1800: {
+            slidesPerView: 4.3,
+            spaceBetween: 30
+          },
+          2300: {
+            slidesPerView: 5.3,
+            spaceBetween: 30,
+          },
+        }}
+        //observer={true}
+        //observeParents={true}
         onSlideChange={(swiper) => {
           const activeYear = swiper.slides?.[swiper.activeIndex]?.dataset?.year;
           setActiveYear(activeYear);
@@ -79,7 +102,7 @@ export default function YearsCarousel({ name, data, asc }) {
                   className={`h-full p-10 border-solid border-b-8 border-brand-green bg-${cycle3Colors(
                     i
                   )} text-white`}
-                  style={{ maxHeight: '80vh' }}
+                  style={{ hight: 580 }}
                 >
                   <h2 className="mb-4 text-3xl-2">{item[name]?.year}</h2>
                   <h3 className="mb-4 text-2xl-2">{item[name]?.heading}</h3>
@@ -95,11 +118,11 @@ export default function YearsCarousel({ name, data, asc }) {
                 <div className="h-full">
                   <div
                     className="h-full flex flex-col border-solid border-b-8 border-brand-green"
-                    style={{ maxHeight: '80vh' }}
+                    style={{ height: 580 }}
                   >
                     <div
                       className="w-full relative bg-brand-gray-pale"
-                      style={{ paddingBottom: '81%' }}
+                      style={{ height: 300 }}
                     >
                       <Image
                         src={box.image?.sourceUrl}
@@ -124,6 +147,18 @@ export default function YearsCarousel({ name, data, asc }) {
 
           return arr;
         }, [])}
+        <button
+          type="button"
+          className="swiper-button-prev w-14 h-14 absolute top-1/2 left-0 z-20 -mt-7 flex justify-center items-center border-none rounded-r-sm bg-white bg-opacity-70 transition-opacity hover:bg-opacity-100"
+        >
+          <FaChevronLeft size={24} color="#111" />
+        </button>
+        <button
+          type="button"
+          className="swiper-button-next w-14 h-14 absolute top-1/2 right-0 z-20 -mt-7 flex justify-center items-center border-none rounded-l-sm bg-white bg-opacity-70 transition-opacity hover:bg-opacity-100"
+        >
+          <FaChevronRight size={24} color="#111" />
+        </button>
       </Swiper>
       <div className="w-full relative border-solid border-b border-brand-orange mt-8">
         <div
