@@ -77,7 +77,7 @@ export default function LatestNews({ data }) {
   
   const [topicOption, setTopicOption] = useState(defaultTopicOption);
   const [searchMode, setSearchMode] = useState('');
-  const [facetFilters, setFacetFilters] = useState([`taxonomies_topic:${data?.topic?.name ?? ''}`]);
+  const [facetFilters, setFacetFilters] = useState([`taxonomies_topic:${data?.topicOverview?.topic?.name ?? ''}`]);
   //const [topics, setTopics] = useState([]);
   const [newsSources, setNewsSources] = useState([]);
   const [selectedYears, setSelectedYears] = useState([]);

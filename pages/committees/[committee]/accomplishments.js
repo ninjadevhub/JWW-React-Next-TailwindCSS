@@ -76,7 +76,7 @@ export default function CommitteeOverview({ data }) {
       data?.accomplishments?.nodes
         ?.filter(
           (node) =>
-            node.accomplishments?.committee?.slug === data?.committee?.slug
+            node.accomplishments?.committee?.slug === slug
         )
         ?.sort((a, b) => +b.accomplishments?.year - +a.accomplishments?.year),
     [data]

@@ -82,7 +82,7 @@ export default function Resources({ data }) {
   
   const [topicOption, setTopicOption] = useState(defaultTopicOption);
   const [searchMode, setSearchMode] = useState('');
-  const [facetFilters, setFacetFilters] = useState([`taxonomies_topic:${data?.topic?.name ?? ''}`]);
+  const [facetFilters, setFacetFilters] = useState([`taxonomies_topic:${data?.topicOverview?.topic?.name ?? ''}`]);
   const [committees, setCommittees] = useState([]);
   //const [topics, setTopics] = useState([]);
   const [types, setTypes] = useState([]);

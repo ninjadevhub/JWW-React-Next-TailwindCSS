@@ -42,7 +42,7 @@ export default function CommitteeOverview({ data }) {
     () =>
       data?.coChairs?.nodes
         ?.filter(
-          (node) => node.coChair?.committee?.slug === data?.committee?.slug
+          (node) => node.coChair?.committee?.slug === slug
         )
         ?.sort((a, b) =>
           a.coChair?.firstName < b.coChair?.firstName ? -1 : 1
