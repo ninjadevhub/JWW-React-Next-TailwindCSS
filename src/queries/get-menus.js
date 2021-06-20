@@ -119,6 +119,24 @@ export const HeaderFooter = `
       button2Text
       button2Url
     }
+    workPlansMegaMenu {
+      block1ButtonColor
+      block1ButtonText
+      block1ButtonUrl
+      block1Image {
+        altText
+        sourceUrl(size: LARGE)
+        title(format: RENDERED)
+      }
+      block2ButtonColor
+      block2ButtonText
+      block2ButtonUrl
+      block2Image {
+        altText
+        title(format: RENDERED)
+        sourceUrl(size: LARGE)
+      }
+    }
   },
   footer: getFooter {
     copyrightText

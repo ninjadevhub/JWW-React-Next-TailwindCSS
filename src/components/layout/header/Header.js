@@ -7,20 +7,23 @@ import Navigation from './Navigation';
 import CommitteesMegaMenu from './CommitteesMegaMenu';
 import ResourcesMegaMenu from './ResourcesMegaMenu';
 import LatestNewsMegaMenu from './LatestNewsMegaMenu';
+import WorkPlansMegaMenu from './WorkPlansMegaMenu';
 import styles from '../../../styles/components/layout/header/index.module.scss';
 
 const Header = ({ header, openSearchModal }) => {
   const [committeesMegaMenuIsActive, setCommitteesMegaMenuIsActive] = useState(false);
   const [resourcesMegaMenuIsActive, setResourcesMegaMenuIsActive] = useState(false);
   const [latestNewsMegaMenuIsActive, setLatestNewsMegaMenuIsActive] = useState(false);
+  const [workPlansMegaMenuIsActive, setWorkPlansMegaMenuIsActive] = useState(false);
   const { menus, sitewideSettings } = useWordPressContext();
   const committeesMegaMenuRef = useRef(null);
   const resourcesMegaMenuRef = useRef(null);
   const latestNewsMegaMenuRef = useRef(null);
+  const workPlansMegaMenuRef = useRef(null);
   const headerMenu = menus?.nodes?.filter((node) =>
     node.locations?.includes('HCMS_MENU_HEADER')
   )?.[0]?.menuItems?.nodes;
-  const { committeesMegaMenu, resourcesMegaMenu, latestNewsMegaMenu } = sitewideSettings || {};
+  const { committeesMegaMenu, resourcesMegaMenu, latestNewsMegaMenu, workPlansMegaMenu } = sitewideSettings || {};
 
   return (
     <header className={styles.header}>
@@ -70,6 +73,8 @@ const Header = ({ header, openSearchModal }) => {
               resourcesMegaMenuIsActive={resourcesMegaMenuIsActive}
               latestNewsMegaMenuRef={latestNewsMegaMenuRef}
               latestNewsMegaMenuIsActive={latestNewsMegaMenuIsActive}
+              workPlansMegaMenuRef={workPlansMegaMenuRef}
+              workPlansMegaMenuIsActive={workPlansMegaMenuIsActive}
               styles={styles}
               className={styles.primaryMenu}
             />
@@ -119,6 +124,13 @@ const Header = ({ header, openSearchModal }) => {
             ref={resourcesMegaMenuRef}
             setResourcesMegaMenuIsActive={setResourcesMegaMenuIsActive}
             resourcesMegaMenu={resourcesMegaMenu}
+          />
+        )}
+        {workPlansMegaMenu && (
+          <WorkPlansMegaMenu
+            ref={workPlansMegaMenuRef}
+            setWorkPlansMegaMenuIsActive={setWorkPlansMegaMenuIsActive}
+            workPlansMegaMenu={workPlansMegaMenu}
           />
         )}
       </div>

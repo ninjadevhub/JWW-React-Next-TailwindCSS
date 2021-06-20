@@ -13,12 +13,15 @@ export default function Navigation({
   resourcesMegaMenuIsActive,
   latestNewsMegaMenuRef,
   latestNewsMegaMenuIsActive,
+  workPlansMegaMenuRef,
+  workPlansMegaMenuIsActive,
 }) {
   const { asPath } = useRouter();
   const megaMenuMap = {
     '/committees/asset-management-and-finance-committee/': committeesMegaMenuRef,
     '/resources/': resourcesMegaMenuRef,
     '/latest-news/': latestNewsMegaMenuRef,
+    '/work-plans/': workPlansMegaMenuRef,
   };
 
   return (
@@ -43,7 +46,8 @@ export default function Navigation({
                           (isLinkActive(asPath, item.path) || 
                           (item.path === '/committees/asset-management-and-finance-committee/' && committeesMegaMenuIsActive) ||
                           (item.path === '/resources/' && resourcesMegaMenuIsActive) ||
-                          (item.path === '/latest-news/' && latestNewsMegaMenuIsActive)) && styles.active  
+                          (item.path === '/latest-news/' && latestNewsMegaMenuIsActive) ||
+                          (item.path === '/work-plans/' && workPlansMegaMenuIsActive)) && styles.active  
                         )}
                         onMouseEnter={() => {
                           const megaMenuClassList = megaMenuMap[item.path]?.current?.classList;
