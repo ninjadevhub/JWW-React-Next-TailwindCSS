@@ -84,12 +84,12 @@ export default function CommitteeOverview({ data }) {
   return (
     <Layout data={data}>
       <div className="w-full relative bg-brand-gray" style={{ height: 340 }}>
-        {data?.committee?.Committee?.backgroundImage && (
+        {data?.committeeOverview?.backgroundImage && (
           <Image
-            src={data?.committee?.Committee?.backgroundImage?.sourceUrl}
+            src={data?.committeeOverview?.backgroundImage?.sourceUrl}
             alt={
-              data?.committee?.Committee?.backgroundImage?.altText ||
-              data?.committee?.Committee?.backgroundImage?.title
+              data?.committeeOverview?.backgroundImage?.altText ||
+              data?.committeeOverview?.backgroundImage?.title
             }
             layout="fill"
             objectFit="cover"
