@@ -70,6 +70,11 @@ export default function Resources({ data }) {
 
   const slug = data?.slug ?? '';
   const name = data?.committeeOverview?.committee?.name ?? '';
+  const committeesMap = {};
+  data?.committees?.nodes?.forEach(node => {
+    committeesMap[node.name] = node.slug;
+  });
+  
   const defaultCommitteeOption = { value: '', label: 'Change Committee' };
   const committeesOptions = [
     defaultCommitteeOption,
