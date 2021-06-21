@@ -61,19 +61,19 @@ export default function YearsCarousel({ name, data, asc }) {
           prevEl: '.swiper-button-prev',
         }}
         breakpoints={{
-          700: {
+          600: {
             slidesPerView: 2.3,
             spaceBetween: 30
           },
-          1300: {
+          1200: {
             slidesPerView: 3.3,
             spaceBetween: 30
           },
-          1800: {
+          1700: {
             slidesPerView: 4.3,
             spaceBetween: 30
           },
-          2300: {
+          2200: {
             slidesPerView: 5.3,
             spaceBetween: 30,
           },
@@ -122,7 +122,7 @@ export default function YearsCarousel({ name, data, asc }) {
                   >
                     <div
                       className="w-full relative bg-brand-gray-pale"
-                      style={{ height: 300 }}
+                      style={{ height: 170 }}
                     >
                       <Image
                         src={box.image?.sourceUrl}

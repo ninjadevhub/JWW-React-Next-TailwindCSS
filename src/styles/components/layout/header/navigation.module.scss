@@ -1,19 +1,20 @@
 .navigation {
-  @apply flex items-end;
+  @apply flex items-center;
 
   & > ul {
     @apply flex flex-wrap justify-center;
 
     & > li {
-      @apply relative mb-2;
+      @apply relative;
 
-      & a {
-        @apply block pt-1 px-4 pb-3;
+      & a,
+      & button {
+        @apply block border-none py-3 px-4 bg-transparent;
 
         &:hover,
         &:focus,
         &.active {
-          @apply bg-brand-blue text-white;
+          @apply text-brand-blue;
         }
       }
 

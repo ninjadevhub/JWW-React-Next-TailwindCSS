@@ -3,11 +3,17 @@ import Button from '../../Button/Button';
 import Link from 'next/link';
 
 const ResourcesMegaMenu = forwardRef(
-  ({ setResourcesMegaMenuIsActive, resourcesMegaMenu }, ref) => (
+  ({ resourcesMegaMenu }, ref) => (
     <div
       ref={ref}
-      className="absolute z-50 left-0 top-full hidden flex-wrap overflow-hidden pt-6 pb-36 -mt-2 md:-mx-2 lg:-mx-6 border-solid border-t-4 border-brand-blue bg-white"
-      onMouseEnter={() => {
+      id="resources-mega-menu"
+      className="mega-menu absolute z-50 left-0 top-full hidden flex-wrap overflow-hidden pt-6 pb-36 -mt-2 md:-mx-2 lg:-mx-6 border-solid border-t-4 border-brand-blue bg-white bg-clip-padding"
+      style={{
+        borderLeft: '1.25rem solid rgba(255, 255, 255, 0.5)',
+        borderRight: '1.25rem solid rgba(255, 255, 255, 0.5)',
+        borderBottom: '1.25rem solid rgba(255, 255, 255, 0.5)',
+      }}
+      /*onMouseEnter={() => {
         setResourcesMegaMenuIsActive(true);
         const megaMenuClassList = ref.current?.classList;
         megaMenuClassList?.remove('hidden');
@@ -18,7 +24,7 @@ const ResourcesMegaMenu = forwardRef(
         const megaMenuClassList = ref.current?.classList;
         megaMenuClassList?.remove('flex');
         megaMenuClassList?.add('hidden');
-      }}
+      }}*/
     >
       <div className="w-full flex flex-col justify-center items-center overflow-hidden md:my-2 md:px-2 md:w-1/3 lg:my-6 lg:px-6">
         <div className="h-full pt-6 px-6 pb-12 border-solid border-b-4 border-black bg-brand-gray">

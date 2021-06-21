@@ -137,6 +137,40 @@ export const HeaderFooter = `
         sourceUrl(size: LARGE)
       }
     }
+    eventsMegaMenu {
+      emmBlock1ButtonColor
+      emmBlock1ButtonText
+      emmBlock1ButtonUrl
+      emmBlock1Image {
+        altText
+        title(format: RENDERED)
+        sourceUrl(size: LARGE)
+      }
+      emmBlock2ButtonColor
+      emmBlock2ButtonText
+      emmBlock2ButtonUrl
+      emmBlock2Image {
+        altText
+        title(format: RENDERED)
+        sourceUrl(size: LARGE)
+      }
+      emmBlock3ButtonColor
+      emmBlock3ButtonText
+      emmBlock3ButtonUrl
+      fieldGroupName
+      emmBlock3Image {
+        altText
+        sourceUrl(size: LARGE)
+        title(format: RENDERED)
+      }
+    }
+    getInvolvedDropdownMenu {
+      gidButtons {
+        buttonColor
+        buttonText
+        buttonUrl
+      }
+    }
   },
   footer: getFooter {
     copyrightText
