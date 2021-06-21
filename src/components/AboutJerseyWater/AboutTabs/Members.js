@@ -40,7 +40,7 @@ const Members = ({data}) => {
 
     return(
         <div className='flex flex-col'>
-            <div className='flex w-4/5 m-auto mt-16 '>
+            <div className='flex w-4/5 m-auto mt-16'>
                 <p className='text-2xl text-center text-brand-gray-typo'>{data.membersHeading}</p>
             </div>
             
@@ -51,7 +51,7 @@ const Members = ({data}) => {
                     </button>
                 </div>
                 <div className='w-2/5 bg-brand-orange justify-center flex p-2'>
-                    <button className="font-nova text-base m-auto text-base text-whiterounded">
+                    <button className="font-nova text-base m-auto text-base text-white rounded">
                         {data.membersButton2Text}
                     </button>
                 </div>
