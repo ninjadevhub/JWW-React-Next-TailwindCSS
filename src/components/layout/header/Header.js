@@ -9,6 +9,7 @@ import ResourcesMegaMenu from './ResourcesMegaMenu';
 import LatestNewsMegaMenu from './LatestNewsMegaMenu';
 import WorkPlansMegaMenu from './WorkPlansMegaMenu';
 import EventsMegaMenu from './EventsMegaMenu';
+import GetInvolvedDropdownMenu from './GetInvolvedDropdownMenu';
 import Button from '../../Button/Button';
 import styles from '../../../styles/components/layout/header/index.module.scss';
 
@@ -24,6 +25,8 @@ const Header = ({ header }) => {
   const latestNewsMegaMenuRef = useRef(null);
   const workPlansMegaMenuRef = useRef(null);
   const eventsMegaMenuRef = useRef(null);
+  const getInvolvedDropdownMenuRef = useRef(null);
+  const aboutUsMegaMenuRef = useRef(null);
   const headerMenu = menus?.nodes?.filter((node) =>
     node.locations?.includes('HCMS_MENU_HEADER')
   )?.[0]?.menuItems?.nodes;
@@ -33,6 +36,8 @@ const Header = ({ header }) => {
     latestNewsMegaMenu,
     workPlansMegaMenu,
     eventsMegaMenu,
+    getInvolvedDropdownMenu,
+    aboutUsMegaMenu,
   } = sitewideSettings || {};
 
   return (
@@ -47,7 +52,7 @@ const Header = ({ header }) => {
         setActiveMegaMenuRef(null);
       }
     }}>
-      <div className=" bg-brand-blue text-white">
+      {/*<div className=" bg-brand-blue text-white">
         <div className="md:container mx-auto py-2 flex justify-center items-center">
           <div className="mr-8 font-light">
               April 26: Water Exchange Speaker Series: Preparing for Climate Change
@@ -60,11 +65,11 @@ const Header = ({ header }) => {
             </a>
           </Link>
         </div>
-      </div>
+      </div>*/}
       <div className="relative md:container mx-auto flex">
         <div className="py-4 mr-16">
           <Link href="/">
-            <a>
+          <a>
               {header?.siteLogoUrl ? (
                 <Image src={header.siteLogoUrl} width="200" height="79" />
               ) : (
@@ -150,6 +155,18 @@ const Header = ({ header }) => {
           <EventsMegaMenu
             ref={eventsMegaMenuRef}
             eventsMegaMenu={eventsMegaMenu}
+          />
+        )}
+        {getInvolvedDropdownMenu && (
+          <GetInvolvedDropdownMenu
+            ref={getInvolvedDropdownMenuRef}
+            getInvolvedDropdownMenu={getInvolvedDropdownMenu}
+          />
+        )}
+        {aboutUsMegaMenu && (
+          <AboutUsMegaMenu
+            ref={aboutUsMegaMenuRef}
+            aboutUsMegaMenu={aboutUsMegaMenu}
           />
         )}
       </div>

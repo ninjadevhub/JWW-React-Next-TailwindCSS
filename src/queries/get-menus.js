@@ -171,6 +171,18 @@ export const HeaderFooter = `
         buttonUrl
       }
     }
+    aboutUsMegaMenu {
+      aummBlock1Buttons {
+        buttonColor
+        buttonText
+        buttonUrl
+      }
+      aummBlock2Heading
+      aummBlock2Links {
+        linkText
+        linkUrl
+      }
+    }
   },
   footer: getFooter {
     copyrightText

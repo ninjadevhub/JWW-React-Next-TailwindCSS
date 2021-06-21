@@ -55,6 +55,7 @@ export default function Navigation({
                       onClick={event => {
                         event.preventDefault();
                         const megaMenuRef = megaMenuMap[item.path];
+                        //console.log('mmr', megaMenuRef, 'cmmr', committeesMegaMenuRef)
                         //const megaMenuClassList = megaMenuRef?.current?.classList;
                         document.querySelectorAll('.nav-item').forEach(link => {
                           if (link !== event.currentTarget) {
@@ -67,17 +68,17 @@ export default function Navigation({
                         });
 
                         document.querySelectorAll('.mega-menu').forEach(menu => {
-                          alert(menu.id, megaMenuRef?.current?.id)
+                          //console.log('mi', menu.id, 'mmrci', megaMenuRef?.current?.id, 'ectc', event.currentTarget.classList)
                           if (menu.id !== megaMenuRef?.current?.id) {
                             menu.classList.add('hidden');
                             menu.classList.remove('flex');
-                          } else if (!event.currentTarget.classList?.contains('active')) {
-                            megaMenuRef?.classList?.add('flex');
-                            megaMenuRef?.classList?.remove('hidden');
+                          } else if (event.currentTarget.classList?.contains('active')) {
+                            megaMenuRef?.current?.classList?.add('flex');
+                            megaMenuRef?.current?.classList?.remove('hidden');
                             setActiveMegaMenuRef(megaMenuRef);
                           } else {
-                            megaMenuRef?.classList?.add('hidden');
-                            megaMenuRef?.classList?.remove('flex');
+                            megaMenuRef?.current?.classList?.add('hidden');
+                            megaMenuRef?.current?.classList?.remove('flex');
                             setActiveMegaMenuRef(null);
                           }
                         });
