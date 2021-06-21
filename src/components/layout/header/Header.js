@@ -10,6 +10,7 @@ import LatestNewsMegaMenu from './LatestNewsMegaMenu';
 import WorkPlansMegaMenu from './WorkPlansMegaMenu';
 import EventsMegaMenu from './EventsMegaMenu';
 import GetInvolvedDropdownMenu from './GetInvolvedDropdownMenu';
+import AboutUsMegaMenu from './AboutUsMegaMenu';
 import Button from '../../Button/Button';
 import styles from '../../../styles/components/layout/header/index.module.scss';
 
