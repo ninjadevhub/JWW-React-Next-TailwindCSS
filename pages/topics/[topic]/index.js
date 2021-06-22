@@ -147,7 +147,7 @@ export async function getStaticPaths() {
     //const topicPages = ['', '/highlights', '/latest-news', '/resources'];
     const pathsData =
       (data?.topics?.nodes &&
-        data?.topics?.nodes.map(topic => ({ params: { topic: slug } }))) ?? [];
+        data?.topics?.nodes.map(topic => ({ params: { topic: topic.slug } }))) ?? [];
 
     return {
       paths: pathsData,

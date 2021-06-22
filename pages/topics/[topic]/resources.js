@@ -576,7 +576,7 @@ export default function Resources({ data }) {
             />
           </div>
           <h1 className="mb-5 text-center text-3xl">
-            {data?.title || data?.topicOverview?.topicOverview?.topic?.name}
+            {data?.topicOverview?.title || data?.topicOverview?.topicOverview?.topic?.name}
           </h1>
           <Select
             className="w-84"
@@ -681,7 +681,7 @@ export async function getStaticPaths() {
     //const topicPages = ['', '/highlights', '/latest-news', '/resources'];
     const pathsData =
       (data?.topics?.nodes &&
-        data?.topics?.nodes.map(topic => ({ params: { topic: slug } }))) ?? [];
+        data?.topics?.nodes.map(topic => ({ params: { topic: topic.slug } }))) ?? [];
 
     return {
       paths: pathsData,
