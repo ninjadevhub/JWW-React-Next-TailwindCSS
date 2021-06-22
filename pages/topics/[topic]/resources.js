@@ -71,7 +71,6 @@ export default function Resources({ data }) {
     committeesMap[node.name] = node.slug;
   });
 
-  const slug = data?.topicOverview?.topicOverview?.topic?.slug ?? '';
   const defaultTopicOption = { value: '', label: 'Change Topic' };
   const topicsOptions = [
     defaultTopicOption,
