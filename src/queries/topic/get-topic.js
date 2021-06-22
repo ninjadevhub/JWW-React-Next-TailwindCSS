@@ -29,6 +29,12 @@ export const GET_TOPIC = gql`
         }
       }
     }
+    topics {
+      nodes {
+        name
+        slug
+      }
+    }
 		committees {
 			nodes {
 				name
