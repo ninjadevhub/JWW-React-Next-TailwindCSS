@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import client from '../../../src/apollo/client';
-import { GET_TOPICS_SLUGS } from '../../../src/queries/taxonomies/get-topics-slugs';
-import { GET_TOPIC } from '../../../src/queries/taxonomies/get-topic';
+import { GET_TOPICS_SLUGS } from '../../../src/queries/topic/get-topics-slugs';
+import { GET_TOPICS } from '../../../src/queries/topic/get-topics';
 import { useRouter } from 'next/router';
 import Layout from '../../../src/components/layout';
 import Image from 'next/image';
@@ -65,19 +65,19 @@ export default function LatestNews({ data }) {
     return <div>Loading...</div>;
   }
 
-  const slug = data?.topic?.slug ?? '';
+  const slug = data?.slug ?? '';
   const defaultTopicOption = { value: '', label: 'Change Topic' };
   const topicsOptions = [
     defaultTopicOption,
-    ...(data?.topics?.nodes?.map(({ slug, name }) => ({
-      value: slug,
-      label: name,
+    ...(data?.topicOverviews?.nodes?.map(node => ({
+      value: node.topicOverview?.topic?.slug ?? '',
+      label: node.topicOverview?.topic?.name ?? '',
     })) ?? []),
   ];
   
   const [topicOption, setTopicOption] = useState(defaultTopicOption);
   const [searchMode, setSearchMode] = useState('');
-  const [facetFilters, setFacetFilters] = useState([`taxonomies_topic:${data?.topic?.name ?? ''}`]);
+  const [facetFilters, setFacetFilters] = useState([`taxonomies_topic:${data?.topicOverview?.topic?.name ?? ''}`]);
   //const [topics, setTopics] = useState([]);
   const [newsSources, setNewsSources] = useState([]);
   const [selectedYears, setSelectedYears] = useState([]);
@@ -492,12 +492,12 @@ export default function LatestNews({ data }) {
   return (
     <Layout data={data}>
       <div className="w-full relative bg-brand-gray" style={{ height: 340 }}>
-        {data?.topic?.Topic?.backgroundImage && (
+        {data?.topicOverview?.backgroundImage && (
           <Image
-            src={data?.topic?.Topic?.backgroundImage?.sourceUrl}
+            src={data?.topicOverview?.backgroundImage?.sourceUrl}
             alt={
-              data?.topic?.Topic?.backgroundImage?.altText ||
-              data?.topic?.Topic?.backgroundImage?.title
+              data?.topicOverview?.backgroundImage?.altText ||
+              data?.topicOverview?.backgroundImage?.title
             }
             layout="fill"
             objectFit="cover"
@@ -506,7 +506,7 @@ export default function LatestNews({ data }) {
         <div className="w-200 max-w-full absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col justify-center items-center p-8 border-b-thick-brand-green bg-white">
 		      {getTopicCircleIconBySlug(slug)}
           <h1 className="mb-5 text-center text-3xl">
-            {data?.topic?.Topic?.title || data?.topic?.name}
+            {data?.title || data?.topicOverview?.topic?.name}
           </h1>
           <Select
             className="w-84"
@@ -571,16 +571,21 @@ export default function LatestNews({ data }) {
 export async function getStaticProps({ params }) {
   try {
     const { data, errors } = await client.query({
-      query: GET_TOPIC,
-      variables: {
-        slug: params?.topic ?? '',
-      },
+      query: GET_TOPICS,
     });
 
+    const slug = params.topic;
+    const topicOverview = data?.topicOverviews?.nodes?.find(node => node.topicOverview?.topic?.slug === slug);
     const defaultProps = {
       props: {
-        data: data || {},
+        data: {
+          ...(data || {}),
+          topicOverview: topicOverview?.topicOverview ?? null,
+          title: topicOverview?.title ?? '',
+          slug,
+        },
       },
+
       /**
        * Revalidate means that if a new request comes to server, then every 1 sec it will check
        * if the data is changed, if it is changed then it will update the
@@ -609,9 +614,9 @@ export async function getStaticPaths() {
 
     //const topicPages = ['', '/highlights', '/latest-news', '/resources'];
     const pathsData =
-      (data?.topics?.nodes &&
-        data?.topics?.nodes.reduce((arr, topic) => {
-          const slug = topic.slug;
+      (data?.topicOverviews?.nodes &&
+        data?.topicOverviews?.nodes.reduce((arr, node) => {
+          const slug = node.topicOverview?.topic?.slug;
           if (slug) {
             arr.push({ params: { topic: slug } });
           }

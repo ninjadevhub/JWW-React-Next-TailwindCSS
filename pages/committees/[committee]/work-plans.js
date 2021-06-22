@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import client from '../../../src/apollo/client';
-import { GET_COMMITTEES_SLUGS } from '../../../src/queries/taxonomies/get-committees-slugs';
-import { GET_COMMITTEE } from '../../../src/queries/taxonomies/get-committee';
+import { GET_COMMITTEES_SLUGS } from '../../../src/queries/committee/get-committees-slugs';
+import { GET_COMMITTEES } from '../../../src/queries/committee/get-committees';
 import { useRouter } from 'next/router';
 import Layout from '../../../src/components/layout';
 import Image from 'next/image';
@@ -56,16 +56,17 @@ export default function CommitteeOverview({ data }) {
     return <div>Loading...</div>;
   }
 
-  const slug = data?.committee?.slug ?? '';
-  const name = data?.committee?.name ?? '';
+  const slug = data?.slug ?? '';
+  const name = data?.committeeOverview?.committee?.name ?? '';
   const defaultCommitteeOption = { value: '', label: 'Change Committee' };
   const committeesOptions = [
     defaultCommitteeOption,
-    ...(data?.committees?.nodes?.map(({ slug, name }) => ({
-      value: slug,
-      label: name,
+    ...(data?.committeeOverviews?.nodes?.map(node => ({
+      value: node.committeeOverview?.committee?.slug ?? '',
+      label: node.committeeOverview?.committee?.name ?? '',
     })) ?? []),
   ];
+
   const [committeeOption, setCommitteeOption] = useState(
     defaultCommitteeOption
   );
@@ -74,7 +75,7 @@ export default function CommitteeOverview({ data }) {
     () =>
       data?.workPlans?.nodes
         ?.filter(
-          (node) => node.workPlan?.committee?.slug === data?.committee?.slug
+          (node) => node.workPlan?.committee?.slug === slug
         )
         ?.sort((a, b) => +b.workPlan?.year - +a.workPlan?.year),
     [data]
@@ -83,12 +84,12 @@ export default function CommitteeOverview({ data }) {
   return (
     <Layout data={data}>
       <div className="w-full relative bg-brand-gray" style={{ height: 340 }}>
-        {data?.committee?.Committee?.backgroundImage && (
+        {data?.committeeOverview?.backgroundImage && (
           <Image
-            src={data?.committee?.Committee?.backgroundImage?.sourceUrl}
+            src={data?.committeeOverview?.backgroundImage?.sourceUrl}
             alt={
-              data?.committee?.Committee?.backgroundImage?.altText ||
-              data?.committee?.Committee?.backgroundImage?.title
+              data?.committeeOverview?.backgroundImage?.altText ||
+              data?.committeeOverview?.backgroundImage?.title
             }
             layout="fill"
             objectFit="cover"
@@ -97,7 +98,7 @@ export default function CommitteeOverview({ data }) {
         <div className="w-200 max-w-full absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col justify-center items-center p-8 border-b-thick-brand-green bg-white">
           {getCommitteeIconsByName(name)}
           <h1 className="mb-5 text-center text-3xl">
-            {data?.committee?.Committee?.title || name}
+            {data?.title || name}
           </h1>
           <Select
             className="w-84"
@@ -153,10 +154,23 @@ export default function CommitteeOverview({ data }) {
                 </AccordionSummary>
                 <AccordionDetails>
                   <div className="content">
-                    {node.workPlan?.committeeDescription}
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: sanitize(
+                          node.workPlan?.committeeDescription ?? ''
+                        ),
+                      }}
+                    />
                     <ul>
                       {node.workPlan?.boxes?.map((box, i) => (
-                        <li key={i}>{box.text}</li>
+                        <li 
+                          key={i}
+                          dangerouslySetInnerHTML={{
+                            __html: sanitize(
+                              box.text
+                            ),
+                          }}
+                        />
                       ))}
                     </ul>
                   </div>
@@ -173,15 +187,19 @@ export default function CommitteeOverview({ data }) {
 export async function getStaticProps({ params }) {
   try {
     const { data, errors } = await client.query({
-      query: GET_COMMITTEE,
-      variables: {
-        slug: params?.committee ?? '',
-      },
+      query: GET_COMMITTEES,
     });
 
+    const slug = params.committee;
+    const committeeOverview = data?.committeeOverviews?.nodes?.find(node => node.committeeOverview?.committee?.slug === slug);
     const defaultProps = {
       props: {
-        data: data || {},
+        data: {
+          ...(data || {}),
+          committeeOverview: committeeOverview?.committeeOverview,
+          title: committeeOverview?.title,
+          slug,
+        },
       },
       /**
        * Revalidate means that if a new request comes to server, then every 1 sec it will check
@@ -191,12 +209,7 @@ export async function getStaticProps({ params }) {
       revalidate: 60,
     };
 
-    return handleRedirectsAndReturnData(
-      defaultProps,
-      data,
-      errors,
-      'committee'
-    );
+    return handleRedirectsAndReturnData(defaultProps, data, errors, 'committee');
   } catch (err) {
     console.log({ error: err });
     return {
@@ -216,9 +229,9 @@ export async function getStaticPaths() {
 
     //const committeePages = ['', '/highlights', '/latest-news', '/resources'];
     const pathsData =
-      (data?.committees?.nodes &&
-        data?.committees?.nodes.reduce((arr, committee) => {
-          const slug = committee.slug;
+      (data?.committeeOverviews?.nodes &&
+        data?.committeeOverviews?.nodes.reduce((arr, committee) => {
+          const slug = committee.committee?.slug;
           if (slug) {
             arr.push({ params: { committee: slug } });
           }

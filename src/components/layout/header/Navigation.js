@@ -8,20 +8,23 @@ export default function Navigation({
   menu,
   className,
   committeesMegaMenuRef,
-  committeesMegaMenuIsActive,
+  //committeesMegaMenuIsActive,
   resourcesMegaMenuRef,
-  resourcesMegaMenuIsActive,
+  //resourcesMegaMenuIsActive,
   latestNewsMegaMenuRef,
-  latestNewsMegaMenuIsActive,
+  //latestNewsMegaMenuIsActive,
   workPlansMegaMenuRef,
-  workPlansMegaMenuIsActive,
+  //workPlansMegaMenuIsActive,
+  eventsMegaMenuRef,
+  setActiveMegaMenuRef,
 }) {
   const { asPath } = useRouter();
   const megaMenuMap = {
-    '/committees/asset-management-and-finance-committee/': committeesMegaMenuRef,
+    '/committees/': committeesMegaMenuRef,
     '/resources/': resourcesMegaMenuRef,
     '/latest-news/': latestNewsMegaMenuRef,
     '/work-plans/': workPlansMegaMenuRef,
+    '/events/': eventsMegaMenuRef,
   };
 
   return (
@@ -38,18 +41,49 @@ export default function Navigation({
               if (!item.parentId) {
                 arr.push(
                   <li key={index}>
-                    <Link href={item.path}>
-                      <a
-                        target={item.target ? item.target : '_self'}
-                        className={cn(
-                          'nav-item',
-                          (isLinkActive(asPath, item.path) || 
-                          (item.path === '/committees/asset-management-and-finance-committee/' && committeesMegaMenuIsActive) ||
-                          (item.path === '/resources/' && resourcesMegaMenuIsActive) ||
-                          (item.path === '/latest-news/' && latestNewsMegaMenuIsActive) ||
-                          (item.path === '/work-plans/' && workPlansMegaMenuIsActive)) && styles.active  
-                        )}
-                        onMouseEnter={() => {
+                    <a
+                      href={item.path}
+                      target={item.target ? item.target : '_self'}
+                      className={cn(
+                        'nav-item',
+                        isLinkActive(asPath, item.path) /*|| 
+                        (item.path === '/committees/asset-management-and-finance-committee/' && committeesMegaMenuIsActive) ||
+                        (item.path === '/resources/' && resourcesMegaMenuIsActive) ||
+                        (item.path === '/latest-news/' && latestNewsMegaMenuIsActive) ||
+                        (item.path === '/work-plans/' && workPlansMegaMenuIsActive))*/ && styles.active  
+                      )}
+                      onClick={event => {
+                        event.preventDefault();
+                        const megaMenuRef = megaMenuMap[item.path];
+                        //console.log('mmr', megaMenuRef, 'cmmr', committeesMegaMenuRef)
+                        //const megaMenuClassList = megaMenuRef?.current?.classList;
+                        document.querySelectorAll('.nav-item').forEach(link => {
+                          if (link !== event.currentTarget) {
+                            link.classList.remove('active');
+                          } else if (!event.currentTarget.classList?.contains('active')) {
+                            event.currentTarget.classList?.add('active');
+                          } else {
+                            event.currentTarget.classList?.remove('active');
+                          }
+                        });
+
+                        document.querySelectorAll('.mega-menu').forEach(menu => {
+                          //console.log('mi', menu.id, 'mmrci', megaMenuRef?.current?.id, 'ectc', event.currentTarget.classList)
+                          if (menu.id !== megaMenuRef?.current?.id) {
+                            menu.classList.add('hidden');
+                            menu.classList.remove('flex');
+                          } else if (event.currentTarget.classList?.contains('active')) {
+                            megaMenuRef?.current?.classList?.add('flex');
+                            megaMenuRef?.current?.classList?.remove('hidden');
+                            setActiveMegaMenuRef(megaMenuRef);
+                          } else {
+                            megaMenuRef?.current?.classList?.add('hidden');
+                            megaMenuRef?.current?.classList?.remove('flex');
+                            setActiveMegaMenuRef(null);
+                          }
+                        });
+                      }}
+                        /*onMouseEnter={() => {
                           const megaMenuClassList = megaMenuMap[item.path]?.current?.classList;
                           megaMenuClassList?.remove('hidden');
                           megaMenuClassList?.add('flex');
@@ -58,11 +92,10 @@ export default function Navigation({
                           const megaMenuClassList = megaMenuMap[item.path]?.current?.classList;
                           megaMenuClassList?.remove('flex');
                           megaMenuClassList?.add('hidden');
-                        }}
-                      >
-                        {item.label}
-                      </a>
-                    </Link>
+                        }}*/
+                    >
+                      {item.label}
+                    </a>
                     {children && (
                       <ul>
                         {children.map((item, index) => {

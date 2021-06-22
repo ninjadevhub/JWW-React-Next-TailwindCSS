@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-const defaultClassName = 'inline-block py-2 px-8 text-center text-white';
+const defaultClassName = 'inline-block py-2 px-8 text-center';
 
 export default function Button({
   className,
@@ -9,9 +9,10 @@ export default function Button({
   onClick,
   color = 'brand-blue',
   fullWidth,
+  ghost,
   children,
 }) {
-  const finalClassName = `${defaultClassName} bg-${color}${
+  const finalClassName = `${defaultClassName} bg-${ghost ? 'white' : color} text-${ghost ? color : 'white'}${ghost ? ` border-solid border-2 border-${color}` : ''}${
     fullWidth ? ' w-full' : ''
   } ${className}`;
   if (typeof uri !== 'undefined') {
