@@ -102,7 +102,7 @@ export default function YearsCarousel({ name, data, asc }) {
                   className={`h-full p-10 border-solid border-b-8 border-brand-green bg-${cycle3Colors(
                     i
                   )} text-white`}
-                  style={{ hight: 580 }}
+                  style={{ height: 580 }}
                 >
                   <h2 className="mb-4 text-3xl-2">{item[name]?.year}</h2>
                   <h3 className="mb-4 text-2xl-2">{item[name]?.heading}</h3>

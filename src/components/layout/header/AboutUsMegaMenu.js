@@ -7,7 +7,7 @@ const AboutUsMegaMenu = forwardRef(
     <div
       ref={ref}
       id="latest-news-mega-menu"
-      className="mega-menu latest-news-mega-menu absolute z-50 left-0 top-full hidden flex-wrap overflow-hidden px-6 pt-6 pb-36 -mt-2 md:-mx-2 lg:px-18 lg:-mx-6 border-solid border-t-4 border-brand-blue bg-white bg-clip-padding"
+      className="mega-menu latest-news-mega-menu absolute z-50 right-0 top-full hidden flex-wrap overflow-hidden px-6 pt-6 pb-36 -mt-2 md:-mx-2 lg:px-18 lg:-mx-6 bg-white bg-clip-padding"
       style={{
         borderLeft: '1.25rem solid rgba(255, 255, 255, 0.5)',
         borderRight: '1.25rem solid rgba(255, 255, 255, 0.5)',
