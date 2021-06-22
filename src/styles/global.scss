@@ -618,7 +618,7 @@ h3 {
   border-bottom: 5px solid #04a39a;
 }
 .com-flow:before {
-  content: "";
+  content: '';
   position: absolute;
   left: 0;
   bottom: 0;
@@ -714,7 +714,7 @@ h3 {
   bottom: 20px;
   transform: translateX(-50%);
   width: 650px;
-  background-color: rgba(255, 255, 255, .9);
+  background-color: rgba(255, 255, 255, 0.9);
   text-align: center;
 }
 .com-cta-button a {
@@ -776,4 +776,27 @@ h3 {
   .committee-cta > div {
     width: 100%;
   }
+}
+
+.accordion__button {
+  position: relative;
+}
+
+.accordion__button:after {
+  display: inline-block;
+  content: '';
+  height: 10px;
+  width: 10px;
+  margin-right: 12px;
+  border-bottom: 2px solid currentColor;
+  border-right: 2px solid currentColor;
+  transform: rotate(-45deg) translateY(-50%);
+  position: absolute;
+  right: 34px;
+  top: 50%;
+}
+
+.accordion__button[aria-expanded='true']::after,
+.accordion__button[aria-selected='true']::after {
+  transform: rotate(45deg) translateY(-50%);
 }
