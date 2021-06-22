@@ -7,27 +7,25 @@ import { HeaderFooter } from '../get-menus';
 export const GET_TOPIC = gql`
 	query GET_TOPIC($slug: ID!) {
 		${HeaderFooter}
-    topicOverviews {
-      nodes {
-        title(format: RENDERED)
-        topicOverview {
-          backgroundImage {
-            altText
-            title(format: RENDERED)
-            sourceUrl(size: LARGE)
-          }
-          description
-          highlightsButtonText
-          highlightsButtonUrl
-          topic {
-            name
-            slug
-          }
-          topicIcon {
-            altText
-            sourceUrl(size: LARGE)
-            title(format: RENDERED)
-          }
+    topicOverview(id: $slug, idType: SLUG) {
+      title(format: RENDERED)
+      topicOverview {
+        backgroundImage {
+          altText
+          sourceUrl(size: LARGE)
+          title(format: RENDERED)
+        }
+        description
+        highlightsButtonText
+        highlightsButtonUrl
+        topic {
+          name
+          slug
+        }
+        topicIcon {
+          altText
+          sourceUrl(size: LARGE)
+          title(format: RENDERED)
         }
       }
     }

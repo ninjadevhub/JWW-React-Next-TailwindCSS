@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import client from '../../../src/apollo/client';
-import { GET_TOPICS_SLUGS } from '../../../src/queries/topic/get-topics-slugs';
-import { GET_TOPICS } from '../../../src/queries/topic/get-topics';
+import { GET_TOPICS_SLUGS } from '../../../src/queries/taxonomies/get-topics-slugs';
+import { GET_TOPIC } from '../../../src/queries/topic/get-topic';
 import { useRouter } from 'next/router';
 import Layout from '../../../src/components/layout';
 import Image from 'next/image';
@@ -20,13 +20,13 @@ export default function TopicOverview({ data }) {
     return <div>Loading...</div>;
   }
 
-  const slug = data?.slug ?? '';
+  const slug = data?.topicOverview?.topicOverview?.topic?.slug ?? '';
   const defaultTopicOption = { value: '', label: 'Change Topic' };
   const topicsOptions = [
     defaultTopicOption,
-    ...(data?.topicOverviews?.nodes?.map(node => ({
-      value: node?.topicOverview?.topic?.slug ?? '',
-      label: node?.topicOverview?.topic?.name ?? '',
+    ...(data?.topics?.nodes?.map(node => ({
+      value: node.slug ?? '',
+      label: node.name ?? '',
     })) ?? []),
   ];
   const [topicOption, setTopicOption] = useState(defaultTopicOption);
@@ -34,21 +34,28 @@ export default function TopicOverview({ data }) {
   return (
     <Layout data={data}>
       <div className="w-full relative bg-brand-gray" style={{ height: 340 }}>
-        {data?.topicOverview?.backgroundImage && (
+        {data?.topicOverview?.topicOverview?.backgroundImage && (
           <Image
-            src={data?.topicOverview?.backgroundImage?.sourceUrl}
+            src={data?.topicOverview?.topicOverview?.backgroundImage?.sourceUrl}
             alt={
-              data?.topicOverview?.backgroundImage?.altText ||
-              data?.topicOverview?.backgroundImage?.title
+              data?.topicOverview?.topicOverview?.backgroundImage?.altText ||
+              data?.topicOverview?.topicOverview?.backgroundImage?.title
             }
             layout="fill"
             objectFit="cover"
           />
         )}
         <div className="w-200 max-w-full absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col justify-center items-center p-8 border-b-thick-brand-green bg-white">
-          {getTopicCircleIconBySlug(slug)}
+          <div className="w-17 h-17 relative">
+            <Image
+              src={data?.topicOverview?.topicOverview?.topicIcon?.sourceUrl}
+              layout="fill"
+              objectFit="contain"
+              alt={data?.topicOverview?.topicOverview?.topicIcon?.altText || data?.topicOverview?.topicOverview?.topicIcon?.title}
+            />
+          </div>
           <h1 className="mb-5 text-center text-3xl">
-            {data?.title || data?.topicOverview?.topic?.name}
+            {data?.topicOverview?.title || data?.topicOverview?.topicOverview?.topic?.name}
           </h1>
           <Select
             className="w-84"
@@ -90,7 +97,7 @@ export default function TopicOverview({ data }) {
       <div
         className="max-w-5xl mx-auto px-4 mb-20"
         dangerouslySetInnerHTML={{
-          __html: sanitize(data?.topicOverview?.description ?? ''),
+          __html: sanitize(data?.topicOverview?.topicOverview?.description ?? ''),
         }}
       />
     </Layout>
@@ -100,19 +107,15 @@ export default function TopicOverview({ data }) {
 export async function getStaticProps({ params }) {
   try {
     const { data, errors } = await client.query({
-      query: GET_TOPICS,
+      query: GET_TOPIC,
+      variables: {
+        slug: params.topic,
+      },
     });
 
-    const slug = params.topic;
-    const topicOverview = data?.topicOverviews?.nodes?.find(node => node.topicOverview?.topic?.slug === slug);
     const defaultProps = {
       props: {
-        data: {
-          ...(data || {}),
-          topicOverview: topicOverview?.topicOverview ?? null,
-          title: topicOverview?.title ?? '',
-          slug,
-        },
+        data: data || {},
       },
 
       /**
@@ -143,16 +146,8 @@ export async function getStaticPaths() {
 
     //const topicPages = ['', '/highlights', '/latest-news', '/resources'];
     const pathsData =
-      (data?.topicOverviews?.nodes &&
-        data?.topicOverviews?.nodes.reduce((arr, node) => {
-          const slug = node.topicOverview?.topic?.slug;
-          if (slug) {
-            arr.push({ params: { topic: slug } });
-          }
-
-          return arr;
-        }, [])) ||
-      [];
+      (data?.topics?.nodes &&
+        data?.topics?.nodes.map(topic => ({ params: { topic: slug } }))) ?? [];
 
     return {
       paths: pathsData,

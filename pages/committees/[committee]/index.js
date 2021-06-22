@@ -43,7 +43,7 @@ export default function CommitteeOverview({ data }) {
               data?.committeeOverview?.committeeOverview?.backgroundImage?.title
             }
             layout="fill"
-            objectFit="cover"
+            objectFit="contain"
           />
         )}
         <div className="w-200 max-w-full absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col justify-center items-center p-8 border-b-thick-brand-green bg-white">
@@ -152,15 +152,7 @@ export async function getStaticPaths() {
     //const committeePages = ['', '/highlights', '/latest-news', '/resources'];
     const pathsData =
       (data?.committees?.nodes &&
-        data?.committees?.nodes.reduce((arr, committee) => {
-          const slug = committee.slug;
-          if (slug) {
-            arr.push({ params: { committee: slug } });
-          }
-
-          return arr;
-        }, [])) ||
-      [];
+        data?.committees?.nodes.map(committee => ({ params: { committee: committee.slug } }))) ?? [];
 
     return {
       paths: pathsData,
