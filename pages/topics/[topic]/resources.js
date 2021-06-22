@@ -65,7 +65,7 @@ export default function Resources({ data }) {
     return <div>Loading...</div>;
   }
 
-  const slug = data?.slug ?? '';
+  const slug = data?.topicOverview?.topicOverview?.topic?.slug ?? '';
   const committeesMap = {};
   data?.committees?.nodes?.forEach(node => {
     committeesMap[node.name] = node.slug;
