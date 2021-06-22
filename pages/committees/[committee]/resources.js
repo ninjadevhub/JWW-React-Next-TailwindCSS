@@ -577,7 +577,7 @@ export default function Resources({ data }) {
               data?.committeeOverview?.committeeOverview?.backgroundImage?.title
             }
             layout="fill"
-            objectFit="contain"
+            objectFit="cover"
           />
         )}
         <div className="w-200 max-w-full absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col justify-center items-center p-8 border-b-thick-brand-green bg-white">
@@ -585,7 +585,7 @@ export default function Resources({ data }) {
             <Image
               src={data?.committeeOverview?.committeeOverview?.committeeIcon?.sourceUrl}
               layout="fill"
-              objectFit="cover"
+              objectFit="contain"
               alt={data?.committeeOverview?.committeeOverview?.committeeIcon?.altText || data?.committeeOverview?.committeeOverview?.committeeIcon?.title}
             />
           </div>

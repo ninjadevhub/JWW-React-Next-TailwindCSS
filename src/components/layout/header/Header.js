@@ -15,10 +15,6 @@ import Button from '../../Button/Button';
 import styles from '../../../styles/components/layout/header/index.module.scss';
 
 const Header = ({ header }) => {
-  /*const [committeesMegaMenuIsActive, setCommitteesMegaMenuIsActive] = useState(false);
-  const [resourcesMegaMenuIsActive, setResourcesMegaMenuIsActive] = useState(false);
-  const [latestNewsMegaMenuIsActive, setLatestNewsMegaMenuIsActive] = useState(false);
-  const [workPlansMegaMenuIsActive, setWorkPlansMegaMenuIsActive] = useState(false);*/
   const [activeMegaMenuRef, setActiveMegaMenuRef] = useState(null);
   const { menus, sitewideSettings } = useWordPressContext();
   const committeesMegaMenuRef = useRef(null);
@@ -40,12 +36,40 @@ const Header = ({ header }) => {
     getInvolvedDropdownMenu,
     aboutUsMegaMenu,
   } = sitewideSettings || {};
+  
+  const linkClickHandler = (event, megaMenuRef) => {
+    event.preventDefault();
+    document.querySelectorAll('.nav-item, .nav-button').forEach(link => {
+      if (link !== event.currentTarget) {
+        link.classList.remove('active');
+      } else if (!event.currentTarget.classList?.contains('active')) {
+        event.currentTarget.classList?.add('active');
+      } else {
+        event.currentTarget.classList?.remove('active');
+      }
+    });
+
+    document.querySelectorAll('.mega-menu').forEach(menu => {
+      if (menu.id !== megaMenuRef?.current?.id) {
+        menu.classList.add('hidden');
+        menu.classList.remove('flex');
+      } else if (event.currentTarget.classList?.contains('active')) {
+        megaMenuRef?.current?.classList?.add('flex');
+        megaMenuRef?.current?.classList?.remove('hidden');
+        setActiveMegaMenuRef(megaMenuRef);
+      } else {
+        megaMenuRef?.current?.classList?.add('hidden');
+        megaMenuRef?.current?.classList?.remove('flex');
+        setActiveMegaMenuRef(null);
+      }
+    });
+  };
 
   return (
     <header className={styles.header} onClick={event => {
-      const link = event.target.closest('.nav-item');
+      const link = event.target.closest('.nav-item, .nav-button');
       const megaMenu = event.target.closest('.mega-menu');
-      const activeLink = event.currentTarget.querySelector('.nav-item.active');
+      const activeLink = event.currentTarget.querySelector('.nav-item.active, .nav-button.active');
       if (!link && !megaMenu && activeLink) {
         activeMegaMenuRef?.current?.classList?.add('hidden');
         activeMegaMenuRef?.current?.classList?.remove('flex');
@@ -53,20 +77,6 @@ const Header = ({ header }) => {
         setActiveMegaMenuRef(null);
       }
     }}>
-      {/*<div className=" bg-brand-blue text-white">
-        <div className="md:container mx-auto py-2 flex justify-center items-center">
-          <div className="mr-8 font-light">
-              April 26: Water Exchange Speaker Series: Preparing for Climate Change
-              in the Wake of Houston&rsquo;s Water Crisis  
-          </div>
-          <Link href="#">
-            <a className="flex items-center text-white text-semibold text-center">
-              <span>Join Us</span>
-              <FaChevronRight className='ml-1 mb-0.5 text-xs' />
-            </a>
-          </Link>
-        </div>
-      </div>*/}
       <div className="relative md:container mx-auto flex">
         <div className="py-4 mr-16">
           <Link href="/">
@@ -79,25 +89,21 @@ const Header = ({ header }) => {
             </a>
           </Link>
         </div>
-        <div className="flex justify-between items-center flex-1">
+        <div className="relative flex justify-between items-center flex-1">
           <div className="w-full flex justify-between items-center">
             <Navigation
               menu={headerMenu}
               committeesMegaMenuRef={committeesMegaMenuRef}
-              //committeesMegaMenuIsActive={committeesMegaMenuIsActive}
               resourcesMegaMenuRef={resourcesMegaMenuRef}
-              //resourcesMegaMenuIsActive={resourcesMegaMenuIsActive}
               latestNewsMegaMenuRef={latestNewsMegaMenuRef}
-              //latestNewsMegaMenuIsActive={latestNewsMegaMenuIsActive}
               workPlansMegaMenuRef={workPlansMegaMenuRef}
-              //workPlansMegaMenuIsActive={workPlansMegaMenuIsActive}
               eventsMegaMenuRef={eventsMegaMenuRef}
               setActiveMegaMenuRef={setActiveMegaMenuRef}
               styles={styles}
               className={styles.primaryMenu}
             />
             <div className="flex justify-end">
-              <div className="flex items-center px-6 py-1">
+              <div className="flex items-center pl-6 py-1">
                 <Link href="/search/">
                   <a className="mr-5">
                     <svg
@@ -111,21 +117,40 @@ const Header = ({ header }) => {
                     </svg>
                   </a>
                 </Link>
-                <Button className="mr-5" uri="/about/" ghost={true}>
+                <Button 
+                  className="nav-button mr-5"
+                  onClick={event => linkClickHandler(event, aboutUsMegaMenuRef)}
+                  ghost={true}
+                >
                   About Us
                 </Button>
-                <Button uri="/get-involved/" color="brand-green">
+                <Button
+                  className="nav-button"
+                  onClick={event => linkClickHandler(event, getInvolvedDropdownMenuRef)}
+                  color="brand-green"
+                >
                   Get Involved
                 </Button>
               </div>
             </div>
           </div>
+          {getInvolvedDropdownMenu && (
+            <GetInvolvedDropdownMenu
+              ref={getInvolvedDropdownMenuRef}
+              getInvolvedDropdownMenu={getInvolvedDropdownMenu}
+            />
+          )}
+          {aboutUsMegaMenu && (
+            <AboutUsMegaMenu
+              ref={aboutUsMegaMenuRef}
+              aboutUsMegaMenu={aboutUsMegaMenu}
+            />
+          )}
         </div>
 
         {committeesMegaMenu && (
           <CommitteesMegaMenu
             ref={committeesMegaMenuRef}
-            //setCommitteesMegaMenuIsActive={setCommitteesMegaMenuIsActive}
             committeesMegaMenu={committeesMegaMenu}
           />
         )}
@@ -133,7 +158,6 @@ const Header = ({ header }) => {
         {latestNewsMegaMenu && (
           <LatestNewsMegaMenu
             ref={latestNewsMegaMenuRef}
-            //setLatestNewsMegaMenuIsActive={setLatestNewsMegaMenuIsActive}
             latestNewsMegaMenu={latestNewsMegaMenu}
           />
         )}
@@ -141,14 +165,12 @@ const Header = ({ header }) => {
         {resourcesMegaMenu && (
           <ResourcesMegaMenu
             ref={resourcesMegaMenuRef}
-            //setResourcesMegaMenuIsActive={setResourcesMegaMenuIsActive}
             resourcesMegaMenu={resourcesMegaMenu}
           />
         )}
         {workPlansMegaMenu && (
           <WorkPlansMegaMenu
             ref={workPlansMegaMenuRef}
-            //setWorkPlansMegaMenuIsActive={setWorkPlansMegaMenuIsActive}
             workPlansMegaMenu={workPlansMegaMenu}
           />
         )}
@@ -156,18 +178,6 @@ const Header = ({ header }) => {
           <EventsMegaMenu
             ref={eventsMegaMenuRef}
             eventsMegaMenu={eventsMegaMenu}
-          />
-        )}
-        {getInvolvedDropdownMenu && (
-          <GetInvolvedDropdownMenu
-            ref={getInvolvedDropdownMenuRef}
-            getInvolvedDropdownMenu={getInvolvedDropdownMenu}
-          />
-        )}
-        {aboutUsMegaMenu && (
-          <AboutUsMegaMenu
-            ref={aboutUsMegaMenuRef}
-            aboutUsMegaMenu={aboutUsMegaMenu}
           />
         )}
       </div>
