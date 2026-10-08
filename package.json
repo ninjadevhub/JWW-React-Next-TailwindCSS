@@ -12,9 +12,9 @@
   "licence": "MIT",
   "homepage": "https://github.com/3lanemarketing/jerseywaterworks-frontend",
   "scripts": {
-    "dev": "cross-env NODE_OPTIONS='--inspect' next dev",
-    "build": "next build",
-    "start": "next start",
+    "dev": "node api.js && cross-env NODE_OPTIONS='--inspect' next dev",
+    "build": "node api.js && next build",
+    "start": "node api.js && next start",
     "svg": "svgr -d src/components/icons src/components/icons/svgs",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
